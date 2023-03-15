@@ -1,0 +1,262 @@
+{
+  "errorCode": "01-200-C00000",
+  "code": 0,
+  "version": "v2",
+  "message": "success",
+  "data": {
+    "guidEntityMap": {
+      "f22d59dc-b255-4711-a7c6-3b62678748bc": {
+        "guid": "f22d59dc-b255-4711-a7c6-3b62678748bc",
+        "typeName": "HiveTable",
+        "attributes": {
+          "cluster": "default",
+          "parentName": "ea_lark_expense",
+          "qualifiedName": "HiveTable:///ea_lark_expense/ods_hermes_employee_prd_project_da@0",
+          "name": "ods_hermes_employee_prd_project_da",
+          "namespace": null,
+          "userNames": [],
+          "fields": [
+            {
+              "guid": "0f6ae709-f635-4c4d-ab42-a353945e1ae3",
+              "typeName": "HiveColumn",
+              "attributes": {
+                "qualifiedName": "HiveColumn:///ea_lark_expense/ods_hermes_employee_prd_project_da/union_id@0",
+                "hotSecurityLabelNames": null,
+                "dataType": "string",
+                "name": "union_id",
+                "index": 1,
+                "comment": "unionId",
+                "securityTag": null
+              }
+            },
+            {
+              "guid": "79398e2c-1dee-4040-a2a9-8c848c2b200d",
+              "typeName": "HiveColumn",
+              "attributes": {
+                "qualifiedName": "HiveColumn:///ea_lark_expense/ods_hermes_employee_prd_project_da/id@0",
+                "hotSecurityLabelNames": null,
+                "dataType": "bigint",
+                "name": "id",
+                "index": 0,
+                "comment": "id",
+                "securityTag": null
+              }
+            },
+            {
+              "guid": "d441205c-ab95-4f77-b6e9-22b627b2c774",
+              "typeName": "HiveColumn",
+              "attributes": {
+                "qualifiedName": "HiveColumn:///ea_lark_expense/ods_hermes_employee_prd_project_da/tenant_union_id@0",
+                "hotSecurityLabelNames": null,
+                "dataType": "string",
+                "name": "tenant_union_id",
+                "index": 2,
+                "comment": "租户id",
+                "securityTag": null
+              }
+            }
+          ],
+          "department": "unknown"
+        }
+      },
+      "c538eb4a-4dc9-4332-8f7b-e037756c2152": {
+        "guid": "c538eb4a-4dc9-4332-8f7b-e037756c2152",
+        "typeName": "HiveTable",
+        "attributes": {
+          "cluster": "default",
+          "parentName": "ea_stg",
+          "qualifiedName": "HiveTable:///ea_stg/stg_db_mysql_hermes_employee_prd_project_da@0",
+          "name": "stg_db_mysql_hermes_employee_prd_project_da",
+          "namespace": null,
+          "userNames": [],
+          "fields": [
+            {
+              "guid": "bb272782-c5c9-45f4-9f7d-7ac4d8270814",
+              "typeName": "HiveColumn",
+              "attributes": {
+                "qualifiedName": "HiveColumn:///ea_stg/stg_db_mysql_hermes_employee_prd_project_da/id@0",
+                "hotSecurityLabelNames": null,
+                "dataType": "bigint",
+                "name": "id",
+                "index": 0,
+                "comment": "id",
+                "securityTag": null
+              }
+            },
+            {
+              "guid": "266703a1-7e7c-474e-b31b-763e7332eca1",
+              "typeName": "HiveColumn",
+              "attributes": {
+                "qualifiedName": "HiveColumn:///ea_stg/stg_db_mysql_hermes_employee_prd_project_da/tenant_union_id@0",
+                "hotSecurityLabelNames": null,
+                "dataType": "string",
+                "name": "tenant_union_id",
+                "index": 2,
+                "comment": "租户id",
+                "securityTag": null
+              }
+            },
+            {
+              "guid": "0b673ec1-1fa8-4551-a04d-03cb3903d256",
+              "typeName": "HiveColumn",
+              "attributes": {
+                "qualifiedName": "HiveColumn:///ea_stg/stg_db_mysql_hermes_employee_prd_project_da/union_id@0",
+                "hotSecurityLabelNames": null,
+                "dataType": "string",
+                "name": "union_id",
+                "index": 1,
+                "comment": "unionId",
+                "securityTag": null
+              }
+            }
+          ],
+          "department": "unknown"
+        }
+      },
+      "66bf9d90-20f1-40ac-8193-4982bcfa565c": {
+        "guid": "66bf9d90-20f1-40ac-8193-4982bcfa565c",
+        "typeName": "DummyTask",
+        "attributes": {
+          "qualifiedName": "DummyTask:///104734314/1_3c131997838745af9984eb2d2cbc697d@0",
+          "name": "stg_db_mysql_lite_hermes_employee_prd_project_da",
+          "userNames": [],
+          "id": 104734314,
+          "department": "unknown"
+        }
+      },
+      "072baede-7d7a-4c41-a748-04c4d12f6218": {
+        "guid": "072baede-7d7a-4c41-a748-04c4d12f6218",
+        "typeName": "HiveTable",
+        "attributes": {
+          "cluster": "default",
+          "parentName": "ea_lark_expense",
+          "qualifiedName": "HiveTable:///ea_lark_expense/dim_hermes_employee_prd_project_da@0",
+          "name": "dim_hermes_employee_prd_project_da",
+          "namespace": null,
+          "userNames": [],
+          "fields": [
+            {
+              "guid": "526c491a-1fe1-40e7-8d72-3933f6636886",
+              "typeName": "HiveColumn",
+              "attributes": {
+                "qualifiedName": "HiveColumn:///ea_lark_expense/dim_hermes_employee_prd_project_da/id@0",
+                "hotSecurityLabelNames": null,
+                "dataType": "bigint",
+                "name": "id",
+                "index": 0,
+                "comment": "id",
+                "securityTag": null
+              }
+            },
+            {
+              "guid": "9242bf7e-ea7e-4519-8555-4594d6b927dc",
+              "typeName": "HiveColumn",
+              "attributes": {
+                "qualifiedName": "HiveColumn:///ea_lark_expense/dim_hermes_employee_prd_project_da/union_id@0",
+                "hotSecurityLabelNames": null,
+                "dataType": "string",
+                "name": "union_id",
+                "index": 1,
+                "comment": "unionId",
+                "securityTag": null
+              }
+            },
+            {
+              "guid": "840cae6e-a7ee-400a-852d-0c93b8f525cb",
+              "typeName": "HiveColumn",
+              "attributes": {
+                "qualifiedName": "HiveColumn:///ea_lark_expense/dim_hermes_employee_prd_project_da/tenant_union_id@0",
+                "hotSecurityLabelNames": null,
+                "dataType": "string",
+                "name": "tenant_union_id",
+                "index": 2,
+                "comment": "租户id",
+                "securityTag": null
+              }
+            }
+          ],
+          "department": "unknown"
+        }
+      },
+      "75891c0f-685a-4ffb-9e51-bfcb4720ee04": {
+        "guid": "75891c0f-685a-4ffb-9e51-bfcb4720ee04",
+        "typeName": "DummyTask",
+        "attributes": {
+          "qualifiedName": "DummyTask:///106435028/1_8ee23a628a250e5084658cdf97b20bcd@0",
+          "name": "ea_lark_expense.dim_hermes_employee_prd_project_da",
+          "userNames": [],
+          "id": 106435028,
+          "department": "unknown"
+        }
+      },
+      "81fc1f4c-1966-4c0f-9227-f25d1a4a5338": {
+        "guid": "81fc1f4c-1966-4c0f-9227-f25d1a4a5338",
+        "typeName": "DummyTask",
+        "attributes": {
+          "qualifiedName": "DummyTask:///104734314/1_ded6bb3702d02012eb6eb197dae6a645@0",
+          "name": "stg_db_mysql_lite_hermes_employee_prd_project_da",
+          "userNames": [],
+          "id": 104734314,
+          "department": "unknown"
+        }
+      },
+      "6b213418-2900-4bd0-a400-bf6caddd9573": {
+        "guid": "6b213418-2900-4bd0-a400-bf6caddd9573",
+        "typeName": "MySQLTable",
+        "attributes": {
+          "cluster": null,
+          "parentName": "hermes_employee_prd",
+          "qualifiedName": "MySQLTable:///hermes_employee_prd/project@0",
+          "name": "project",
+          "namespace": null,
+          "userNames": [],
+          "fields": [
+            {
+              "guid": "cf964468-8119-43f1-b45e-0a61abad5d71",
+              "typeName": "MySQLColumn",
+              "attributes": {
+                "name": "tenant_union_id",
+                "qualifiedName": "MySQLColumn:///hermes_employee_prd/project/tenant_union_id@0",
+                "hotSecurityLabelNames": null,
+                "dataType": "varchar"
+              }
+            },
+            {
+              "guid": "3ca6ee35-e917-4bae-9639-d242cfb53f1a",
+              "typeName": "MySQLColumn",
+              "attributes": {
+                "name": "id",
+                "qualifiedName": "MySQLColumn:///hermes_employee_prd/project/id@0",
+                "hotSecurityLabelNames": null,
+                "dataType": "bigint"
+              }
+            },
+            {
+              "guid": "291ef200-4a8b-4e34-9b5a-93dbc245e379",
+              "typeName": "MySQLColumn",
+              "attributes": {
+                "name": "union_id",
+                "qualifiedName": "MySQLColumn:///hermes_employee_prd/project/union_id@0",
+                "hotSecurityLabelNames": null,
+                "dataType": "varchar"
+              }
+            }
+          ],
+          "department": "unknown"
+        }
+      }
+    },
+    "inputEntityGuids": [
+      [
+        "f22d59dc-b255-4711-a7c6-3b62678748bc"
+      ],
+      [
+        "c538eb4a-4dc9-4332-8f7b-e037756c2152"
+      ],
+      [
+        "6b213418-2900-4bd0-a400-bf6caddd9573"
+      ]
+    ],
+    "outputEntityGuids": []
+  }
+}

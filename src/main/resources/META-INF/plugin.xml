@@ -1,0 +1,88 @@
+<idea-plugin>
+    <id>org.example.MyHive</id>
+    <name>DataStudio</name>
+    <vendor email="datastudio@xyz.com" url="http://www.xyz.com">YourCompany</vendor>
+
+    <description><![CDATA[
+        欢迎使用DataStudio工具
+    ]]></description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <fileType
+                name="Hive File"
+                implementationClass="plugin.HiveFileType"
+                fieldName="INSTANCE"
+                language="Hive"
+                extensions="hql"/>
+
+        <lang.parserDefinition language="Hive" implementationClass="plugin.HiveParserDefinition"/>
+        <!--        <lang.syntaxHighlighterFactory language="Hive" implementationClass="plugin.HiveSyntaxHighlighterFactory"/>-->
+        <lang.syntaxHighlighter language="Hive" implementationClass="hilight.HiveSyntaxHighlighter"/>
+        <colorSettingsPage implementation="plugin.HiveColorSettingsPage"/>
+
+        <completion.contributor language="Hive" implementationClass="completion.HiveCompletionContributor"/>
+        <lang.braceMatcher language="Hive" implementationClass="match.HiveBraceMatcher"/>
+        <lang.foldingBuilder language="Hive" implementationClass="folding.HiveFoldingBuilder"/>
+        <lang.commenter language="Hive" implementationClass="HiveCommentor"/>
+        <lang.formatter language="Hive" implementationClass="format.HiveFormattingModelBuilder"/>
+        <lang.ast.factory language="Hive" implementationClass="psi.HiveASTFactory"/>
+        <lang.psiStructureViewFactory language="Hive" implementationClass="structview.HiveStructureViewFactory"/>
+        <lang.findUsagesProvider language="Hive" implementationClass="usage.HiveFindUsagesProvider"/>
+        <liveTemplateContext implementation="templates.HiveLiveTemplateContext"/>
+        <defaultLiveTemplates file="/livetemplates/HiveTemplates.xml"/>
+        <liveTemplateMacro implementation="templates.TitleCaseMacro"/>
+        <lang.refactoringSupport language="Hive" implementationClass="HiveRefactoringSupport"/>
+        <lang.surroundDescriptor language="Hive" implementationClass="util.HiveSurround"/>
+        <toolWindow factoryClass="mydata.studio.MyDataStudioFactory" id="MyToolWindow"
+                    icon="AllIcons.Actions.GroupByModuleGroup"/>
+        <codeStyleSettingsProvider implementation="codestyle.HiveCodeStyleSettingsProvider"/>
+        <langCodeStyleSettingsProvider implementation="codestyle.HiveLanguageCodeStyleSettingsProvider"/>
+        <applicationService
+                serviceImplementation="config.AppSettingsState"/>
+        <!--        <applicationService-->
+        <!--                serviceImplementation="hierachyconfig.HierachyConfigState"/>-->
+        <applicationConfigurable
+                parentId="tools"
+                instance="config.AppSettingsConfigurable"
+                id="config.AppSettingsConfigurable"
+                displayName="MyDataStudio数据工作室"/>
+        <!--
+                <applicationConfigurable
+                        instance="hierachyconfig.HierachyConfiguable" id="hirachyconfig.HierachyConfiguable"
+                                         displayName="HierachyTools"/>
+        -->
+        <applicationService serviceImplementation="hierachyconfig.MyConfigurable"/>
+        <applicationConfigurable instance="hierachyconfig.MyConfigEntry" displayName="hierachy"
+                                 parentId="tools" id="hierachy"
+        />
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="action.HiveFormatAction" class="action.HiveFormatAction" text="HiveFormat">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+        <action id="GraphvizShowAction" class="action.GraphvizShowAction" text="GraphVizShow">
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl meta alt G"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+        <action id="HiveWholeProjectRenameAction" class="action.HiveWholeProjectRenameAction"
+                text="HiveWholeProjectRenameAction">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl meta alt T"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+        <action id="PsiParseAction" class="action.PsiParseAction" text="PsiParse">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt P"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+        <action id="extractTablesAction" class="action.ExtractTablesAction" text="extractTablesAction"
+                description="extractTablesAction">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+    </actions>
+</idea-plugin>

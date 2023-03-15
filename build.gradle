@@ -1,0 +1,89 @@
+plugins {
+    id 'org.jetbrains.intellij' version '1.9.0'
+    id 'java'
+    id 'antlr'
+    id 'scala'
+    id 'net.researchgate.release' version '3.0.2'
+    id "io.freefair.lombok" version "6.5.1"
+    id "org.jetbrains.kotlin.jvm" version "1.7.0"
+}
+
+group 'org.example'
+
+test.onlyIf { project.hasProperty('someProperty') }
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', 'src/main/gen']
+        }
+        scala {
+            srcDirs = ['src/main/scala']
+        }
+    }
+}
+//compileJava.dependsOn(compileScala)
+compileJava.classpath += files(compileScala.destinationDir)
+// TODO: 突然发现打出的JAR包不含依赖， 体积骤降，导致相关的类无法加载，调整为打包成fatJar
+// FatJar导致包体积过大，需要调整
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    classifier = 'all'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+task fatJar(type: Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    classifier = 'all'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+    implementation 'org.antlr:antlr4:4.11.1'
+    implementation "org.antlr:antlr4-intellij-adaptor:0.1"
+    implementation 'org.scala-lang:scala-library:2.13.8'
+    implementation 'com.github.vertical-blank:sql-formatter:2.0.3'
+    implementation 'io.zhangshengshan.github:mygraphapp_2.13:0.0.2-SNAPSHOT'
+    implementation 'mygraphutil:mygraphutil_2.13:0.0.1-SNAPSHOT'
+    implementation 'com.intellij:forms_rt:7.0.3'
+    implementation 'com.google.code.gson:gson:2.10'
+}
+
+generateGrammarSource {
+    include("**/ANTLRv4*.g4")
+
+    arguments += [
+            "-package", "org.antlr.intellij.plugin.parser",
+            "-lib", "src/main/antlr/org/antlr/intellij/plugin/parser",
+            "-Xexact-output-dir"
+    ]
+}
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+    version = '2022.2.4'
+
+
+}
+patchPluginXml {
+    changeNotes = """
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>"""
+}
+test {
+    useJUnitPlatform()
+}
+
+release {
+
+    ignoredSnapshotDependencies = ["io.zhangshengshan.github:graph_2.13", "commongraph:commongraph_2.13"]
+}

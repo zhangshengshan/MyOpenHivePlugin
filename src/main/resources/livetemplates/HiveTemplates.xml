@@ -1,0 +1,30 @@
+<templateSet group="Hive">
+    <template name="select"
+              value="SELECT &#x000A;$FIELD$ AS $FIELD_NAME$ &#x000A;FROM&#x000A;$TABLE_NAME$&#x000A;WHERE&#x000A;date = '${date}'"
+              description="SELECT"
+              toReformat="true"
+              toShortenFQNames="false">
+        <variable name="FIELD" expression="complete()" defaultValue="template for select"
+                  alwaysStopAt="true"/>
+        <variable name="FIELD_NAME" expression="complete()" defaultValue="template for select"
+                  alwaysStopAt="true"/>
+        <variable name="TABLE_NAME" expression="complete()" defaultValue="template for select"
+                  alwaysStopAt="true"/>
+        <context>
+            <option name="Hive" value="true"/>
+        </context>
+    </template>
+    <template name="fas"
+              value="$FIELD_NAME$ AS $ALIAS_NAME$"
+              description="AS"
+              toReformat="true"
+              toShortenFQNames="false">
+        <variable name="FIELD_NAME" expression="complete()" defaultValue="template for select"
+                  alwaysStopAt="true"/>
+        <variable name="ALIAS_NAME" expression="complete()" defaultValue="template for select"
+                  alwaysStopAt="true"/>
+        <context>
+            <option name="Hive" value="true"/>
+        </context>
+    </template>
+</templateSet>

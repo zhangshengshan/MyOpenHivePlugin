@@ -1,0 +1,44 @@
+package hierachyconfig;
+
+public class DefaultColor {
+    final static int turquoise50 = 0xe8f8f5;
+    final static int turquoise100 = 0xd1f2eb;
+    final static int greensea50 = 0xe8f6f3;
+    final static int greensea100 = 0xd0ece7;
+    final static int emerald50 = 0xeafaf1;
+    final static int emerald100 = 0xd5f5e3;
+    final static int nephritis50 = 0xe9f7ef;
+    final static int nephritis100 = 0xd4efdf;
+    final static int peterriver50 = 0xebf5fb;
+    final static int peterriver100 = 0xd6eaf8;
+    final static int belizehole50 = 0xeaf2f8;
+    final static int belizehole100 = 0xd4e6f1;
+    final static int amethyst50 = 0xf5eef8;
+    final static int amethyst100 = 0xebdef0;
+    final static int wisteria50 = 0xf4ecf7;
+    final static int wisteria100 = 0xe8daef;
+    final static int wetasphalt50 = 0xebedef;
+    final static int wetasphalt100 = 0xd6dbdf;
+    final static int midnightblue50 = 0xeaecee;
+    final static int midnightblue100 = 0xd5d8dc;
+    final static int sunflower50 = 0xfef9e7;
+    final static int sunflower100 = 0xfcf3cf;
+    final static int orange50 = 0xfef5e7;
+    final static int orange100 = 0xfdebd0;
+    final static int carrot50 = 0xfdf2e9;
+    final static int carrot100 = 0xfae5d3;
+    final static int pumpkin50 = 0xfbeee6;
+    final static int pumpkin100 = 0xf6ddcc;
+    final static int alizarin50 = 0xfdedec;
+    final static int alizarin100 = 0xfadbd8;
+    final static int pomegranate50 = 0xf9ebea;
+    final static int pomegranate100 = 0xf2d7d5;
+    final static int clouds50 = 0xfdfefe;
+    final static int clouds100 = 0xfbfcfc;
+    final static int silver50 = 0xf8f9f9;
+    final static int silver100 = 0xf2f3f4;
+    final static int concrete50 = 0xf4f6f6;
+    final static int concrete100 = 0xeaeded;
+    final static int asbestos50 = 0xf2f4f4;
+    final static int asbestos100 = 0xe5e8e8;
+}
