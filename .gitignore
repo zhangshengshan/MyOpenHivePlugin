@@ -1,0 +1,10 @@
+/.gradle/
+/build/
+/.vim-bookmarks
+/.idea
+/ my.log
+/.metals/
+/.vscode/
+/1.patch
+/my.patch
+/X.patch
