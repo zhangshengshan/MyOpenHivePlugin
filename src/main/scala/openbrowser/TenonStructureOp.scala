@@ -38,12 +38,4 @@ object TenonStructureOp {
   }
 
 }
-
-object mytest extends App {
-  val p1 = List("1", "2", "3")
-
-  def f(args: String*): String = {
-    args.toList.mkString("_")
-  }
-  println(f(p1: _*))
 }
