@@ -36,6 +36,4 @@ object TenonStructureOp {
       Some("/usr/local/bin")
     )
   }
-
-}
 }
