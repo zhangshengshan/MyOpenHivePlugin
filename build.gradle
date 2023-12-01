@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.intellij' version '1.9.0'
+    id 'org.jetbrains.intellij' version '1.10.2'
     id 'java'
     id 'antlr'
     id 'scala'
@@ -7,9 +7,10 @@ plugins {
     id "io.freefair.lombok" version "6.5.1"
     id "org.jetbrains.kotlin.jvm" version "1.7.0"
     id "maven-publish"
+    id "signing"
 }
 
-group 'io.zhangshengshan.github'
+group 'io.github.zhangshengshan'
 version '2.0.0-SNAPSHOT'
 
 test.onlyIf { project.hasProperty('someProperty') }
@@ -97,7 +98,7 @@ task sourceJar(type: Jar) {
 
 publishing {
     publications {
-        myPublication(MavenPublication) {
+        Zss(MavenPublication) {
             from components.java
             artifact sourceJar
             pom {
@@ -122,6 +123,26 @@ publishing {
                     developerConnection = "scm:git:ssh:githubcom:zhangshengshan/MyOpenHivePlugin.git"
                     url = "https://github.com/zhangshengshan/MyOpenHivePlugin/tree/main"
                 }
+            }
+        }
+    }
+    repositories {
+        // The repository to publish to, Sonatype/MavenCentral
+        maven {
+            // This is an arbitrary name, you may also use "mavencentral" or
+            // any other name that's descriptive for you
+            name = "datastudio"
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+
+            // You only need this if you want to publish snapshots, otherwise just set the URL
+            // to the release repo directly
+
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            // The username and password we've fetched earlier
+            credentials {
+                username "zhangshengshan"
+                password "zss19880322"
             }
         }
     }
