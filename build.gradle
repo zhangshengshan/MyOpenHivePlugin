@@ -6,9 +6,11 @@ plugins {
     id 'net.researchgate.release' version '3.0.2'
     id "io.freefair.lombok" version "6.5.1"
     id "org.jetbrains.kotlin.jvm" version "1.7.0"
+    id "maven-publish"
 }
 
-group 'org.example'
+group 'io.zhangshengshan.github'
+version '2.0.0-SNAPSHOT'
 
 test.onlyIf { project.hasProperty('someProperty') }
 
@@ -86,4 +88,41 @@ test {
 release {
 
     ignoredSnapshotDependencies = ["io.zhangshengshan.github:graph_2.13", "commongraph:commongraph_2.13"]
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = "sources"
+}
+
+publishing {
+    publications {
+        myPublication(MavenPublication) {
+            from components.java
+            artifact sourceJar
+            pom {
+                name = "Demo"
+                description = "A demonstration of Maven POM customization"
+                url = "http://www.example.com/project"
+                licenses {
+                    license {
+                        name = "The Apache License, Version 2.0"
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "zhangshengshan"
+                        name = "alphabetago"
+                        email = "alphabetago@163.com"
+                    }
+                }
+                scm {
+                    connection = "scm:svn:http://subversion.example.com/svn/project/trunk/"
+                    developerConnection = "scm:svn:https://subversion.example.com/svn/project/trunk/"
+                    url = "http://subversion.example.com/svn/project/trunk/"
+                }
+            }
+        }
+    }
 }
