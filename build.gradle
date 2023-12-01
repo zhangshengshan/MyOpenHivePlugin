@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.intellij' version '1.9.0'
+    id 'org.jetbrains.intellij' version '1.10.2'
     id 'java'
     id 'antlr'
     id 'scala'
@@ -7,9 +7,10 @@ plugins {
     id "io.freefair.lombok" version "6.5.1"
     id "org.jetbrains.kotlin.jvm" version "1.7.0"
     id "maven-publish"
+    id "signing"
 }
 
-group 'io.zhangshengshan.github'
+group 'io.github.zhangshengshan'
 version '2.0.0-SNAPSHOT'
 
 test.onlyIf { project.hasProperty('someProperty') }
@@ -55,8 +56,8 @@ dependencies {
     implementation "org.antlr:antlr4-intellij-adaptor:0.1"
     implementation 'org.scala-lang:scala-library:2.13.8'
     implementation 'com.github.vertical-blank:sql-formatter:2.0.3'
-    implementation 'io.zhangshengshan.github:mygraphapp_2.13:0.1.0-SNAPSHOT'
-    implementation 'mygraphutil:mygraphutil_2.13:0.0.1-SNAPSHOT'
+    implementation 'io.github.zhangshengshan:mygraphapp_2.13:0.1.1'
+    implementation 'io.github.zhangshengshan:mycommongraph_2.13:0.0.10'
     implementation 'com.intellij:forms_rt:7.0.3'
     implementation 'com.google.code.gson:gson:2.10'
 }
@@ -72,9 +73,7 @@ generateGrammarSource {
 }
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = '2022.2.4'
-
-
+    version = '2023.2.3'
 }
 patchPluginXml {
     changeNotes = """
@@ -86,8 +85,7 @@ test {
 }
 
 release {
-
-    ignoredSnapshotDependencies = ["io.zhangshengshan.github:graph_2.13", "commongraph:commongraph_2.13"]
+    ignoredSnapshotDependencies = [ "commongraph:mycommongraph_2.13", "mygraphutil:mygraphutil_2.13"]
 }
 
 task sourceJar(type: Jar) {
@@ -97,7 +95,7 @@ task sourceJar(type: Jar) {
 
 publishing {
     publications {
-        myPublication(MavenPublication) {
+        Zss(MavenPublication) {
             from components.java
             artifact sourceJar
             pom {
@@ -125,4 +123,35 @@ publishing {
             }
         }
     }
+    repositories {
+        // The repository to publish to, Sonatype/MavenCentral
+        maven {
+            // This is an arbitrary name, you may also use "mavencentral" or
+            // any other name that's descriptive for you
+            name = "datastudio"
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+
+            // You only need this if you want to publish snapshots, otherwise just set the URL
+            // to the release repo directly
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            // The username and password we've fetched earlier
+            credentials {
+                username = OSSRHUSERNAME
+                password = OSSRHPASSWORD
+            }
+        }
+    }
 }
+
+
+//signing.keyId=
+//signing.password=
+//signing.secretKeyRingFile=
+//OSSRHUSERNAME=
+//OSSRHPASSWORD=
+
+signing {
+    sign publishing.publications.Zss
+}
+

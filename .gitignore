@@ -8,3 +8,5 @@
 /1.patch
 /my.patch
 /X.patch
+/target/
+/.bsp/

@@ -84,5 +84,9 @@
                 description="extractTablesAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+        <action id="processChineseAction" class="action.ProcessChineseAction" text="processChineseAction"
+                description="processChineseAction">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
     </actions>
 </idea-plugin>
