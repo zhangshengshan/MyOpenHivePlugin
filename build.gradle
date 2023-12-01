@@ -87,7 +87,6 @@ test {
 }
 
 release {
-
     ignoredSnapshotDependencies = ["io.zhangshengshan.github:graph_2.13", "commongraph:commongraph_2.13"]
 }
 
