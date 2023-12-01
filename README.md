@@ -56,6 +56,7 @@
 - [ ] Graph 中嵌入的地址不对
 - [ ] Graph 中commet 里面的特殊字符，可能导致失败， 需要进行告警检查
 - [ ] Graph 中的表名，字段名，需要进行大小写的转换
+- [ ] extracttable names optimize 过滤别名
  ```sql
 ON
 CONCAT(hi_expense.owner_employee_email,SUBSTRING(hi_expense.checkin_date,1,10))
