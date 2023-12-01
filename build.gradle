@@ -119,8 +119,8 @@ publishing {
                 }
                 scm {
                     connection = "scm:svn:http://subversion.example.com/svn/project/trunk/"
-                    developerConnection = "scm:svn:https://subversion.example.com/svn/project/trunk/"
-                    url = "http://subversion.example.com/svn/project/trunk/"
+                    developerConnection = "scm:git:ssh:githubcom:zhangshengshan/MyOpenHivePlugin.git"
+                    url = "https://github.com/zhangshengshan/MyOpenHivePlugin/tree/main"
                 }
             }
         }
