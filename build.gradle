@@ -87,7 +87,8 @@ test {
 }
 
 release {
-    ignoredSnapshotDependencies = ["io.zhangshengshan.github:graph_2.13", "commongraph:commongraph_2.13"]
+    ignoredSnapshotDependencies = ["io.zhangshengshan.github:graph_2.13", "commongraph:commongraph_2.13",
+    "io.zhangshengshan.github:mygraphapp_2.13", "mygraphutil:mygraphutil_2.13"]
 }
 
 task sourceJar(type: Jar) {
