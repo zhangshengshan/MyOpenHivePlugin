@@ -24,7 +24,7 @@ class ExtractTablesAction extends AnAction {
     val context: SqlBaseParser.StatementContext = parser.statement()
     val visitor = new SparkSqlTablesExtractVisitor()
     visitor.visit(context)
-    val plot: List[String] = visitor.plot
+    val plot: List[String] = visitor.plot()
 
     if (MyConfigurable.getInstance().isDownloadAfterExtract) {
 

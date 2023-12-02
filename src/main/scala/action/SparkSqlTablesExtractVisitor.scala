@@ -6,7 +6,7 @@ class SparkSqlTablesExtractVisitor extends SqlBaseParserBaseVisitor[String] {
   val tablesMap = scala.collection.mutable.HashMap[String, Int]()
 
   override def visitTableName(ctx: SqlBaseParser.TableNameContext): String = {
-    val dbtb: String = ctx.getText
+    val dbtb: String = ctx.multipartIdentifier().getText
     if (tablesMap.contains(dbtb)) {
       tablesMap(dbtb) += 1
     } else {
