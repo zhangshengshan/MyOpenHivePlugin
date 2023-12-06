@@ -56,8 +56,9 @@ dependencies {
     implementation "org.antlr:antlr4-intellij-adaptor:0.1"
     implementation 'org.scala-lang:scala-library:2.13.8'
     implementation 'com.github.vertical-blank:sql-formatter:2.0.3'
-    implementation 'io.github.zhangshengshan:mygraphapp_2.13:0.1.1'
-    implementation 'io.github.zhangshengshan:mycommongraph_2.13:0.0.10'
+    implementation 'io.github.zhangshengshan:mygraphapp_2.13:0.1.0-SNAPSHOT'
+    // mygraphapp中包含此依赖，此处不再需要，防止冲突
+//    implementation 'io.github.zhangshengshan:mycommongraph_2.13:0.0.12'
     implementation 'com.intellij:forms_rt:7.0.3'
     implementation 'com.google.code.gson:gson:2.10'
 }
