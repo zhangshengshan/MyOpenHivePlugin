@@ -37,19 +37,21 @@ class GraphvizShowAction extends AnAction {
         Messages.getInformationIcon
       )
       // 底层的库中需要增加一个plot函数, 用于支持Windows和Mac的图形化显示
-      if(SystemInfo.isMac){
+      if (SystemInfo.isMac) {
         visitor.plot(
           Some("test"),
           Some(OsConfig.macOutputPath),
           Some(true),
-          Some(macDotPath)
+          Some(macDotPath),
+          Some(false)
         )
-      }else if(SystemInfo.isWindows) {
+      } else if (SystemInfo.isWindows) {
         visitor.plot(
           Some("test"),
           Some(OsConfig.winOutputPath),
           Some(true),
-          Some(winDotPath)
+          Some(winDotPath),
+          Some(true)
         )
       }
       // Linux System current not supported

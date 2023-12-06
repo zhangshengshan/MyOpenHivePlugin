@@ -151,6 +151,27 @@ publishing {
 //signing.secretKeyRingFile=
 //OSSRHUSERNAME=
 //OSSRHPASSWORD=
+afterEvaluate {
+    publishing {
+        publications {
+            Aliyun(MavenPublication) {
+                from components.java
+            }
+        }
+        repositories {
+            maven {
+                name = "aliyunxiao"
+                def release_url = 'https://packages.aliyun.com/maven/repository/2440159-release-ZPowfH/'
+                def snapshot_url = 'https://packages.aliyun.com/maven/repository/2440159-snapshot-iMOtTE/'
+                url  = version.endsWith('SNAPSHOT') ? snapshot_url : release_url
+                credentials {
+                    username = ALIYUNUSERNAME
+                    password = ALIYUNPASSWORD
+                }
+            }
+        }
+    }
+}
 
 signing {
     sign publishing.publications.Zss
