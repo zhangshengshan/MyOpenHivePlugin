@@ -88,5 +88,9 @@
                 description="processChineseAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+        <action id="commentProcess" class="action.CommentProcess" text="commentProcess"
+                description="commentProcess">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
     </actions>
 </idea-plugin>
