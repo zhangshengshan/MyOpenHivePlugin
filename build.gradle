@@ -86,7 +86,7 @@ test {
 }
 
 release {
-    ignoredSnapshotDependencies = [ "commongraph:mycommongraph_2.13", "mygraphutil:mygraphutil_2.13"]
+    ignoredSnapshotDependencies = ["io.github.zhangshengshan:mygraphapp_2.13"]
 }
 
 task sourceJar(type: Jar) {
@@ -163,7 +163,7 @@ afterEvaluate {
                 name = "aliyunxiao"
                 def release_url = 'https://packages.aliyun.com/maven/repository/2440159-release-ZPowfH/'
                 def snapshot_url = 'https://packages.aliyun.com/maven/repository/2440159-snapshot-iMOtTE/'
-                url  = version.endsWith('SNAPSHOT') ? snapshot_url : release_url
+                url = version.endsWith('SNAPSHOT') ? snapshot_url : release_url
                 credentials {
                     username = ALIYUNUSERNAME
                     password = ALIYUNPASSWORD
