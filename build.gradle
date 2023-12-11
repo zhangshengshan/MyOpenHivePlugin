@@ -73,7 +73,7 @@ generateGrammarSource {
 }
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = '2022.2.4'
+    version = '2023.2.3'
 
 
 }
@@ -97,7 +97,7 @@ task sourceJar(type: Jar) {
 
 publishing {
     publications {
-        myPublication(MavenPublication) {
+        Zss(MavenPublication) {
             from components.java
             artifact sourceJar
             pom {
