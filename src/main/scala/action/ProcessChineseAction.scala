@@ -16,6 +16,7 @@ class ProcessChineseAction extends AnAction {
       .replaceAll("\\.\"([\\u4e00-\\u9fa5]+)\"", ".`$1`")
       .replaceAll("\\.([\\u4e00-\\u9fa5]+)", ".`$1`")
       .replaceAll("(AS|as)\\s+([\\u4e00-\\u9fa5]+)", "$1 `$2`")
+      .replaceAll("\\.\"([^\"]+)\"", ".$1")
 
     Messages.showMessageDialog(
       newText,
