@@ -144,12 +144,15 @@ publishing {
     }
 }
 
+//signing.keyId =
+//signing.password =
+//signing.secretKeyRingFile =
+//OSSRHUSERNAME =
+//OSSRHPASSWORD =
+//ALIYUNUSERNAME =
+//ALIYUNPASSWORD =
+//systemProp.org.gradle.internal.publish.checksums.insecure = true
 
-//signing.keyId=
-//signing.password=
-//signing.secretKeyRingFile=
-//OSSRHUSERNAME=
-//OSSRHPASSWORD=
 afterEvaluate {
     publishing {
         publications {
