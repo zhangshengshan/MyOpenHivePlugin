@@ -31,7 +31,7 @@ class BatchReplace extends AnAction {
         val target: String = line.split("\\|")(1)
         val text: String = document.getText
         val newText: String = text
-          .replaceAll(source, target)
+          .replaceAll("\\s+" + source + "\\s+", " " + target + " ")
         try {
           // write the new text to the editor and save
           ApplicationManager.getApplication.runWriteAction(new Runnable {
