@@ -31,6 +31,8 @@ import static plugin.basic.HiveTokenTypes.*;
  */
 public class HiveFoldingBuilder extends CustomFoldingBuilder {
 
+    public static final RuleIElementType JOIN = getRuleElementType(SqlBaseParser.RULE_joinCriteria);
+
     public static final RuleIElementType SELECT_CLAUSE =
             getRuleElementType(SqlBaseParser.RULE_namedExpressionSeq);
 
@@ -66,6 +68,13 @@ public class HiveFoldingBuilder extends CustomFoldingBuilder {
         });
         Iterable<PsiElement> whereParts = MyPsiUtils.findChildrenOfType(root, WHERE_CLAUSE);
         whereParts.forEach(action -> {
+            if (action != null) {
+                descriptors.add(new FoldingDescriptor(action.getNode(), action.getTextRange()));
+            }
+        });
+
+        Iterable<PsiElement> joinParts = MyPsiUtils.findChildrenOfType(root, JOIN);
+        joinParts.forEach(action -> {
             if (action != null) {
                 descriptors.add(new FoldingDescriptor(action.getNode(), action.getTextRange()));
             }
@@ -124,15 +133,17 @@ public class HiveFoldingBuilder extends CustomFoldingBuilder {
      */
     private static String getPlaceholderText(PsiElement element) {
 
-        if (element.getNode().getElementType() == LINE_COMMENT_TOKEN) {
+        if(element.getNode().getElementType()== JOIN){
+            return "JOIN...\r\n" + System.getProperty("line.separator");
+        }
+        else if (element.getNode().getElementType() == LINE_COMMENT_TOKEN) {
             return "...";
         } else if (element.getNode().getElementType() == SELECT_CLAUSE) {
-            return "字段列表..." + System.getProperty("line.separator");
+            return "字段列表...\r\n" + System.getProperty("line.separator");
         } else if (element.getNode().getElementType() == WHERE_CLAUSE) {
-            return "WHERE..." + System.getProperty("line.separator");
+            return "WHERE...\r\n" + System.getProperty("line.separator");
         } else if (element.getNode().getElementType() == GROUPBY) {
-            return "GROUP BY..." + System.getProperty("line.separator");
-
+            return "GROUP BY...\r\n" + System.getProperty("line.separator");
         } else if (element.getNode().getElementType()
                 == getRuleElementType(SqlBaseParser.RULE_relationPrimary)) {
             String text = "";
