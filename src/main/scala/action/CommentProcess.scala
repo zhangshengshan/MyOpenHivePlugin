@@ -19,17 +19,6 @@ class CommentProcess extends AnAction {
     val text: String = document.getText
     val newText: String = text
       .replaceAll("--", " -- ")
-
-    //此处弹出多行对话框
-    Messages.showMultilineInputDialog(
-      project,
-      "Please input the comment",
-      "Comment",
-      null,
-      Messages.getQuestionIcon,
-      null
-    )
-
     try {
       // write the new text to the editor and save
       ApplicationManager.getApplication.runWriteAction(new Runnable {
