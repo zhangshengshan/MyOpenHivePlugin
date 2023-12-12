@@ -147,6 +147,17 @@ publishing {
                 password = OSSRHPASSWORD
             }
         }
+
+        maven {
+            name = "aliyunxiao"
+            def release_url = 'https://packages.aliyun.com/maven/repository/2440159-release-ZPowfH/'
+            def snapshot_url = 'https://packages.aliyun.com/maven/repository/2440159-snapshot-iMOtTE/'
+            url = version.endsWith('SNAPSHOT') ? snapshot_url : release_url
+            credentials {
+                username = ALIYUNUSERNAME
+                password = ALIYUNPASSWORD
+            }
+        }
     }
 }
 
@@ -159,27 +170,17 @@ publishing {
 //ALIYUNPASSWORD =
 //systemProp.org.gradle.internal.publish.checksums.insecure = true
 
-afterEvaluate {
-    publishing {
-        publications {
-            Aliyun(MavenPublication) {
-                from components.java
-            }
-        }
-        repositories {
-            maven {
-                name = "aliyunxiao"
-                def release_url = 'https://packages.aliyun.com/maven/repository/2440159-release-ZPowfH/'
-                def snapshot_url = 'https://packages.aliyun.com/maven/repository/2440159-snapshot-iMOtTE/'
-                url = version.endsWith('SNAPSHOT') ? snapshot_url : release_url
-                credentials {
-                    username = ALIYUNUSERNAME
-                    password = ALIYUNPASSWORD
-                }
-            }
-        }
-    }
-}
+//afterEvaluate {
+//    publishing {
+//        publications {
+//            Aliyun(MavenPublication) {
+//                from components.java
+//            }
+//        }
+//        repositories {
+//        }
+//    }
+//}
 
 signing {
     sign publishing.publications.Sonatype
