@@ -1,7 +1,9 @@
 package openbrowser
 
 import another.GraphBuilder
+import com.intellij.openapi.util.SystemInfo
 import com.zss.graph.Graph
+import config.os.OsConfig
 import hierachyconfig.MyConfigurable
 
 object TenonStructureOp {
@@ -34,5 +36,23 @@ object TenonStructureOp {
       Some(openOrNot),
       Some("/usr/local/Cellar/graphviz/9.0.0/bin/dot")
     )
+
+    if (SystemInfo.isMac) {
+      graph.render(
+        fileName,
+        Some(OsConfig.macOutputPath),
+        Some(openOrNot),
+        Some(OsConfig.macDotPath),
+        Some(false)
+      )
+    } else {
+      graph.render(
+        fileName,
+        Some(OsConfig.winOutputPath),
+        Some(openOrNot),
+        Some(OsConfig.winDotPath),
+        Some(false)
+      )
+    }
   }
 }
