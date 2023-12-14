@@ -62,7 +62,7 @@ public class MyConfigurable implements PersistentStateComponent<MyConfigurable>,
 
     boolean batchFieldHierachy = false;
     boolean openAfterGen = true;
-    String outputPath = "~/Desktop";
+    String outputPath = "/Users/zhangshengshan/Desktop";
 
 
     boolean downloadAfterExtract = false;

@@ -1,6 +1,5 @@
 package openbrowser
 
-
 import another.GraphBuilder
 import com.zss.graph.Graph
 import hierachyconfig.MyConfigurable
@@ -33,7 +32,7 @@ object TenonStructureOp {
       fileName,
       Some(outPutDir),
       Some(openOrNot),
-      Some("/usr/local/bin")
+      Some("/usr/local/Cellar/graphviz/9.0.0/bin/dot")
     )
   }
 }
