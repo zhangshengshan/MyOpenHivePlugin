@@ -30,7 +30,10 @@ object TenonStructureOp {
     val graph: Graph = GraphBuilder.make(param, Some(genUrl), Some(config))
     val openOrNot = MyConfigurable.getInstance().isOpenAfterGen
 
-    import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserFactory}
+    import com.intellij.openapi.fileChooser.{
+      FileChooserDescriptor,
+      FileChooserFactory
+    }
     import com.intellij.openapi.project.ProjectManager
     import com.intellij.openapi.ui.Messages
 
@@ -60,22 +63,33 @@ object TenonStructureOp {
       else OsConfig.winOutputPath
     }
 
-    if (SystemInfo.isMac) {
-      graph.render(
-        fileName,
-        Some(outPutDir),
-        Some(openOrNot),
-        Some(OsConfig.macDotPath),
-        Some(false)
-      )
-    } else {
-      graph.render(
-        fileName,
-        Some(outPutDir),
-        Some(openOrNot),
-        Some(OsConfig.winDotPath),
-        Some(false)
-      )
+    try {
+      if (SystemInfo.isMac) {
+        graph.render(
+          fileName,
+          Some(outPutDir),
+          Some(openOrNot),
+          Some(OsConfig.macDotPath),
+          Some(false)
+        )
+      } else {
+        graph.render(
+          fileName,
+          Some(outPutDir),
+          Some(openOrNot),
+          Some(OsConfig.winDotPath),
+          Some(true)
+        )
+      }
+    } catch {
+      case e: Exception => {
+        Messages.showMessageDialog(
+          project,
+          e.getMessage,
+          "错误",
+          Messages.getErrorIcon
+        )
+      }
     }
   }
 }

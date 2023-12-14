@@ -50,7 +50,7 @@ case class TypeDBTableFieldNode(
       val tableHeader: String = "<TR>" + headerMeta.map { x => s"<TD>$x</TD>" }.mkString + "</TR>"
       val value: _root_.scala.collection.immutable.List[_root_.scala.Predef.String] = this.fieldComment.tail.map(
         (x: List[String]) => {
-          x.map(item ⇒ s""" <TD>$item</TD> """).mkString("<TR>", "\r", "</TR>")
+          x.map(item => s""" <TD>$item</TD> """).mkString("<TR>", "\r", "</TR>")
         }
       )
       val str: String = value.mkString(" ")
