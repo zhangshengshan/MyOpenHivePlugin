@@ -23,6 +23,9 @@ repositories {
     maven {
         url "https://oss.sonatype.org/content/repositories/releases"
     }
+    maven {
+        url "https://oss.sonatype.org/service/local/repositories/releases/content"
+    }
 }
 sourceSets {
     main {
