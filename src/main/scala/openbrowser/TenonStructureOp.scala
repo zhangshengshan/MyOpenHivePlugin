@@ -1,7 +1,9 @@
 package openbrowser
 
 import another.GraphBuilder
+import com.intellij.openapi.fileChooser.FileChooserDialog
 import com.intellij.openapi.util.SystemInfo
+import com.intellij.openapi.vfs.VirtualFile
 import com.zss.graph.Graph
 import config.os.OsConfig
 import hierachyconfig.MyConfigurable
@@ -9,6 +11,7 @@ import hierachyconfig.MyConfigurable
 object TenonStructureOp {
 
   def genTenonStructureGraph(param: String): Unit = {
+
     param
       .replace("(", "_")
       .replace(")", "_")
@@ -23,24 +26,44 @@ object TenonStructureOp {
       s"https://www.baidu.com"
     }
 
-    val config = Map("mode" → MyConfigurable.getInstance().getTennonShowMode)
+    val config = Map("mode" -> MyConfigurable.getInstance().getTennonShowMode)
     val graph: Graph = GraphBuilder.make(param, Some(genUrl), Some(config))
-    val outPutDir = MyConfigurable.getInstance().getOutputPath
     val openOrNot = MyConfigurable.getInstance().isOpenAfterGen
 
-    val fileName = param.split("\\/").last.split("\\.").head
+    import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserFactory}
+    import com.intellij.openapi.project.ProjectManager
+    import com.intellij.openapi.ui.Messages
 
-    graph.render(
-      fileName,
-      Some(outPutDir),
-      Some(openOrNot),
-      Some("/usr/local/Cellar/graphviz/9.0.0/bin/dot")
+    val descriptor =
+      new FileChooserDescriptor(false, true, false, false, false, false)
+    val project = ProjectManager.getInstance().getDefaultProject
+
+    val initialFileName = param.split("\\/").last.split("\\.").head
+    //TODO: 给一个默认的文件名
+    val fileName: String = Messages.showInputDialog(
+      project,
+      "请输入文件名",
+      "文件名",
+      Messages.getQuestionIcon,
+      initialFileName,
+      null
     )
+
+    val dialog: FileChooserDialog = FileChooserFactory
+      .getInstance()
+      .createFileChooser(descriptor, project, null)
+
+    val option: Option[VirtualFile] = dialog.choose(project).headOption
+    val outPutDir = {
+      if (option.isDefined) option.get.getPath
+      else if (SystemInfo.isMac) OsConfig.macOutputPath
+      else OsConfig.winOutputPath
+    }
 
     if (SystemInfo.isMac) {
       graph.render(
         fileName,
-        Some(OsConfig.macOutputPath),
+        Some(outPutDir),
         Some(openOrNot),
         Some(OsConfig.macDotPath),
         Some(false)
@@ -48,7 +71,7 @@ object TenonStructureOp {
     } else {
       graph.render(
         fileName,
-        Some(OsConfig.winOutputPath),
+        Some(outPutDir),
         Some(openOrNot),
         Some(OsConfig.winDotPath),
         Some(false)
