@@ -50,7 +50,8 @@ object TenonStructureOp {
       initialFileName,
       null
     )
-    val graph: Graph = GraphBuilder.make(fileName, Some(genUrl), Some(config))
+    val graph: Graph = GraphBuilder.make(param, Some(genUrl), Some(config))
+
     val dialog: FileChooserDialog = FileChooserFactory
       .getInstance()
       .createFileChooser(descriptor, project, null)
