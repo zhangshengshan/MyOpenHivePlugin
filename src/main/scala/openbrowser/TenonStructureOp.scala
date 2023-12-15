@@ -27,7 +27,6 @@ object TenonStructureOp {
     }
 
     val config = Map("mode" -> MyConfigurable.getInstance().getTennonShowMode)
-    val graph: Graph = GraphBuilder.make(param, Some(genUrl), Some(config))
     val openOrNot = MyConfigurable.getInstance().isOpenAfterGen
 
     import com.intellij.openapi.fileChooser.{
@@ -51,7 +50,7 @@ object TenonStructureOp {
       initialFileName,
       null
     )
-
+    val graph: Graph = GraphBuilder.make(fileName, Some(genUrl), Some(config))
     val dialog: FileChooserDialog = FileChooserFactory
       .getInstance()
       .createFileChooser(descriptor, project, null)
