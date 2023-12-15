@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.{Document, Editor}
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
+import misc.ClipBoardUtil
 
 import scala.util.matching.Regex
 
@@ -12,6 +13,7 @@ class BatchReplace extends AnAction {
 
   final val NORMAL_MODE: String = "普通替换"
   final val REGEX_MODE: String = "正则替换"
+  final val ANOTHER_EXTRACT: String = "另一种提取方式"
 
   override def actionPerformed(e: AnActionEvent): Unit = {
 
@@ -22,7 +24,7 @@ class BatchReplace extends AnAction {
     //此处弹出多行对话框
     val lines: String = Messages.showMultilineInputDialog(
       project,
-      "source|target",
+      "source|target或者regex",
       "批量替换",
       null,
       Messages.getQuestionIcon,
@@ -33,19 +35,21 @@ class BatchReplace extends AnAction {
       "请选择替换模式",
       "替换模式",
       Messages.getQuestionIcon,
-      Array(NORMAL_MODE, REGEX_MODE),
+      Array(NORMAL_MODE, REGEX_MODE, ANOTHER_EXTRACT),
       NORMAL_MODE,
       null
     )
 
+    val anotherStringBuffer: StringBuffer = new StringBuffer()
+
     lines
       .split("\n")
       .foreach(line => {
-        val source: String = line.split("\\|")(0)
-        val target: String = line.split("\\|")(1)
-        val text: String = document.getText
 
         if (subMode == NORMAL_MODE) {
+          val source: String = line.split("\\|")(0)
+          val target: String = line.split("\\|")(1)
+          val text: String = document.getText
           try {
             val newText: String = text
               .replaceAll("\\s+" + source + "\\s+", target)
@@ -66,7 +70,10 @@ class BatchReplace extends AnAction {
               )
             }
           }
-        } else {
+        } else if (subMode == REGEX_MODE) {
+          val source: String = line.split("\\|")(0)
+          val target: String = line.split("\\|")(1)
+          val text: String = document.getText
           try {
             val r: Regex = source.r
             val str: String = r.replaceAllIn(
@@ -92,8 +99,27 @@ class BatchReplace extends AnAction {
               )
             }
           }
+        } else {
+          val r: Regex = (line + "\\.[^ ]+").r
+          val text: String = document.getText
+          r.findAllMatchIn(text).foreach(m => {
+            anotherStringBuffer.append(m.toString() + "\n")
+          })
         }
       })
-
+      if(anotherStringBuffer.length()>0){
+        Messages.showInfoMessage(anotherStringBuffer.toString(), "提取结果")
+        ClipBoardUtil.copyToClipBoard(anotherStringBuffer.toString())
+      }
   }
+}
+object Hello extends App {
+  val s =
+    "from dw.dws_asdfasdf_d  join ods.asdfaswdf_sdafdasdf_dsasdfa as a on a.id = d.id"
+  "ods.[^\\s]+".r
+    .findAllMatchIn(s)
+    .foreach(m => {
+      val m1: Regex.Match = m
+      println(m.toString())
+    })
 }
