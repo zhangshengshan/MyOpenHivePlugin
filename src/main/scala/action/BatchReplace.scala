@@ -115,13 +115,3 @@ class BatchReplace extends AnAction {
     }
   }
 }
-object Hello extends App {
-  val s =
-    "from dw.dws_asdfasdf_d  join ods.asdfaswdf_sdafdasdf_dsasdfa as a on a.id = d.id"
-  "ods.[^\\s]+".r
-    .findAllMatchIn(s)
-    .foreach(m => {
-      val m1: Regex.Match = m
-      println(m.toString())
-    })
-}
