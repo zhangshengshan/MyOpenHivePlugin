@@ -100,17 +100,19 @@ class BatchReplace extends AnAction {
             }
           }
         } else {
-          val r: Regex = (line + "\\.[^ ]+").r
+//          val r: Regex = (line + "\\.[^ ]+").r
+          val r: Regex = line.r
           val text: String = document.getText
-          r.findAllMatchIn(text).foreach(m => {
-            anotherStringBuffer.append(m.toString() + "\n")
-          })
+          r.findAllMatchIn(text)
+            .foreach(m => {
+              anotherStringBuffer.append(m.toString() + "\n")
+            })
         }
       })
-      if(anotherStringBuffer.length()>0){
-        Messages.showInfoMessage(anotherStringBuffer.toString(), "提取结果")
-        ClipBoardUtil.copyToClipBoard(anotherStringBuffer.toString())
-      }
+    if (anotherStringBuffer.length() > 0) {
+      Messages.showInfoMessage(anotherStringBuffer.toString(), "提取结果")
+      ClipBoardUtil.copyToClipBoard(anotherStringBuffer.toString())
+    }
   }
 }
 object Hello extends App {
