@@ -11,9 +11,9 @@ import scala.util.matching.Regex
 
 class BatchReplace extends AnAction {
 
-  final val NORMAL_MODE: String = "普通替换"
-  final val REGEX_MODE: String = "正则替换"
-  final val ANOTHER_EXTRACT: String = "另一种提取方式"
+  private final val NORMAL_MODE: String = "普通替换"
+  private final val REGEX_MODE: String = "正则替换"
+  private final val ANOTHER_EXTRACT: String = "另一种提取方式"
 
   override def actionPerformed(e: AnActionEvent): Unit = {
 
