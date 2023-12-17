@@ -21,6 +21,8 @@ class BatchReplace extends AnAction {
     val editor: Editor = e.getData(CommonDataKeys.EDITOR)
     val document: Document = editor.getDocument
 
+
+
     //此处弹出多行对话框
     val lines: String = Messages.showMultilineInputDialog(
       project,
