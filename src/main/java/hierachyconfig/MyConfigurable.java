@@ -54,6 +54,13 @@ public class MyConfigurable implements PersistentStateComponent<MyConfigurable>,
     int DASHBOARDFONT = alizarin100;
 
 
+    int color1 = sunflower50;
+    int color2 = sunflower100;
+    int color3 = orange50;
+    int color4 = orange100;
+
+
+
     boolean DownStream = true;
     boolean UpStream = true;
     boolean Fields显示 = true;

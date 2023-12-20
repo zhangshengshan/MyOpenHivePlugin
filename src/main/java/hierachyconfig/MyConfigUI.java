@@ -82,6 +82,12 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
     private JRadioButton OnlyHiveTable;
 
 
+    private JButton color1Button;
+    private JButton color2Button;
+    private JButton color3Button;
+    private JButton color4Button;
+
+
     public MyConfigUI(MyConfigurable settings) {
         // TODO: 赋予初始化数数值
 
@@ -326,6 +332,35 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
             DASHBOARDFONTButton.setBackground(color);
             DASHBOARDFONTButton.setForeground(color);
         });
+
+        color1Button.addActionListener(e -> {
+            Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.RED);
+            final Color color = new Color(newColor.getRGB());
+            color1Button.setBackground(color);
+            color1Button.setForeground(color);
+        });
+
+        color2Button.addActionListener(e -> {
+            Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.RED);
+            final Color color = new Color(newColor.getRGB());
+            color2Button.setBackground(color);
+            color2Button.setForeground(color);
+        });
+
+        color3Button.addActionListener(e -> {
+            Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.RED);
+            final Color color = new Color(newColor.getRGB());
+            color3Button.setBackground(color);
+            color3Button.setForeground(color);
+        });
+
+        color4Button.addActionListener(e -> {
+            Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.RED);
+            final Color color = new Color(newColor.getRGB());
+            color4Button.setBackground(color);
+            color4Button.setForeground(color);
+        });
+
         colorRestButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -339,6 +374,8 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
 
             }
         });
+
+
     }
 
     @Override
@@ -392,6 +429,11 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         this.tennonModeSelector.setSelectedItem(settings.getTennonShowMode());
 
         this.OnlyHiveTable.setSelected(settings.isHiveOnlyHierachy());
+
+        this.color1Button.setBackground(new Color(settings.getColor1()));
+        this.color2Button.setBackground(new Color(settings.getColor2()));
+        this.color3Button.setBackground(new Color(settings.getColor3()));
+        this.color4Button.setBackground(new Color(settings.getColor4()));
     }
 
     @Override
@@ -449,6 +491,12 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
 
         isModified |= !(this.OnlyHiveTable.isSelected() == settings.isHiveOnlyHierachy());
 
+
+        isModified |= !(this.color1Button.getBackground().getRGB() == settings.getColor1());
+        isModified |= !(this.color2Button.getBackground().getRGB() == settings.getColor2());
+        isModified |= !(this.color3Button.getBackground().getRGB() == settings.getColor3());
+        isModified |= !(this.color4Button.getBackground().getRGB() == settings.getColor4());
+
         return isModified;
     }
 
@@ -500,6 +548,13 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         settings.setTennonShowMode(this.tennonModeSelector.getSelectedItem().toString());
 
         settings.setHiveOnlyHierachy(this.OnlyHiveTable.isSelected());
+
+
+        settings.setColor1(this.color1Button.getBackground().getRGB());
+        settings.setColor2(this.color2Button.getBackground().getRGB());
+        settings.setColor3(this.color3Button.getBackground().getRGB());
+        settings.setColor4(this.color4Button.getBackground().getRGB());
+
     }
 
     @Override

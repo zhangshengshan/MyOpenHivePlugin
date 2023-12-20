@@ -26,13 +26,13 @@ object TenonStructureOp {
       s"https://www.baidu.com"
     }
 
-    val config = Map("mode" -> MyConfigurable.getInstance().getTennonShowMode)
+    val config = Map(
+      "mode" -> MyConfigurable.getInstance().getTennonShowMode
+    ) ++ HierachyConfigStrategy.getColorConfig
+
     val openOrNot = MyConfigurable.getInstance().isOpenAfterGen
 
-    import com.intellij.openapi.fileChooser.{
-      FileChooserDescriptor,
-      FileChooserFactory
-    }
+    import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserFactory}
     import com.intellij.openapi.project.ProjectManager
     import com.intellij.openapi.ui.Messages
 
@@ -50,7 +50,8 @@ object TenonStructureOp {
       initialFileName,
       null
     )
-    val graph: Graph = GraphBuilder.make(param, Some(genUrl), Some(config), Some(fileName))
+    val graph: Graph =
+      GraphBuilder.make(param, Some(genUrl), Some(config.toMap), Some(fileName))
 
     val dialog: FileChooserDialog = FileChooserFactory
       .getInstance()

@@ -656,6 +656,38 @@
                       </model>
                     </properties>
                   </component>
+                  <component id="6e93b" class="javax.swing.JButton" binding="color1Button" default-binding="true">
+                    <constraints>
+                      <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Color1"/>
+                    </properties>
+                  </component>
+                  <component id="5e44" class="javax.swing.JButton" binding="color2Button" default-binding="true">
+                    <constraints>
+                      <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Color2"/>
+                    </properties>
+                  </component>
+                  <component id="893f5" class="javax.swing.JButton" binding="color3Button" default-binding="true">
+                    <constraints>
+                      <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Color3"/>
+                    </properties>
+                  </component>
+                  <component id="edf30" class="javax.swing.JButton" binding="color4Button" default-binding="true">
+                    <constraints>
+                      <grid row="9" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Color4"/>
+                    </properties>
+                  </component>
                 </children>
               </grid>
               <grid id="fad80" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
