@@ -7,6 +7,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.zss.graph.Graph
 import config.os.OsConfig
 import hierachyconfig.MyConfigurable
+import misc.ClipBoardUtil
 
 object TenonStructureOp {
 
@@ -92,5 +93,17 @@ object TenonStructureOp {
         )
       }
     }
+
+    val genSQL: String = graph.toSQLWithOn(0)
+
+    ClipBoardUtil.copyToClipBoard(genSQL)
+
+    Messages.showMessageDialog(
+      project,
+      genSQL,
+      "SQL",
+      Messages.getInformationIcon
+    )
+
   }
 }
