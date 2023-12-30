@@ -80,7 +80,7 @@ generateGrammarSource {
 }
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = '2023.2.3'
+    version = '2023.3.2'
 }
 patchPluginXml {
     changeNotes = """
