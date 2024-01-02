@@ -98,6 +98,7 @@
         </action>
         <action id="CommentSelectLines" class="action.CommentSelectLines" text="commentSelectLines"
                 description="CommentSelectLines">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt T"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
     </actions>
