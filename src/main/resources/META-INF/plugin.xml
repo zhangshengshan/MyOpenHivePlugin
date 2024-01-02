@@ -96,5 +96,9 @@
                 description="batchProcess">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+        <action id="CommentSelectLines" class="action.CommentSelectLines" text="commentSelectLines"
+                description="CommentSelectLines">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
     </actions>
 </idea-plugin>
