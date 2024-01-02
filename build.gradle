@@ -42,6 +42,7 @@ compileJava.classpath += files(compileScala.destinationDir)
 // TODO: 突然发现打出的JAR包不含依赖， 体积骤降，导致相关的类无法加载，调整为打包成fatJar
 // FatJar导致包体积过大，需要调整
 jar {
+    classifier = "all"
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
