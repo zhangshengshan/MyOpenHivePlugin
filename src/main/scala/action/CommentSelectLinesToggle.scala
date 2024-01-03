@@ -5,8 +5,9 @@ import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.{Document, Editor}
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
+import com.intellij.openapi.util.TextRange
 
-class CommentSelectLines extends AnAction {
+class CommentSelectLinesToggle extends AnAction {
   override def actionPerformed(e: AnActionEvent): Unit = {
 
     // 获取编辑器选择的行，然后在行首添加 -- 进行注释
@@ -32,7 +33,18 @@ class CommentSelectLines extends AnAction {
             lineStart to lineEnd foreach { curLine =>
               {
                 val insertPos: Int = document.getLineStartOffset(curLine)
-                document.insertString(insertPos, " -- ")
+                // 如果该行的行首没有 -- 则在行首添加 --
+                // 如果该行的行首有 -- 则去掉行首的 --
+
+                if (
+                  document
+                    .getText(new TextRange(insertPos, insertPos + 2)) == "--"
+                ) {
+                  document.deleteString(insertPos, insertPos + 2)
+                } else {
+                  document.insertString(insertPos, "--")
+                }
+
               }
             }
           } catch {
