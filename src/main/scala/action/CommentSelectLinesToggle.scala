@@ -38,11 +38,11 @@ class CommentSelectLinesToggle extends AnAction {
 
                 if (
                   document
-                    .getText(new TextRange(insertPos, insertPos + 2)) == "--"
+                    .getText(new TextRange(insertPos, insertPos + 3)) == "-- "
                 ) {
-                  document.deleteString(insertPos, insertPos + 2)
+                  document.deleteString(insertPos, insertPos + 3)
                 } else {
-                  document.insertString(insertPos, "--")
+                  document.insertString(insertPos, "-- ")
                 }
 
               }
