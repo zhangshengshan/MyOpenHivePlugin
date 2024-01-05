@@ -160,6 +160,17 @@ publishing {
                 password = ALIYUNPASSWORD
             }
         }
+
+        maven {
+             name = "MyOpenHivePlugin"
+             url = uri("https://maven.pkg.github.com/zhangshengshan/MyOpenHivePlugin")
+
+             credentials {
+                 username = GITHUBUSERNAME
+                 password = GITHUBPASSWORD
+             }
+         }
+
     }
 }
 
