@@ -11,11 +11,11 @@ plugins {
 }
 
 group 'io.github.zhangshengshan'
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-test.onlyIf { project.hasProperty('someProperty') }
+//java {
+//    sourceCompatibility = JavaVersion.VERSION_1_8
+//    targetCompatibility = JavaVersion.VERSION_1_8
+//}
+//test.onlyIf { project.hasProperty('someProperty') }
 
 repositories {
     mavenLocal()
