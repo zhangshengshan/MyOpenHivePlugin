@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.intellij' version '1.10.2'
+    id 'org.jetbrains.intellij' version '1.16.1'
     id 'java'
     id 'antlr'
     id 'scala'
@@ -11,12 +11,15 @@ plugins {
 }
 
 group 'io.github.zhangshengshan'
-
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 test.onlyIf { project.hasProperty('someProperty') }
 
 repositories {
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
@@ -42,7 +45,6 @@ compileJava.classpath += files(compileScala.destinationDir)
 // TODO: 突然发现打出的JAR包不含依赖， 体积骤降，导致相关的类无法加载，调整为打包成fatJar
 // FatJar导致包体积过大，需要调整
 jar {
-    classifier = "all"
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
