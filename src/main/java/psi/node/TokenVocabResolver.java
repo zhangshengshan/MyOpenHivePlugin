@@ -6,7 +6,6 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nullable;
 import plugin.HiveFile;
 
@@ -30,7 +29,8 @@ public class TokenVocabResolver {
                 PsiElement optionName = PsiTreeUtil.getDeepestFirst(option);
 
                 if (optionName.getText().equals("tokenVocab")) {
-                    String text = StringUtils.strip(reference.getText(), "'");
+//                    String text = StringUtils.strip(reference.getText(), "'");
+                    String text = reference.getText().replaceAll("'", "");
                     return findRelativeFile(text, reference.getContainingFile());
                 }
             }
