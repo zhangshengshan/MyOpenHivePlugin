@@ -57,7 +57,7 @@
                                          displayName="HierachyTools"/>
         -->
         <applicationService serviceImplementation="hierachyconfig.MyConfigurable"/>
-        <applicationConfigurable instance="hierachyconfig.MyConfigEntry" displayName="hierachy"
+        <applicationConfigurable instance="hierachyconfig.MyConfigEntry" displayName="层次工具"
                                  parentId="tools" id="hierachy"
         />
     </extensions>
