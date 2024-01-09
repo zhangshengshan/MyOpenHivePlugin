@@ -11,9 +11,7 @@
 - [ ] code style support
 - [ ] structure view support all tables extract
 - [ ] Graphviz can sequence is a little wrong when nested select clauses are used in a hive file
-- [x] GraphViz 设置默认的存储路径和SVG名称 java.security.PrivilegedActionException:
-  java.security.PrivilegedActionException:
-  java.io.FileNotFoundException: test.dot (Read-only file system)
+- [x] GraphViz 设置默认的存储路径和SVG名称 
 - [ ] https://github.com/JetBrains/intellij-sdk-code-samples/blob/main/psi_demo/src/main/java/org/intellij/sdk/psi/PsiNavigationDemoAction.java
 - [ ] 图形化界面的Hierachy工具 仿照本文写一个HIVE的Action
 - [ ] display syntax error by the
