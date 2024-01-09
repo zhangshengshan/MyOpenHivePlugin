@@ -5,7 +5,7 @@ plugins {
     id 'scala'
     id 'net.researchgate.release' version '3.0.2'
     id "io.freefair.lombok" version "8.4"
-    id "org.jetbrains.kotlin.jvm" version "1.7.0"
+//    id "org.jetbrains.kotlin.jvm" version "1.7.0"
     id "maven-publish"
     id "signing"
 }
@@ -13,8 +13,16 @@ plugins {
 group 'io.github.zhangshengshan'
 
 repositories {
+
     mavenLocal()
     mavenCentral()
+    // add aliyun huawei repo
+    maven {
+        url "https://repo.huaweicloud.com/repository/maven/"
+    }
+    maven {
+        url "https://maven.aliyun.com/repository/public"
+    }
 
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
@@ -54,7 +62,6 @@ task fatJar(type: Jar) {
     }
     with jar
 }
-
 
 
 dependencies {
@@ -163,14 +170,14 @@ publishing {
         }
 
         maven {
-             name = "MyOpenHivePlugin"
-             url = uri("https://maven.pkg.github.com/zhangshengshan/MyOpenHivePlugin")
+            name = "MyOpenHivePlugin"
+            url = uri("https://maven.pkg.github.com/zhangshengshan/MyOpenHivePlugin")
 
-             credentials {
-                 username = GITHUBUSERNAME
-                 password = GITHUBPASSWORD
-             }
-         }
+            credentials {
+                username = GITHUBUSERNAME
+                password = GITHUBPASSWORD
+            }
+        }
 
     }
 }
