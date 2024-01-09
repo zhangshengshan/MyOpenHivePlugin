@@ -2,8 +2,8 @@
 
 # TODO
 
-## 重要紧急
-
+- [ ] 开发新的SQL FORMATTER用于格式化SQL代替现有的三方库以及Intellij_Platform的Formatter
+- 
 - [x] completion for keywords and functions **_关键字和函数的自动补全_**
 - [x] uppercase and lowercase support 大写小写支持
 - [x] usage find provider 使用查找
@@ -16,8 +16,6 @@
 - [x] dot 命令需要显示指定，需要进行dot命令的检测， 环境变量等的配置， 如果没有则弹窗告警。
 - [x] jump to definitions for table name and column name
 - [x] get project from a tool window
-- [ ] 开发新的SQL FORMATTER用于格式化SQL代替现有的三方库以及Intellij_Platform的Formatter
-- [ ] rename refactoring 改名重构
 - [ ] optimize the strategy of folding 折叠策略优化, set key=value 开始的SQL不能正常fold
 - [x] surround with support
 - [ ] extract with part support
@@ -40,8 +38,6 @@
 - [ ] 执行按钮的快捷键设置还有问题，可以做成可以配置的
 - [ ] Hierachy绘图样式的配置
 - [x] Hierachy绘图column参数的选择和配置
-- [ ] Hierachy绘图的表级支持
-- [ ] Hierachy绘图的多字段的支持
 - [ ] Hierachy Color Config 
 - [ ] 颜色支持Node类型自定义， 也支持成套的颜色配置
 - [ ] 输出地址可以配置
@@ -57,16 +53,6 @@
 - [ ] Graph 中commet 里面的特殊字符，可能导致失败， 需要进行告警检查
 - [ ] Graph 中的表名，字段名，需要进行大小写的转换
 - [ ] extracttable names optimize 过滤别名
- ```sql
-ON
-CONCAT(hi_expense.owner_employee_email,SUBSTRING(hi_expense.checkin_date,1,10))
-=
-vcc_info.ck
-```对于这类关联条件不能正常展示
-
-
-## 重要不紧急
-
 - [x] gradle release plugin 发布插件
 - [x] comment support
 - [x] graphviz integration but still depend on other library 图形化集成
@@ -76,9 +62,6 @@ vcc_info.ck
 - [ ] plugin.xml refactoring 插件配置文件重构
 - [ ] generate hive sql coding guidelines hive sql编码规范
 - [ ] 格式的调优与可定义实现
-  ~~- [ ] more tests 更多测试~~
-  ~~- [ ] more examples 更多示例~~
-  ~~- [ ] code linter 代码检查~~
 - [ ] 本工程编译需要mix java 和 scala , 编译的时候存在相互依赖， 需要手动处理， 1、先编译JAVA， 2， 再编译Scala , 3 在编译JAVA， 从长远看需要处理。 
 - [ ] 针对ICON缺失的问题进行处理解决。
 
@@ -102,3 +85,11 @@ vcc_info.ck
 
 - Keymapping for moving carel to matching brace (Ctrl+M)
 
+
+
+ ```sql
+ON
+CONCAT(hi_expense.owner_employee_email,SUBSTRING(hi_expense.checkin_date,1,10))
+=
+vcc_info.ck
+```对于这类关联条件不能正常展示
