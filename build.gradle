@@ -11,15 +11,13 @@ plugins {
 }
 
 group 'io.github.zhangshengshan'
-//java {
-//    sourceCompatibility = JavaVersion.VERSION_1_8
-//    targetCompatibility = JavaVersion.VERSION_1_8
-//}
-//test.onlyIf { project.hasProperty('someProperty') }
 
 repositories {
     mavenLocal()
     mavenCentral()
+//    maven {
+//        url "https://maven.aliyun.com/repository/central"
+//    }
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
