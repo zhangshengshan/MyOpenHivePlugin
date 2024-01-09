@@ -16,9 +16,9 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
     private JButton FieldsFontColorButton;
     private JButton FieldBgColorButton;
     private JButton ClusterFontColorButton;
-    private JPanel 颜色配置;
-    private JPanel 形状配置;
-    private JPanel 关系配置;
+    private JPanel colorConfig;
+    private JPanel shapeConfig;
+    private JPanel relationConfig;
     private JButton ClusterBgColorButton;
     private JButton TableBgColorButton;
     private JButton ArrowColorButton;
@@ -53,9 +53,9 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
     private JButton DWMBGButton;
     private JButton APPBGButton;
     private JButton DIMBGButton;
-    private JCheckBox 过滤CheckBox;
-    private JButton 过滤BGButton;
-    private JButton 过滤FontButton;
+    private JCheckBox filterCheckBox;
+    private JButton filterBGButton;
+    private JButton filterFontButton;
     private JTextField textField2;
     private JTextArea textArea1;
     private JTextArea textArea2;
@@ -68,12 +68,9 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
     private JButton DWMFontButton;
     private JButton APPFontButton;
     private JButton DIMFontButton;
-    /**
-     * 此按钮的作用是恢复Hierachy预设的配色方案
-     */
     private JButton colorRestButton;
     private JComboBox hierachyDepth;
-    private JRadioButton 批量处理字段血缘RadioButton;
+    private JRadioButton batchFieldHierachy;
     private JRadioButton OpenAfterGen;
     private JTextField outputPath;
     private JRadioButton downloadAfterExtractRadioButton;
@@ -89,8 +86,6 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
 
 
     public MyConfigUI(MyConfigurable settings) {
-        // TODO: 赋予初始化数数值
-
 
         ClusterBgColorButton.addActionListener(e -> {
             Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.RED);
@@ -172,17 +167,17 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
             DIMBGButton.setBackground(color);
             DIMBGButton.setForeground(color);
         });
-        过滤BGButton.addActionListener(e -> {
+        filterBGButton.addActionListener(e -> {
             Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.RED);
             final Color color = new Color(newColor.getRGB());
-            过滤BGButton.setBackground(color);
-            过滤BGButton.setForeground(color);
+            filterBGButton.setBackground(color);
+            filterBGButton.setForeground(color);
         });
-        过滤FontButton.addActionListener(e -> {
+        filterFontButton.addActionListener(e -> {
             Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.RED);
             final Color color = new Color(newColor.getRGB());
-            过滤FontButton.setBackground(color);
-            过滤FontButton.setForeground(color);
+            filterFontButton.setBackground(color);
+            filterFontButton.setForeground(color);
         });
 
         keyWord1BG.addActionListener(e -> {
@@ -419,7 +414,7 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
 
         this.hierachyDepth.setSelectedItem(settings.getHierachyDepth());
 
-        this.批量处理字段血缘RadioButton.setSelected(settings.isBatchFieldHierachy());
+        this.batchFieldHierachy.setSelected(settings.isBatchFieldHierachy());
         this.OpenAfterGen.setSelected(settings.isOpenAfterGen());
         this.outputPath.setText(settings.getOutputPath());
         this.downloadAfterExtractRadioButton.setSelected(settings.isDownloadAfterExtract());
@@ -477,7 +472,7 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
 
         isModified |= !(this.hierachyDepth.getSelectedItem().equals(settings.hierachyDepth));
 
-        isModified |= !(this.批量处理字段血缘RadioButton.isSelected() != settings.isBatchFieldHierachy());
+        isModified |= !(this.batchFieldHierachy.isSelected() != settings.isBatchFieldHierachy());
         isModified |= !(this.OpenAfterGen.isSelected() == (settings.isOpenAfterGen()));
 
 
@@ -540,7 +535,7 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         settings.setFields显示(this.fieldsDisplay.isSelected());
 
         settings.setHierachyDepth(this.hierachyDepth.getSelectedItem().toString());
-        settings.setBatchFieldHierachy(this.批量处理字段血缘RadioButton.isSelected());
+        settings.setBatchFieldHierachy(this.batchFieldHierachy.isSelected());
         settings.setOpenAfterGen(this.OpenAfterGen.isSelected());
         settings.setOutputPath(this.outputPath.getText());
         settings.setDownloadAfterExtract(this.downloadAfterExtractRadioButton.isSelected());

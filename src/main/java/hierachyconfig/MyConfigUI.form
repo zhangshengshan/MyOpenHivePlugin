@@ -41,7 +41,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="e99b3" binding="颜色配置" layout-manager="GridLayoutManager" row-count="7" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="e99b3" binding="colorConfig" layout-manager="GridLayoutManager" row-count="7" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -108,7 +108,7 @@
                       </component>
                     </children>
                   </grid>
-                  <grid id="be510" binding="形状配置" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="be510" binding="shapeConfig" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -174,7 +174,7 @@
                       </component>
                     </children>
                   </grid>
-                  <grid id="302c4" binding="关系配置" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="302c4" binding="relationConfig" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -327,7 +327,7 @@
                           </model>
                         </properties>
                       </component>
-                      <component id="6ce0" class="javax.swing.JRadioButton" binding="批量处理字段血缘RadioButton" default-binding="true">
+                      <component id="6ce0" class="javax.swing.JRadioButton" binding="batchFieldHierachy" default-binding="true">
                         <constraints>
                           <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -483,7 +483,7 @@
                       <text value="DIMBG"/>
                     </properties>
                   </component>
-                  <component id="1fa84" class="javax.swing.JCheckBox" binding="过滤CheckBox" default-binding="true">
+                  <component id="1fa84" class="javax.swing.JCheckBox" binding="filterCheckBox" default-binding="true">
                     <constraints>
                       <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -491,7 +491,7 @@
                       <text value="过滤"/>
                     </properties>
                   </component>
-                  <component id="af253" class="javax.swing.JButton" binding="过滤BGButton" default-binding="true">
+                  <component id="af253" class="javax.swing.JButton" binding="filterBGButton" default-binding="true">
                     <constraints>
                       <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -499,7 +499,7 @@
                       <text value="过滤BG"/>
                     </properties>
                   </component>
-                  <component id="fd08b" class="javax.swing.JButton" binding="过滤FontButton" default-binding="true">
+                  <component id="fd08b" class="javax.swing.JButton" binding="filterFontButton" default-binding="true">
                     <constraints>
                       <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
