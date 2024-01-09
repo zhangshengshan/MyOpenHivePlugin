@@ -18,16 +18,16 @@
 - [ ] 图形化界面的Hierachy工具 仿照本文写一个HIVE的Action
 - [ ] display syntax error by the
   parser https://plugins.jetbrains.com/docs/intellij/syntax-errors.html#controlling-syntax-errors-highlighting
-- [ ] MyToolWindow 中如果输入的文件名称有问题，现在没有错误提示，需要进行修正˚
+- [x] MyToolWindow 中如果输入的文件名称有问题，现在没有错误提示，需要进行修正˚
 - [ ] Studio TableTaskCode
 - [ ] Studio 任务编辑 实例运维 提交历史
 - [ ] Studio Hierachy 榫卯结构 设计
 - [ ] 拖拉拽的榫卯设计雏形可行性尝试。
 - [ ] 执行按钮的快捷键设置还有问题，可以做成可以配置的
-- [ ] Hierachy绘图样式的配置
-- [ ] Hierachy Color Config
-- [ ] 颜色支持Node类型自定义， 也支持成套的颜色配置
-- [ ] 输出地址可以配置
+- [x] Hierachy绘图样式的配置
+- [x] Hierachy Color Config
+- [x] 颜色支持Node类型自定义， 也支持成套的颜色配置
+- [x] 输出地址可以配置
 - [ ] 根据Hierachy 字段级或者表级的依赖关系下载HQL代码
 - [ ] 处理资源文件
 - [ ] 抽取抽表格拷贝到看板中
