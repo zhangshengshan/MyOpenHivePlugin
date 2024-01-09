@@ -2,14 +2,17 @@
 
 # TODO
 
-- [ ] 本工程编译需要mix java 和 scala , 编译的时候存在相互依赖， 需要手动处理， 1、先编译JAVA， 2， 再编译Scala , 3 在编译JAVA， 从长远看需要处理。
+- [ ] Doris Live Templates Support
+- [ ] 本工程编译需要mix java 和 scala , 编译的时候存在相互依赖， 需要手动处理， 1、先编译JAVA， 2， 再编译Scala , 3 在编译JAVA，
+  从长远看需要处理。
 - [ ] 开发新的SQL FORMATTER用于格式化SQL代替现有的三方库以及Intellij_Platform的Formatter
 - [ ] optimize the strategy of folding 折叠策略优化, set key=value 开始的SQL不能正常fold
 - [ ] extract with part support
 - [ ] code style support
 - [ ] structure view support all tables extract
 - [ ] Graphviz can sequence is a little wrong when nested select clauses are used in a hive file
-- [ ] GraphViz 设置默认的存储路径和SVG名称 java.security.PrivilegedActionException: java.security.PrivilegedActionException:
+- [ ] GraphViz 设置默认的存储路径和SVG名称 java.security.PrivilegedActionException:
+  java.security.PrivilegedActionException:
   java.io.FileNotFoundException: test.dot (Read-only file system)
 - [ ] https://github.com/JetBrains/intellij-sdk-code-samples/blob/main/psi_demo/src/main/java/org/intellij/sdk/psi/PsiNavigationDemoAction.java
 - [ ] 图形化界面的Hierachy工具 仿照本文写一个HIVE的Action
@@ -22,7 +25,7 @@
 - [ ] 拖拉拽的榫卯设计雏形可行性尝试。
 - [ ] 执行按钮的快捷键设置还有问题，可以做成可以配置的
 - [ ] Hierachy绘图样式的配置
-- [ ] Hierachy Color Config 
+- [ ] Hierachy Color Config
 - [ ] 颜色支持Node类型自定义， 也支持成套的颜色配置
 - [ ] 输出地址可以配置
 - [ ] 根据Hierachy 字段级或者表级的依赖关系下载HQL代码
@@ -30,7 +33,7 @@
 - [ ] 抽取抽表格拷贝到看板中
 - [ ] 生成的文件SQL或者SVG 可以配置路径
 - [ ] Graph支持增加属性设置
-- [ ] Graph UpStream And DownStream Support Layers Config 
+- [ ] Graph UpStream And DownStream Support Layers Config
 - [ ] Graph 中嵌入的地址不对
 - [ ] Graph 中commet 里面的特殊字符，可能导致失败， 需要进行告警检查
 - [ ] Graph 中的表名，字段名，需要进行大小写的转换
