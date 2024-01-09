@@ -15,9 +15,7 @@ group 'io.github.zhangshengshan'
 repositories {
     mavenLocal()
     mavenCentral()
-//    maven {
-//        url "https://maven.aliyun.com/repository/central"
-//    }
+
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
