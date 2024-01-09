@@ -63,7 +63,7 @@ public class MyConfigurable implements PersistentStateComponent<MyConfigurable>,
 
     boolean DownStream = true;
     boolean UpStream = true;
-    boolean Fields显示 = true;
+    boolean fieldsShow = true;
 
     String hierachyDepth = "5";
 

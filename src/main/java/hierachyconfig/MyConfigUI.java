@@ -410,7 +410,7 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
 
         this.downStreamCheckBox.setSelected(settings.isDownStream());
         this.upStreamCheckBox.setSelected(settings.isUpStream());
-        this.fieldsDisplay.setSelected(settings.isFields显示());
+        this.fieldsDisplay.setSelected(settings.isFieldsShow());
 
         this.hierachyDepth.setSelectedItem(settings.getHierachyDepth());
 
@@ -468,7 +468,7 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
 
         isModified |= !(this.downStreamCheckBox.isSelected() == (settings.isDownStream()));
         isModified |= !(this.upStreamCheckBox.isSelected() == (settings.isUpStream()));
-        isModified |= !(this.fieldsDisplay.isSelected() == (settings.isFields显示()));
+        isModified |= !(this.fieldsDisplay.isSelected() == (settings.isFieldsShow()));
 
         isModified |= !(this.hierachyDepth.getSelectedItem().equals(settings.hierachyDepth));
 
@@ -532,7 +532,7 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
 
         settings.setDownStream(this.downStreamCheckBox.isSelected());
         settings.setUpStream(this.upStreamCheckBox.isSelected());
-        settings.setFields显示(this.fieldsDisplay.isSelected());
+        settings.setFieldsShow(this.fieldsDisplay.isSelected());
 
         settings.setHierachyDepth(this.hierachyDepth.getSelectedItem().toString());
         settings.setBatchFieldHierachy(this.batchFieldHierachy.isSelected());

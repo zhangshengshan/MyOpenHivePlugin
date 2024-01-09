@@ -8,7 +8,7 @@ object HierachyConfigStrategy {
   private val configurable: MyConfigurable = MyConfigurable.getInstance()
 
   def showFields: Boolean = {
-    configurable.isFields显示
+    configurable.isFieldsShow
   }
 
   def bathProcessFieldHierach: Boolean = {
