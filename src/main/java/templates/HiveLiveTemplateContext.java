@@ -11,6 +11,7 @@ public class HiveLiveTemplateContext extends TemplateContextType {
 
     @Override
     public boolean isInContext(@NotNull TemplateActionContext templateActionContext) {
-        return templateActionContext.getFile().getName().endsWith(".hql");
+        return templateActionContext.getFile().getName().endsWith(".hql")
+                || templateActionContext.getFile().getName().endsWith(".sql");
     }
 }
