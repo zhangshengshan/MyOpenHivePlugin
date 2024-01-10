@@ -30,6 +30,7 @@ import java.util.List;
 @SuppressWarnings("SimplifiableIfStatement")
 public class MyPsiUtils {
     @Nullable
+    @Deprecated
     public static PsiElement findFirstChildOfType(final PsiElement parent, IElementType type) {
         return findFirstChildOfType(parent, TokenSet.create(type));
     }
@@ -62,7 +63,7 @@ public class MyPsiUtils {
      * @param parent the element whose children will be searched
      * @param types  the types to search for
      * @return an iterable that will traverse the psi tree depth-first, including only the elements
-     * whose type is contained in the provided tokenset.
+     * whose type is contained in the provided tocken sets.
      */
     public static Iterable<PsiElement> findChildrenOfType(
             final PsiElement parent, final TokenSet types) {
@@ -106,14 +107,15 @@ public class MyPsiUtils {
       }
 
   */
+    @Deprecated
     public static PsiElement createLeafFromText(
             Project project, PsiElement context, String text, IElementType type) {
         PsiFileFactoryImpl factory = (PsiFileFactoryImpl) PsiFileFactory.getInstance(project);
         PsiElement el = factory.createElementFromText(text, HiveLanguage.INSTANCE, type, context);
-        return PsiTreeUtil.getDeepestFirst(el); // forces parsing of file!!
-        // start rule depends on root passed in
+        return PsiTreeUtil.getDeepestFirst(el);
     }
 
+    @Deprecated
     public static void replacePsiFileFromText(
             final Project project, final PsiFile psiFile, String text) {
         final PsiFile newPsiFile = createFile(project, text);
@@ -129,7 +131,8 @@ public class MyPsiUtils {
     }
 
     public static PsiFile createFile(Project project, String text) {
-        String fileName = "a.g4"; // random name but must be .g4
+        // random name but must be .g4
+        String fileName = "a.g4";
         PsiFileFactoryImpl factory = (PsiFileFactoryImpl) PsiFileFactory.getInstance(project);
         return factory.createFileFromText(fileName, HiveLanguage.INSTANCE, text, false, false);
     }
@@ -159,6 +162,7 @@ public class MyPsiUtils {
                 });
     }
 
+    @Deprecated
     public static PsiElement[] collectNodesWithText(PsiElement root, final String text) {
         return PsiTreeUtil.collectElements(root, element -> element.getText().equals(text));
     }
@@ -173,6 +177,7 @@ public class MyPsiUtils {
         return elems.toArray(new PsiElement[elems.size()]);
     }
 
+    @Deprecated
     public static PsiElement findChildOfType(PsiElement root, final IElementType tokenType) {
         List<PsiElement> elems = new ArrayList<>();
         for (PsiElement child : root.getChildren()) {
@@ -194,13 +199,15 @@ public class MyPsiUtils {
     }
 
     // Look for stuff like: options { tokenVocab=SqlBaseLexer; superClass=Foo; }
+    @Deprecated
     public static String findTokenVocabIfAny(HiveFile file) {
         String vocabName = null;
         PsiElement[] options = collectNodesWithName(file, "option");
         for (PsiElement o : options) {
             PsiElement[] tokenVocab = collectChildrenWithText(o, "tokenVocab");
             if (tokenVocab.length > 0) {
-                PsiElement optionNode = tokenVocab[0].getParent(); // tokenVocab[0] is id node
+                // tokenVocab[0] is id node
+                PsiElement optionNode = tokenVocab[0].getParent();
                 PsiElement[] ids =
                         collectChildrenOfType(
                                 optionNode,
@@ -211,6 +218,7 @@ public class MyPsiUtils {
         return vocabName;
     }
 
+    @Deprecated
     public static PsiElement findElement(PsiElement startNode, int offset) {
         PsiElement p = startNode;
         if (p == null) {
