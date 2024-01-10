@@ -2,6 +2,7 @@
 
 # TODO
 
+- [ ] org.jetbrains.intellij version 只能升级到1.12.0， 无法进一步升级，否则会出现启动问题
 - [ ] Doris Live Templates Support
 - [ ] 本工程编译需要mix java 和 scala , 编译的时候存在相互依赖， 需要手动处理， 1、先编译JAVA， 2， 再编译Scala , 3 在编译JAVA，
   从长远看需要处理。
