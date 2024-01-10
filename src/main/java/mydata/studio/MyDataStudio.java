@@ -21,14 +21,14 @@ public class MyDataStudio {
     private JTable workTable;
     private JTabbedPane tabbedPane1;
     private JPanel CheckBox;
-    private JRadioButton 字段信息RadioButton;
+    private JRadioButton fieldsInfoButton;
     private JComboBox comboBox1;
     private JButton plotHierachyButton;
     private JButton plotERButton;
     private JSlider slider1;
     private JButton clearButton;
     private JRadioButton hierachyRadioButton;
-    private JRadioButton 榫卯结构RadioButton;
+    private JRadioButton tennonButton;
     private JRadioButton hierachyFieldRadioButton;
 
     private String inputFile;

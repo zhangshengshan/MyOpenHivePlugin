@@ -159,7 +159,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="7a576" class="javax.swing.JRadioButton" binding="字段信息RadioButton" default-binding="true">
+                  <component id="7a576" class="javax.swing.JRadioButton" binding="fieldsInfoButton" default-binding="true">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -193,7 +193,7 @@
                       <text value="HierachyField"/>
                     </properties>
                   </component>
-                  <component id="2e372" class="javax.swing.JRadioButton" binding="榫卯结构RadioButton" default-binding="true">
+                  <component id="2e372" class="javax.swing.JRadioButton" binding="tennonButton" default-binding="true">
                     <constraints>
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
