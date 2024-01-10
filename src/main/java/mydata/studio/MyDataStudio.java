@@ -39,7 +39,6 @@ public class MyDataStudio {
      * @param toolWindow
      */
     public MyDataStudio(ToolWindow toolWindow) {
-        /* 让Jtable支持列选择*/
         workTable.setRowSelectionAllowed(true);
         workTable.setColumnSelectionAllowed(true);
         final ExecuteButtonListener executeButtonListener = new ExecuteButtonListener(this);
@@ -56,6 +55,7 @@ public class MyDataStudio {
      * only for ui preview purpose
      */
 
+    @Deprecated
     public void setWorkTable(Object[][] data, String[] columnNames) {
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
         workTable.setModel(model);
@@ -65,6 +65,7 @@ public class MyDataStudio {
         return containerPanel;
     }
 
+    @Deprecated
     public Boolean inputFileExists() {
         return inputFile != null;
     }
