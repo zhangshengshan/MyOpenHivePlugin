@@ -17,6 +17,7 @@ public class HiveKeyWordCompletion extends CompletionProvider<CompletionParamete
     private final String[] keywords;
     private Icon icon;
 
+    @Deprecated
     public HiveKeyWordCompletion(String[] keywords) {
         this.keywords = keywords;
     }
