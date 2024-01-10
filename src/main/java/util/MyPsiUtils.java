@@ -88,25 +88,6 @@ public class MyPsiUtils {
      * mode}s defined in the grammar. This means we have to walk the whole grammar to find matching
      * candidates.
      */
-  /*
-      public static PsiElement findSpecNode(GrammarSpecNode grammar, final String ruleName) {
-          PsiElementFilter definitionFilter = element1 -> {
-              if (!(element1 instanceof RuleSpecNode)) {
-                  return false;
-              }
-
-              GrammarElementRefNode id = ((RuleSpecNode) element1).getNameIdentifier();
-              return id != null && id.getText().equals(ruleName);
-          };
-
-          PsiElement[] ruleSpec = PsiTreeUtil.collectElements(grammar, definitionFilter);
-          if (ruleSpec.length > 0) {
-              return ruleSpec[0];
-          }
-          return null;
-      }
-
-  */
     @Deprecated
     public static PsiElement createLeafFromText(
             Project project, PsiElement context, String text, IElementType type) {
