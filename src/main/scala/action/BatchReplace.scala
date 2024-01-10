@@ -82,7 +82,7 @@ class BatchReplace extends AnAction {
               }
             })
           } catch {
-            case e => {
+            case e: Throwable => {
               e.printStackTrace()
               // 弹出错误对话框显示错误信息
               Messages.showMessageDialog(
@@ -115,7 +115,7 @@ class BatchReplace extends AnAction {
               }
             })
           } catch {
-            case e => {
+            case e: Throwable => {
               e.printStackTrace()
               // 弹出错误对话框显示错误信息
               Messages.showMessageDialog(
