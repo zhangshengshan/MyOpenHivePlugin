@@ -54,7 +54,7 @@ class PsiParseAction extends AnAction {
       element.asInstanceOf[IdentifierNode].getReference.resolve()
 
     val i: Int = PsiTreeUtil.getDepth(root, ref)
-    val i1 = PsiTreeUtil.getDepth(root, element)
+    val i1: Int = PsiTreeUtil.getDepth(root, element)
 
     Messages.showInfoMessage(
       project,
