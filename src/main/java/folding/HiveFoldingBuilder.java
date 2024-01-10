@@ -25,9 +25,8 @@ import java.util.Set;
 import static plugin.basic.HiveTokenTypes.*;
 
 /**
- * Created by jason on 1/7/15. parts copied from JavaFoldingBuilderBase
- *
- * @see com.intellij.codeInsight.folding.impl.JavaFoldingBuilderBase
+ * @author zhangshengshan
+ * @date 1/7/15
  */
 public class HiveFoldingBuilder extends CustomFoldingBuilder {
 
@@ -106,10 +105,6 @@ public class HiveFoldingBuilder extends CustomFoldingBuilder {
         });
     }
 
-    private static void addOptionsFoldingDescriptor(
-            List<FoldingDescriptor> descriptors, PsiElement root) {
-    }
-
     private static void addCommentDescriptors(List<FoldingDescriptor> descriptors, PsiElement root) {
         Set<PsiElement> processedComments = new HashSet<>();
         for (PsiElement comment : MyPsiUtils.findChildrenOfType(root, COMMENTS)) {
@@ -129,31 +124,30 @@ public class HiveFoldingBuilder extends CustomFoldingBuilder {
     }
 
     /**
-     * TODO: 2022/10/18 PlaceHoler中的换行符不能添加
+     * TODO: 2022/10/18 PlaceHolder中的换行符不能添加
      */
     private static String getPlaceholderText(PsiElement element) {
 
-        if(element.getNode().getElementType()== JOIN){
-            return "JOIN...\r\n" + System.getProperty("line.separator");
-        }
-        else if (element.getNode().getElementType() == LINE_COMMENT_TOKEN) {
+        if (element.getNode().getElementType() == JOIN) {
+            return "JOIN...\r\n" + System.lineSeparator();
+        } else if (element.getNode().getElementType() == LINE_COMMENT_TOKEN) {
             return "...";
         } else if (element.getNode().getElementType() == SELECT_CLAUSE) {
-            return "字段列表...\r\n" + System.getProperty("line.separator");
+            return "字段列表...\r\n" + System.lineSeparator();
         } else if (element.getNode().getElementType() == WHERE_CLAUSE) {
-            return "WHERE...\r\n" + System.getProperty("line.separator");
+            return "WHERE...\r\n" + System.lineSeparator();
         } else if (element.getNode().getElementType() == GROUPBY) {
-            return "GROUP BY...\r\n" + System.getProperty("line.separator");
+            return "GROUP BY...\r\n" + System.lineSeparator();
         } else if (element.getNode().getElementType()
                 == getRuleElementType(SqlBaseParser.RULE_relationPrimary)) {
             String text = "";
 
             final PsiElement[] children = element.getChildren();
-            for (int i = 0; i < children.length; i++) {
-                if (children[i].getNode().getElementType()
+            for (PsiElement child : children) {
+                if (child.getNode().getElementType()
                         == getRuleElementType(SqlBaseParser.RULE_tableAlias)) {
-                    if (children[i].getLastChild() != null) {
-                        text = children[i].getLastChild().getText();
+                    if (child.getLastChild() != null) {
+                        text = child.getLastChild().getText();
                     }
                     break;
                 }
@@ -177,7 +171,6 @@ public class HiveFoldingBuilder extends CustomFoldingBuilder {
             addCommentDescriptors(descriptors, root);
             addTokensFoldingDescriptor(descriptors, root);
         }
-        return;
     }
 
     @Override
