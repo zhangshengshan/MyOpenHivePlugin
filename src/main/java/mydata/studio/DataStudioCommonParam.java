@@ -68,9 +68,7 @@ public class DataStudioCommonParam {
             final DataFlavor stringFlavor = DataFlavor.stringFlavor;
             final Object transferData = contents.getTransferData(stringFlavor);
             final String[] split = transferData.toString().split("\n");
-            for (String s : split) {
-                this.params.add(s);
-            }
+            this.params.addAll(List.of(split));
         }
 
         // 如果没有选中任何行
