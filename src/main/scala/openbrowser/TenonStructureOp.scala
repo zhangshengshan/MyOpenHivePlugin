@@ -2,6 +2,7 @@ package openbrowser
 
 import another.GraphBuilder
 import com.intellij.openapi.fileChooser.FileChooserDialog
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.vfs.VirtualFile
 import com.zss.graph.Graph
@@ -21,17 +22,15 @@ object TenonStructureOp {
       .replace("）", "_")
       .replace("=", "_")
 
-    def genUrl(ss: Array[String]) = {
-      val db = ss(1)
-      val tb = ss(2)
+    def genUrl(ss: Array[String]): String = {
       s"https://www.baidu.com"
     }
 
-    val config = Map(
+    val config: Map[String, String] = Map(
       "mode" -> MyConfigurable.getInstance().getTennonShowMode
     ) ++ HierachyConfigStrategy.getColorConfig
 
-    val openOrNot = MyConfigurable.getInstance().isOpenAfterGen
+    val openOrNot: Boolean = MyConfigurable.getInstance().isOpenAfterGen
 
     import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserFactory}
     import com.intellij.openapi.project.ProjectManager
@@ -39,9 +38,9 @@ object TenonStructureOp {
 
     val descriptor =
       new FileChooserDescriptor(false, true, false, false, false, false)
-    val project = ProjectManager.getInstance().getDefaultProject
+    val project: Project = ProjectManager.getInstance().getDefaultProject
 
-    val initialFileName = param.split("\\/").last.split("\\.").head
+    val initialFileName: String = param.split("/").last.split("\\.").head
     //TODO: 给一个默认的文件名
     val fileName: String = Messages.showInputDialog(
       project,
@@ -52,14 +51,14 @@ object TenonStructureOp {
       null
     )
     val graph: Graph =
-      GraphBuilder.make(param, Some(genUrl), Some(config.toMap), Some(fileName))
+      GraphBuilder.make(param, Some(genUrl), Some(config), Some(fileName))
 
     val dialog: FileChooserDialog = FileChooserFactory
       .getInstance()
       .createFileChooser(descriptor, project, null)
 
     val option: Option[VirtualFile] = dialog.choose(project).headOption
-    val outPutDir = {
+    val outPutDir: String = {
       if (option.isDefined) option.get.getPath
       else if (SystemInfo.isMac) OsConfig.macOutputPath
       else OsConfig.winOutputPath
@@ -84,14 +83,13 @@ object TenonStructureOp {
         )
       }
     } catch {
-      case e: Exception => {
+      case e: Exception =>
         Messages.showMessageDialog(
           project,
           e.getMessage,
           "错误",
           Messages.getErrorIcon
         )
-      }
     }
 
     val genSQL: String = graph.toSQLWithOn(0)
