@@ -53,7 +53,7 @@ public class OpenButtonListener implements ActionListener {
                         FileChooserDescriptorFactory.createSingleFileDescriptor(), null, null);
 
         this.myDataStudio.setInputFile(virtualFile.getPath());
-        this.myDataStudio.getPrompt().setText(virtualFile.getPath());
+        this.myDataStudio.getPromptArea().setText(virtualFile.getPath());
         final String path = virtualFile.getPath();
         final String name = virtualFile.getNameWithoutExtension();
         // TODO: 2022/11/4 添加专门的ERPLOT LISTENER

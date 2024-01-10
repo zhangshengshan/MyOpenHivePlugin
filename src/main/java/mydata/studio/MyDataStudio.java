@@ -14,13 +14,13 @@ import javax.swing.table.DefaultTableModel;
  */
 @Data
 public class MyDataStudio {
-    private JButton Execute;
-    private JPanel Container;
-    private JTextArea Prompt;
-    private JButton OpenFIle;
+    private JButton executeButton;
+    private JPanel containerPanel;
+    private JTextArea promptArea;
+    private JButton openFileButton;
     private JTable workTable;
     private JTabbedPane tabbedPane1;
-    private JPanel CheckBox;
+    private JPanel checkBoxPanel;
     private JRadioButton fieldsInfoButton;
     private JComboBox comboBox1;
     private JButton plotHierachyButton;
@@ -45,10 +45,10 @@ public class MyDataStudio {
         final ExecuteButtonListener executeButtonListener = new ExecuteButtonListener(this);
 
         // TODO: 2022/11/18 刚刚点击checkbox之后，执行按钮不能运行
-        Execute.addActionListener(executeButtonListener);
-        Execute.addKeyListener(executeButtonListener);
+        executeButton.addActionListener(executeButtonListener);
+        executeButton.addKeyListener(executeButtonListener);
 
-        OpenFIle.addActionListener(new OpenButtonListener(this));
+        openFileButton.addActionListener(new OpenButtonListener(this));
         clearButton.addActionListener(new ClearActionListener(this));
     }
 
@@ -62,7 +62,7 @@ public class MyDataStudio {
     }
 
     public JPanel getContent() {
-        return Container;
+        return containerPanel;
     }
 
     public Boolean inputFileExists() {

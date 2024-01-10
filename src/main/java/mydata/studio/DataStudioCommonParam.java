@@ -52,7 +52,7 @@ public class DataStudioCommonParam {
                 }
             }
         }
-        final String text = myDataStudio.getPrompt().getText();
+        final String text = myDataStudio.getPromptArea().getText();
         // 如果没有选中任何行，从prompt中提取
         if (this.params.size() == 0 && !text.equals("")) {
             final String[] split = text.split("\n");

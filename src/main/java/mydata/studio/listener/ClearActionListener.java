@@ -17,7 +17,7 @@ public class ClearActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        this.myDataStudio.getPrompt().setText("");
+        this.myDataStudio.getPromptArea().setText("");
         this.myDataStudio.getWorkTable().clearSelection();
         this.myDataStudio
                 .getWorkTable()
