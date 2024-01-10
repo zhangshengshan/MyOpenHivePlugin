@@ -57,7 +57,7 @@ public class MyPsiUtils {
     }
 
     /**
-     * Like PsiTreeUtil.findChildrenOfType, except no collection is created and it doesnt use
+     * Like PsiTreeUtil.findChildrenOfType, except no collection is created and it does not use
      * recursion.
      *
      * @param parent the element whose children will be searched
