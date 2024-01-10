@@ -105,6 +105,9 @@ public class HiveFoldingBuilder extends CustomFoldingBuilder {
     }
 
     private static void addCommentDescriptors(List<FoldingDescriptor> descriptors, PsiElement root) {
+        /*
+        processedComments 永远没有被更新
+         */
         Set<PsiElement> processedComments = new HashSet<>();
         for (PsiElement comment : MyPsiUtils.findChildrenOfType(root, COMMENTS)) {
             IElementType type = comment.getNode().getElementType();
