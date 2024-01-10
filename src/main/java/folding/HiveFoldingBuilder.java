@@ -26,7 +26,6 @@ import static plugin.basic.HiveTokenTypes.*;
 
 /**
  * @author zhangshengshan
- * @date 1/7/15
  */
 public class HiveFoldingBuilder extends CustomFoldingBuilder {
 
@@ -152,7 +151,7 @@ public class HiveFoldingBuilder extends CustomFoldingBuilder {
                     break;
                 }
             }
-            return "表(块)" + " " + text + System.getProperty("line.separator");
+            return "表(块)" + " " + text + System.lineSeparator();
         } else if (element.getNode().getElementType() == getRuleElementType(SqlBaseParser.RULE_namedQuery)) {
             return "block " + element.getFirstChild().getText() + " ";
         } else if (element.getNode().getElementType() == getRuleElementType(SqlBaseParser.RULE_ctes)) {
