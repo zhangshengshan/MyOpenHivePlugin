@@ -4,6 +4,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import plugin.HiveLanguage;
 
+/**
+ * @author zhangshengshan
+ */
 public class HiveRefactoringSupport extends RefactoringSupportProvider {
 
     @Override

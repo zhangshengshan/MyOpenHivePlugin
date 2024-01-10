@@ -20,6 +20,9 @@ import java.util.Map;
 
 import static plugin.basic.HiveTokenTypes.isKeyWord;
 
+/**
+ * @author zhangshengshan
+ */
 public class HiveASTFactory extends ASTFactory {
     private static final Map<IElementType, PsiElementFactory> ruleElementTypeToPsiFactory =
             new HashMap<>();

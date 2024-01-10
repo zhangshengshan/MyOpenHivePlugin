@@ -7,21 +7,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import psi.node.IdentifierNode;
 
+/**
+ * @author zhangshengshan
+ */
 public class HiveFindUsagesProvider implements FindUsagesProvider {
     @Override
     public boolean canFindUsagesFor(@NotNull PsiElement psiElement) {
         return psiElement instanceof PsiNamedElement;
     }
-
-  /*  @Nullable
-  @Override
-  public WordsScanner getWordsScanner() {
-    return new DefaultWordsScanner(
-        new HiveAntlrLexerAdaptor(HiveLanguage.INSTANCE, new SqlBaseLexer(null)),
-        HiveTokenTypes.ID,
-        HiveTokenTypes.COMMENTS,
-        HiveTokenTypes.KEYWORDS);
-  }*/
 
     @Nullable
     @Override
