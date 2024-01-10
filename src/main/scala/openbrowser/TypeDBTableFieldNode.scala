@@ -10,13 +10,13 @@ case class TypeDBTableFieldNode(
                                  currentNode: Option[Boolean] = None) extends NodeElem {
 
   var targetNode: Boolean = false
-  // TODO: fieldCommment 需要设计一下。
+  // TODO: fieldComment 需要设计一下。
   var fieldComment: List[List[String]] = Nil
 
   /**
    * 在这里务必加上column作为唯一键，否则graph无法添加重复的节点
    */
-  override def content: String = s"db:${db}tb:${tb}:column:$column"
+  override def content: String = s"db:${db}tb:$tb:column:$column"
 
   def setFieldComment(fieldComment: List[List[String]]): Unit = {
     this.fieldComment = fieldComment
@@ -39,27 +39,27 @@ case class TypeDBTableFieldNode(
       s"<TR>" +
         s"<TD BGCOLOR=\"$color\" ROWSPAN=\"$rowSparn\"><IMG SRC=\"$imgfile\" HREF=\"$href\"/></TD><TD BGCOLOR=\"$color\" ROWSPAN=\"$rowSparn\" HREF=\"$href\">库表<B>$db.$tb</B>" +
         s"<BR/><FONT COLOR=\"orange\">所属数仓层次</FONT>" +
-        s"<BR/><U><B><FONT COLOR=\"red\">${column}</FONT></B></U>" +
+        s"<BR/><U><B><FONT COLOR=\"red\">$column</FONT></B></U>" +
         s"</TD></TR> "
 
     // TODO: 这里有问题
     if (this.fieldComment == Nil || this.fieldComment.size <= 1)
-      return s""" <<TABLE CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">$dbtbdesc</TABLE>> """
+      s""" <<TABLE CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">$dbtbdesc</TABLE>> """
     else {
-      val headerMeta: List[String] = this.fieldComment(0)
-      val tableHeader: String = "<TR>" + headerMeta.map { x => s"<TD>$x</TD>" }.mkString + "</TR>"
+      val headerMeta: List[String] = this.fieldComment.head
+      val tableHeader: String = "<TR>" + headerMeta.map { x: String => s"<TD>$x</TD>" }.mkString + "</TR>"
       val value: _root_.scala.collection.immutable.List[_root_.scala.Predef.String] = this.fieldComment.tail.map(
         (x: List[String]) => {
-          x.map(item => s""" <TD>$item</TD> """).mkString("<TR>", "\r", "</TR>")
+          x.map((item: String) => s""" <TD>$item</TD> """).mkString("<TR>", "\r", "</TR>")
         }
       )
       val str: String = value.mkString(" ")
-      return s""" <<TABLE CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">$dbtbdesc $tableHeader $str</TABLE>> """
+      s""" <<TABLE CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">$dbtbdesc $tableHeader $str</TABLE>> """
     }
   }
 
   def genSelectCode(condition: String): String = {
-    return s"-----------------$db.$tb $column---------------------" +
+    s"-----------------$db.$tb $column---------------------" +
       System.lineSeparator() +
       s"SELECT * FROM $db.$tb WHERE date =  " + "\"" + "${date}" + "\"" + " AND " + s"$column = " + "\"" + condition + "\";"
   }
