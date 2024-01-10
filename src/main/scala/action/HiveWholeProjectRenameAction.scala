@@ -53,7 +53,7 @@ class HiveWholeProjectRenameAction extends AnAction {
     //      renameRefactoring.run()
     //    })
 
-    str += "size" + elements.size + SEP
+    str += "size" + elements.length + SEP
     Messages.showMessageDialog(
       str,
       "HiveWholeProjectRenameAction",
