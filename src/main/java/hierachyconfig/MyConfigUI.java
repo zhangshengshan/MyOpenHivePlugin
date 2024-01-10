@@ -359,18 +359,12 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
             color4Button.setForeground(color);
         });
 
-        colorRestButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                HIVEBGButton.setBackground(new Color(DefaultColor.alizarin100));
-                HIVEBGButton.setForeground(new Color(DefaultColor.alizarin100));
-            }
+        colorRestButton.addActionListener(e -> {
+            HIVEBGButton.setBackground(new Color(DefaultColor.alizarin100));
+            HIVEBGButton.setForeground(new Color(DefaultColor.alizarin100));
         });
-        hierachyDepth.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        hierachyDepth.addActionListener(e -> {
 
-            }
         });
 
 
