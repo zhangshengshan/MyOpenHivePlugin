@@ -12,6 +12,7 @@ import com.intellij.psi.impl.PsiFileFactoryImpl;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import plugin.HiveFile;
 import plugin.HiveLanguage;
@@ -23,6 +24,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * @author zhangshengshan
+ */
 @SuppressWarnings("SimplifiableIfStatement")
 public class MyPsiUtils {
     @Nullable
@@ -66,9 +70,6 @@ public class MyPsiUtils {
                 PsiTreeUtil.collectElements(
                         parent,
                         input -> {
-                            if (input == null) {
-                                return false;
-                            }
                             ASTNode node = input.getNode();
                             if (node == null) {
                                 return false;
@@ -79,10 +80,10 @@ public class MyPsiUtils {
     }
 
     /**
-     * Finds the first {@link RuleSpecNode} or {@link ModeSpecNode} matching the {@code ruleName}
+     * Finds the first {@link RuleSpecNode} or {@link } matching the {@code ruleName}
      * defined in the given {@code grammar}.
      *
-     * <p>Rule specs can be either children of the {@link RulesNode}, or under one of the {@code
+     * <p>Rule specs can be either children of the {@link }, or under one of the {@code
      * mode}s defined in the grammar. This means we have to walk the whole grammar to find matching
      * candidates.
      */
@@ -119,7 +120,7 @@ public class MyPsiUtils {
         WriteCommandAction setTextAction =
                 new WriteCommandAction(project) {
                     @Override
-                    protected void run(final Result result) {
+                    protected void run(@NotNull final Result result) {
                         psiFile.deleteChildRange(psiFile.getFirstChild(), psiFile.getLastChild());
                         psiFile.addRange(newPsiFile.getFirstChild(), newPsiFile.getLastChild());
                     }
