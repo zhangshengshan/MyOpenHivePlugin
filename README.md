@@ -1,7 +1,8 @@
 # README
 
-# TODO
+## TODO
 
+- [ ] org.jetbrains.intellij version 只能升级到1.12.0， 无法进一步升级，否则会出现启动问题
 - [ ] Doris Live Templates Support
 - [ ] 本工程编译需要mix java 和 scala , 编译的时候存在相互依赖， 需要手动处理， 1、先编译JAVA， 2， 再编译Scala , 3 在编译JAVA，
   从长远看需要处理。
@@ -48,14 +49,8 @@
 - [ ] icons could be config by user 图标可以被用户配置
 - Keymapping for moving carel to matching brace (Ctrl+M)
 
- ```sql
-ON
-CONCAT(hi_expense.owner_employee_email,SUBSTRING(hi_expense.checkin_date,1,10))
-=
-vcc_info.ck
-```对于这类关联条件不能正常展示
 
-
+## DONE
 - [x] completion for keywords and functions **_关键字和函数的自动补全_**
 - [x] uppercase and lowercase support 大写小写支持
 - [x] usage find provider 使用查找
