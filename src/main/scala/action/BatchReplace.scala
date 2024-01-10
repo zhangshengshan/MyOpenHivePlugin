@@ -11,26 +11,22 @@ import scala.util.matching.Regex
 
 class BatchReplace extends AnAction {
 
-  /**
-   * 普通替换模式
-   */
+  /** 普通替换模式
+    */
   private final val NORMAL_MODE: String = "普通替换"
 
-  /**
-   * 正则替换模式
-   */
+  /** 正则替换模式
+    */
   private final val REGEX_MODE: String = "正则替换"
 
-  /**
-   * 另一种提取方式
-   */
+  /** 另一种提取方式
+    */
   private final val ANOTHER_EXTRACT: String = "另一种提取方式"
 
-  /**
-   * 处理动作触发时的事件
-   *
-   * @param e 动作事件
-   */
+  /** 处理动作触发时的事件
+    *
+    * @param e 动作事件
+    */
   override def actionPerformed(e: AnActionEvent): Unit = {
 
     val project: Project = e.getData(CommonDataKeys.PROJECT)
@@ -62,7 +58,7 @@ class BatchReplace extends AnAction {
     // 对每一行进行处理
     lines
       .split("\n")
-      .foreach(line => {
+      .foreach((line: String) => {
 
         if (subMode == NORMAL_MODE) {
           // 获取源字符串和目标字符串
@@ -82,7 +78,7 @@ class BatchReplace extends AnAction {
               }
             })
           } catch {
-            case e: Throwable => {
+            case e: Throwable =>
               e.printStackTrace()
               // 弹出错误对话框显示错误信息
               Messages.showMessageDialog(
@@ -90,7 +86,6 @@ class BatchReplace extends AnAction {
                 "Error",
                 Messages.getErrorIcon
               )
-            }
           }
         } else if (subMode == REGEX_MODE) {
           // 获取源正则表达式和目标字符串
@@ -115,7 +110,7 @@ class BatchReplace extends AnAction {
               }
             })
           } catch {
-            case e: Throwable => {
+            case e: Throwable =>
               e.printStackTrace()
               // 弹出错误对话框显示错误信息
               Messages.showMessageDialog(
@@ -123,7 +118,6 @@ class BatchReplace extends AnAction {
                 "Error",
                 Messages.getErrorIcon
               )
-            }
           }
         } else {
           // 获取正则表达式
@@ -131,7 +125,7 @@ class BatchReplace extends AnAction {
           val text: String = document.getText
           // 查找匹配项并提取
           r.findAllMatchIn(text)
-            .foreach(m => {
+            .foreach((m: Regex.Match) => {
               anotherStringBuffer.append(m.toString() + "\n")
             })
         }
@@ -139,8 +133,8 @@ class BatchReplace extends AnAction {
 
     // 如果有提取结果，则显示提取结果并复制到剪贴板
     if (anotherStringBuffer.length() > 0) {
-      Messages.showInfoMessage(anotherStringBuffer.toString(), "提取结果")
-      ClipBoardUtil.copyToClipBoard(anotherStringBuffer.toString())
+      Messages.showInfoMessage(anotherStringBuffer.toString, "提取结果")
+      ClipBoardUtil.copyToClipBoard(anotherStringBuffer.toString)
     }
   }
 }
