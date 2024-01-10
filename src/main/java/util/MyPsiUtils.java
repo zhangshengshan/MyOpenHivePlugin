@@ -179,7 +179,6 @@ public class MyPsiUtils {
         return elems.toArray(new PsiElement[elems.size()]);
     }
 
-    // Look for stuff like: options { tokenVocab=SqlBaseLexer; superClass=Foo; }
     @Deprecated
     public static String findTokenVocabIfAny(HiveFile file) {
         String vocabName = null;
