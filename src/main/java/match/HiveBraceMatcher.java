@@ -17,7 +17,7 @@ public class HiveBraceMatcher implements PairedBraceMatcher {
 
     @NotNull
     @Override
-    public BracePair[] getPairs() {
+    public BracePair @NotNull [] getPairs() {
         return new BracePair[]{
                 new BracePair(getTokenElementType(LEFT_PAREN), getTokenElementType(RIGHT_PAREN), true),
                 new BracePair(getTokenElementType(LEFT_BRACKET), getTokenElementType(RIGHT_BRACKET), true),
