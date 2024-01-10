@@ -20,6 +20,7 @@ import util.MyPsiUtils;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static plugin.basic.HiveTokenTypes.*;
@@ -50,6 +51,7 @@ public class HiveFoldingBuilder extends CustomFoldingBuilder {
             getTokenElementType(SqlBaseLexer.BRACKETED_COMMENT);
     private static final TokenIElementType LINE_COMMENT_TOKEN =
             getTokenElementType(SqlBaseLexer.SIMPLE_COMMENT);
+    @Deprecated
     private static final TokenIElementType TOKENS = getTokenElementType(SqlBaseLexer.IDENTIFIER);
     private static final TokenSet RULE_BLOCKS =
             TokenSet.create(
@@ -113,6 +115,8 @@ public class HiveFoldingBuilder extends CustomFoldingBuilder {
             IElementType type = comment.getNode().getElementType();
             if (processedComments.contains(comment)) {
                 continue;
+            } else {
+                processedComments.add(comment);
             }
             if (type == DOC_COMMENT_TOKEN || type == BLOCK_COMMENT_TOKEN || type == LINE_COMMENT_TOKEN) {
                 descriptors.add(new FoldingDescriptor(comment, comment.getTextRange()));
@@ -177,7 +181,7 @@ public class HiveFoldingBuilder extends CustomFoldingBuilder {
 
     @Override
     protected String getLanguagePlaceholderText(@NotNull ASTNode node, @NotNull TextRange range) {
-        return getPlaceholderText(SourceTreeToPsiMap.treeElementToPsi(node));
+        return getPlaceholderText(Objects.requireNonNull(SourceTreeToPsiMap.treeElementToPsi(node)));
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
