@@ -39,9 +39,6 @@ public class MyDataStudio {
      * @param toolWindow
      */
     public MyDataStudio(ToolWindow toolWindow) {
-        Object data[][] = {};
-        //    workTable.setModel(new DefaultTableModel(data, new String[] {}));
-        //    workTable.getColumnModel().getColumn(0).setPreferredWidth(100);
         /* 让Jtable支持列选择*/
         workTable.setRowSelectionAllowed(true);
         workTable.setColumnSelectionAllowed(true);
