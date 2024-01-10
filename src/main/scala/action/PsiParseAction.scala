@@ -37,11 +37,9 @@ class PsiParseAction extends AnAction {
     PsiTreeUtil
       .collectElements(
         root,
-        (e: PsiElement) => {
-          e match {
-            case _: IdentifierNode => e.getText == element.getText
-            case _ => false
-          }
+        {
+          case e@(_: IdentifierNode) => e.getText == element.getText
+          case _ => false
         }
       )
       .foreach((e: PsiElement) => {
