@@ -80,6 +80,12 @@
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt P"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+
+        <action id="getDorisTableAction" class="action.GetDorisSchemaAction" text="getDorisTableAction"
+                description="getDorisTableAction">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
         <action id="extractTablesAction" class="action.ExtractTablesAction" text="extractTablesAction"
                 description="extractTablesAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
