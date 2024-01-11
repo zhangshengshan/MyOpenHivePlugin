@@ -28,7 +28,7 @@ public class TokenVocabResolver {
             if (option != null) {
                 PsiElement optionName = PsiTreeUtil.getDeepestFirst(option);
 
-                if (optionName.getText().equals("tokenVocab")) {
+                if ("tokenVocab".equals(optionName.getText())) {
 //                    String text = StringUtils.strip(reference.getText(), "'");
                     String text = reference.getText().replaceAll("'", "");
                     return findRelativeFile(text, reference.getContainingFile());
