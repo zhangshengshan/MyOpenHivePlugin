@@ -1,6 +1,9 @@
 import com.intellij.lang.Commenter;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @author zhangshengshan
+ */
 public class HiveCommentor implements Commenter {
     @Override
     public @Nullable String getLineCommentPrefix() {

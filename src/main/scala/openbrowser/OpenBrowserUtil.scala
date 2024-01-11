@@ -14,7 +14,7 @@ object OpenBrowserUtil {
    * @param url 要打开的网页链接
    */
   def open(url: String): Unit = {
-    if (Desktop.isDesktopSupported && url != null && !url.trim.isEmpty) {
+    if (Desktop.isDesktopSupported && url != null && url.trim.nonEmpty) {
       try {
         Desktop.getDesktop.browse(new URI(url))
       } catch {

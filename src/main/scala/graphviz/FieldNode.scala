@@ -13,6 +13,7 @@ object GraphVizConst {
   val TD_END = "</TD>"
 }
 
+@Deprecated
 case class FieldNode(
                       typeName: String,
                       name: String,
@@ -24,21 +25,21 @@ case class FieldNode(
 
   override def htmlTable: String = {
 
-    val dbtbmeta =
-      TR_BEGIN + s"<TD BGCOLOR=\"#f6ff15\" ROWSPAN=\"9\" HREF=\" +  ${nodeUrl} + \">" + s"库表:<B>${db.get}${tb.get}</B>" + TD_END + TR_END
+    val dbtbmeta: String =
+      TR_BEGIN + s"<TD BGCOLOR=\"#f6ff15\" ROWSPAN=\"9\" HREF=\" +  $nodeUrl + \">" + s"库表:<B>${db.get}${tb.get}</B>" + TD_END + TR_END
 
     val fieldsDesc: String = (1 to 5).toList
-      .map(x => {
+      .map((x: Int) => {
         TR_BEGIN + TD_BEGIN + s"字段名" + x + TD_END + TD_BEGIN + s"字段名" + (x + 1) + TD_END + TR_END
       })
       .mkString(" ")
 
-    val html = HTMLTABLE_BEGIN + dbtbmeta + fieldsDesc + HTMLTABLE_END
+    val html: String = HTMLTABLE_BEGIN + dbtbmeta + fieldsDesc + HTMLTABLE_END
 
     html
   }
 
-  def nodeUrl = {
+  private def nodeUrl: String = {
     if (db.isDefined && tb.isDefined) {
       s""
     } else {

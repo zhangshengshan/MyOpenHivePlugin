@@ -13,7 +13,7 @@ class ExtractTablesAction extends AnAction {
   override def actionPerformed(event: AnActionEvent): Unit = {
     val editor: Editor = event.getData(CommonDataKeys.EDITOR)
 
-    val text = editor.getDocument.getText
+    val text: String = editor.getDocument.getText
     val lexer: SqlBaseLexer =
       new SqlBaseLexer(
         new CaseChangingCharStream(CharStreams.fromString(text), true)

@@ -117,11 +117,11 @@ publishing {
             pom {
                 name = "Demo"
                 description = "A demonstration of Maven POM customization"
-                url = "http://www.example.com/project"
+                url = "https://www.example.com/project"
                 licenses {
                     license {
                         name = "The Apache License, Version 2.0"
-                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                        url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
                     }
                 }
                 developers {
@@ -132,7 +132,7 @@ publishing {
                     }
                 }
                 scm {
-                    connection = "scm:svn:http://subversion.example.com/svn/project/trunk/"
+                    connection = "scm:svn:https://subversion.example.com/svn/project/trunk/"
                     developerConnection = "scm:git:ssh:githubcom:zhangshengshan/MyOpenHivePlugin.git"
                     url = "https://github.com/zhangshengshan/MyOpenHivePlugin/tree/main"
                 }

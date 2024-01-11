@@ -9,6 +9,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * @author zhangshengshan
+ */
 public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
     private JPanel panel1;
     private JTextField textField1;
@@ -356,18 +359,12 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
             color4Button.setForeground(color);
         });
 
-        colorRestButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                HIVEBGButton.setBackground(new Color(DefaultColor.alizarin100));
-                HIVEBGButton.setForeground(new Color(DefaultColor.alizarin100));
-            }
+        colorRestButton.addActionListener(e -> {
+            HIVEBGButton.setBackground(new Color(DefaultColor.alizarin100));
+            HIVEBGButton.setForeground(new Color(DefaultColor.alizarin100));
         });
-        hierachyDepth.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        hierachyDepth.addActionListener(e -> {
 
-            }
         });
 
 
@@ -496,7 +493,7 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
     }
 
     @Override
-    public void apply(@NotNull MyConfigurable settings) throws ConfigurationException {
+    public void apply(@NotNull MyConfigurable settings) {
         settings.setParam(this.textField1.getText());
         settings.setClusterBgColor(this.ClusterBgColorButton.getForeground().getRGB());
         settings.setClusterFontColor(this.ClusterFontColorButton.getForeground().getRGB());

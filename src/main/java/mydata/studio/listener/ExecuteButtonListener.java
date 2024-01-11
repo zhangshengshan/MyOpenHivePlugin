@@ -37,7 +37,7 @@ public class ExecuteButtonListener implements ActionListener, KeyListener {
 
         // todo: judge which button is clicked and execute the corresponding command
 
-        params.stream().forEach(param -> {
+        params.forEach(param -> {
 
             if (this.myDataStudio.getFieldsInfoButton().isSelected()) {
                 GenOp.getSelectPart(param);

@@ -7,6 +7,9 @@ import com.intellij.codeInsight.template.macro.MacroBase;
 import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author zhangshengshan
+ */
 public class TitleCaseMacro extends MacroBase {
 
     public TitleCaseMacro() {
@@ -28,7 +31,7 @@ public class TitleCaseMacro extends MacroBase {
         if (text == null) {
             return null;
         }
-        if (text.length() > 0) {
+        if (!text.isEmpty()) {
             // Capitalize the start of every word
             text = StringUtil.toTitleCase(text);
         }
