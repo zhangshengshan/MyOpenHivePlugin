@@ -1,13 +1,10 @@
 package hierachyconfig;
 
 import com.intellij.openapi.options.ConfigurableUi;
-import com.intellij.openapi.options.ConfigurationException;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author zhangshengshan
@@ -360,8 +357,8 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         });
 
         colorRestButton.addActionListener(e -> {
-            HIVEBGButton.setBackground(new Color(DefaultColor.alizarin100));
-            HIVEBGButton.setForeground(new Color(DefaultColor.alizarin100));
+            HIVEBGButton.setBackground(new Color(DefaultColor.ALIZARIN_100));
+            HIVEBGButton.setForeground(new Color(DefaultColor.ALIZARIN_100));
         });
         hierachyDepth.addActionListener(e -> {
 
@@ -432,62 +429,62 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
     public boolean isModified(@NotNull MyConfigurable settings) {
         boolean isModified = false;
         isModified |= !this.textField1.getText().equals(settings.getParam());
-        isModified |= !(this.ClusterBgColorButton.getBackground().getRGB() == (settings.getClusterBgColor()));
-        isModified |= !(this.ClusterFontColorButton.getForeground().getRGB() == (settings.getClusterFontColor()));
-        isModified |= !(this.TableBgColorButton.getForeground().getRGB() == (settings.getTableBgColor()));
-        isModified |= !(this.TableFontColor.getForeground().getRGB() == (settings.getTableFontColor()));
-        isModified |= !(this.FieldBgColorButton.getForeground().getRGB() == (settings.getFieldBgColor()));
-        isModified |= !(this.FieldsFontColorButton.getForeground().getRGB() == (settings.getFieldsFontColor()));
-        isModified |= !(this.ArrowColorButton.getForeground().getRGB() == (settings.getArrowColor()));
-        isModified |= !(this.hiveLayerColorCheckBox.isSelected() == (settings.isHiveLayerColor()));
-        isModified |= !(this.STGBGButton.getBackground().getRGB() == (settings.getSTGBG()));
-        isModified |= !(this.STGFontButton.getForeground().getRGB() == (settings.getSTGFont()));
-        isModified |= !(this.ODSBGButton.getBackground().getRGB() == (settings.getODSBG()));
-        isModified |= !(this.ODSFontButton.getForeground().getRGB() == (settings.getODSFont()));
-        isModified |= !(this.DWDBGButton.getBackground().getRGB() == (settings.getDWDBG()));
-        isModified |= !(this.DWDFontButton.getForeground().getRGB() == (settings.getDWDFont()));
-        isModified |= !(this.DWMBGButton.getBackground().getRGB() == (settings.getDWMBG()));
-        isModified |= !(this.DWMFontButton.getForeground().getRGB() == (settings.getDWMFont()));
-        isModified |= !(this.APPBGButton.getBackground().getRGB() == (settings.getAPPBG()));
-        isModified |= !(this.APPFontButton.getForeground().getRGB() == (settings.getAPPFont()));
-        isModified |= !(this.DIMBGButton.getBackground().getRGB() == (settings.getDIMBG()));
-        isModified |= !(this.DIMFontButton.getForeground().getRGB() == (settings.getDIMFont()));
-        isModified |= !(this.MYSQLBGButton.getBackground().getRGB() == (settings.getMYSQLBG()));
-        isModified |= !(this.MYSQLFONTButton.getForeground().getRGB() == (settings.getMYSQLFONT()));
-        isModified |= !(this.HIVEBGButton.getBackground().getRGB() == (settings.getHIVEBG()));
-        isModified |= !(this.HIVEFONTButton.getForeground().getRGB() == (settings.getHIVEFONT()));
-        isModified |= !(this.CLICKHOUSEBGButton.getBackground().getRGB() == (settings.getCLICKHOUSEBG()));
-        isModified |= !(this.CLICKHOUSEFONTButton.getForeground().getRGB() == (settings.getCLICKHOUSEFONT()));
-        isModified |= !(this.dataSetBGButton.getBackground().getRGB() == (settings.getDataSetBG()));
-        isModified |= !(this.DATASETFONTButton.getForeground().getRGB() == (settings.getDATASETFONT()));
-        isModified |= !(this.DASHBOARDBGButton.getBackground().getRGB() == (settings.getDASHBOARDBG()));
-        isModified |= !(this.DASHBOARDFONTButton.getForeground().getRGB() == (settings.getDASHBOARDFONT()));
+        isModified |= this.ClusterBgColorButton.getBackground().getRGB() != (settings.getClusterBgColor());
+        isModified |= this.ClusterFontColorButton.getForeground().getRGB() != (settings.getClusterFontColor());
+        isModified |= this.TableBgColorButton.getForeground().getRGB() != (settings.getTableBgColor());
+        isModified |= this.TableFontColor.getForeground().getRGB() != (settings.getTableFontColor());
+        isModified |= this.FieldBgColorButton.getForeground().getRGB() != (settings.getFieldBgColor());
+        isModified |= this.FieldsFontColorButton.getForeground().getRGB() != (settings.getFieldsFontColor());
+        isModified |= this.ArrowColorButton.getForeground().getRGB() != (settings.getArrowColor());
+        isModified |= this.hiveLayerColorCheckBox.isSelected() != (settings.isHiveLayerColor());
+        isModified |= this.STGBGButton.getBackground().getRGB() != (settings.getSTGBG());
+        isModified |= this.STGFontButton.getForeground().getRGB() != (settings.getSTGFont());
+        isModified |= this.ODSBGButton.getBackground().getRGB() != (settings.getODSBG());
+        isModified |= this.ODSFontButton.getForeground().getRGB() != (settings.getODSFont());
+        isModified |= this.DWDBGButton.getBackground().getRGB() != (settings.getDWDBG());
+        isModified |= this.DWDFontButton.getForeground().getRGB() != (settings.getDWDFont());
+        isModified |= this.DWMBGButton.getBackground().getRGB() != (settings.getDWMBG());
+        isModified |= this.DWMFontButton.getForeground().getRGB() != (settings.getDWMFont());
+        isModified |= this.APPBGButton.getBackground().getRGB() != (settings.getAPPBG());
+        isModified |= this.APPFontButton.getForeground().getRGB() != (settings.getAPPFont());
+        isModified |= this.DIMBGButton.getBackground().getRGB() != (settings.getDIMBG());
+        isModified |= this.DIMFontButton.getForeground().getRGB() != (settings.getDIMFont());
+        isModified |= this.MYSQLBGButton.getBackground().getRGB() != (settings.getMYSQLBG());
+        isModified |= this.MYSQLFONTButton.getForeground().getRGB() != (settings.getMYSQLFONT());
+        isModified |= this.HIVEBGButton.getBackground().getRGB() != (settings.getHIVEBG());
+        isModified |= this.HIVEFONTButton.getForeground().getRGB() != (settings.getHIVEFONT());
+        isModified |= this.CLICKHOUSEBGButton.getBackground().getRGB() != (settings.getCLICKHOUSEBG());
+        isModified |= this.CLICKHOUSEFONTButton.getForeground().getRGB() != (settings.getCLICKHOUSEFONT());
+        isModified |= this.dataSetBGButton.getBackground().getRGB() != (settings.getDataSetBG());
+        isModified |= this.DATASETFONTButton.getForeground().getRGB() != (settings.getDATASETFONT());
+        isModified |= this.DASHBOARDBGButton.getBackground().getRGB() != (settings.getDASHBOARDBG());
+        isModified |= this.DASHBOARDFONTButton.getForeground().getRGB() != (settings.getDASHBOARDFONT());
 
-        isModified |= !(this.downStreamCheckBox.isSelected() == (settings.isDownStream()));
-        isModified |= !(this.upStreamCheckBox.isSelected() == (settings.isUpStream()));
-        isModified |= !(this.fieldsDisplay.isSelected() == (settings.isFieldsShow()));
+        isModified |= this.downStreamCheckBox.isSelected() != (settings.isDownStream());
+        isModified |= this.upStreamCheckBox.isSelected() != (settings.isUpStream());
+        isModified |= this.fieldsDisplay.isSelected() != (settings.isFieldsShow());
 
         isModified |= !(this.hierachyDepth.getSelectedItem().equals(settings.hierachyDepth));
 
-        isModified |= !(this.batchFieldHierachy.isSelected() != settings.isBatchFieldHierachy());
-        isModified |= !(this.OpenAfterGen.isSelected() == (settings.isOpenAfterGen()));
+        isModified |= this.batchFieldHierachy.isSelected() != settings.isBatchFieldHierachy();
+        isModified |= this.OpenAfterGen.isSelected() != (settings.isOpenAfterGen());
 
 
         isModified |= !(this.outputPath.getText().equals(settings.getOutputPath()));
 
-        isModified |= !(this.downloadAfterExtractRadioButton.isSelected() == settings.isDownloadAfterExtract());
+        isModified |= this.downloadAfterExtractRadioButton.isSelected() != settings.isDownloadAfterExtract();
 
-        isModified |= !(this.genScoutCmdsRadioButton.isSelected() == settings.isGenScoutCode());
+        isModified |= this.genScoutCmdsRadioButton.isSelected() != settings.isGenScoutCode();
 
         isModified |= !(this.tennonModeSelector.getSelectedItem().equals(settings.getTennonShowMode()));
 
-        isModified |= !(this.OnlyHiveTable.isSelected() == settings.isHiveOnlyHierachy());
+        isModified |= this.OnlyHiveTable.isSelected() != settings.isHiveOnlyHierachy();
 
 
-        isModified |= !(this.color1Button.getBackground().getRGB() == settings.getColor1());
-        isModified |= !(this.color2Button.getBackground().getRGB() == settings.getColor2());
-        isModified |= !(this.color3Button.getBackground().getRGB() == settings.getColor3());
-        isModified |= !(this.color4Button.getBackground().getRGB() == settings.getColor4());
+        isModified |= this.color1Button.getBackground().getRGB() != settings.getColor1();
+        isModified |= this.color2Button.getBackground().getRGB() != settings.getColor2();
+        isModified |= this.color3Button.getBackground().getRGB() != settings.getColor3();
+        isModified |= this.color4Button.getBackground().getRGB() != settings.getColor4();
 
         return isModified;
     }

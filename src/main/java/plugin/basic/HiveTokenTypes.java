@@ -35,15 +35,6 @@ public class HiveTokenTypes {
 
     public static IElementType BAD_TOKEN_TYPE = new IElementType("BAD_TOKEN", HiveLanguage.INSTANCE);
 
-    /*
-        DEBUG
-    */
-    static {
-        for (int i = 0; i < TOKEN_ELEMENT_TYPES.size(); i++) {
-            //      System.out.println(TOKEN_ELEMENT_TYPES.get(i).toString());
-        }
-    }
-
     public static RuleIElementType getRuleElementType(
             @MagicConstant(valuesFromClass = SqlBaseParser.class) int ruleIndex) {
         return RULE_ELEMENT_TYPES.get(ruleIndex);
@@ -54,7 +45,9 @@ public class HiveTokenTypes {
         return TOKEN_ELEMENT_TYPES.get(ruleIndex);
     }
 
-    // TODO: 2022/9/28 需要剔除诸如IDENTIFIER  STRING 这样的TOKEN， 仅保留SELECT  WHERE  FROM 之类的关键字
+    /**
+     * TODO: 2022/9/28 需要剔除诸如IDENTIFIER  STRING 这样的TOKEN， 仅保留SELECT  WHERE  FROM 之类的关键字
+     */
     public static Boolean isKeyWord(IElementType type) {
         return TOKEN_ELEMENT_TYPES.contains(type);
     }

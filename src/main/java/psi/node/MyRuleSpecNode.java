@@ -15,7 +15,7 @@ import psi.PsiElementFactory;
 /**
  * @author nobody
  */
-public class MyRuleSpecNode extends RuleSpecNode {
+public class MyRuleSpecNode extends BaseRuleSpecNode {
     public static final Logger LOG = Logger.getInstance(MyRuleSpecNode.class);
 
     public MyRuleSpecNode(@NotNull ASTNode node) {

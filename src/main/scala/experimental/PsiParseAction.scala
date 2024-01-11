@@ -1,4 +1,4 @@
-package action
+package experimental
 
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent}
 import com.intellij.openapi.editor._

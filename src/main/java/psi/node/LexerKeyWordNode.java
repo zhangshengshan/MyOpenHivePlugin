@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author nobody
  */
-public class LexerKeyWordNode extends GrammarElementRefNode {
+public class LexerKeyWordNode extends BaseGrammarElementRefNode {
     public LexerKeyWordNode(IElementType type, CharSequence text) {
         super(type, text);
     }

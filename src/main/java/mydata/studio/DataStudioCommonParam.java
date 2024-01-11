@@ -35,19 +35,19 @@ public class DataStudioCommonParam {
             twoColumns = false;
         }
 
-        for (int i = 0; i < selectedRows.length; i++) {
+        for (int selectedRow : selectedRows) {
             for (int j = 0; j < selectedColumns.length; j++) {
 
                 if (twoColumns) {
                     final Object db =
-                            myDataStudio.getWorkTable().getValueAt(selectedRows[i], selectedColumns[j]);
+                            myDataStudio.getWorkTable().getValueAt(selectedRow, selectedColumns[j]);
                     j += 1;
                     final Object tb =
-                            myDataStudio.getWorkTable().getValueAt(selectedRows[i], selectedColumns[j]);
+                            myDataStudio.getWorkTable().getValueAt(selectedRow, selectedColumns[j]);
                     this.params.add(db.toString() + "." + tb.toString());
                 } else {
                     final Object dbtb =
-                            myDataStudio.getWorkTable().getValueAt(selectedRows[i], selectedColumns[j]);
+                            myDataStudio.getWorkTable().getValueAt(selectedRow, selectedColumns[j]);
                     this.params.add(dbtb.toString());
                 }
             }
@@ -56,9 +56,9 @@ public class DataStudioCommonParam {
         // 如果没有选中任何行，从prompt中提取
         if (this.params.isEmpty() && !"".equals(text)) {
             final String[] split = text.split("\n");
-            for (int i = 0; i < split.length; i++) {
-                if (!"".equals(split[i]) && !" ".equals(split[i])) {
-                    this.params.add(split[i]);
+            for (String s : split) {
+                if (!"".equals(s) && !" ".equals(s)) {
+                    this.params.add(s);
                 }
             }
         }
