@@ -24,7 +24,7 @@ class GetDorisSchemaAction extends AnAction{
       val headers = Map("Authorization" -> s"Basic $encoded")
 
       val url = s"http://$host:$port/api/$yourdb/$yourtb/_schema"
-      val response = requests.get(url, headers = headers)
+      val response = requests.get(url, headers )
 
       println(response.text())
   }
