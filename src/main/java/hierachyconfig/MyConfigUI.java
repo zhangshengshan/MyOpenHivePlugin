@@ -1,13 +1,10 @@
 package hierachyconfig;
 
 import com.intellij.openapi.options.ConfigurableUi;
-import com.intellij.openapi.options.ConfigurationException;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author zhangshengshan
@@ -360,8 +357,8 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         });
 
         colorRestButton.addActionListener(e -> {
-            HIVEBGButton.setBackground(new Color(DefaultColor.alizarin100));
-            HIVEBGButton.setForeground(new Color(DefaultColor.alizarin100));
+            HIVEBGButton.setBackground(new Color(DefaultColor.ALIZARIN_100));
+            HIVEBGButton.setForeground(new Color(DefaultColor.ALIZARIN_100));
         });
         hierachyDepth.addActionListener(e -> {
 
