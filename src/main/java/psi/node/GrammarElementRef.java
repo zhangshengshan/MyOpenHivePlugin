@@ -18,6 +18,7 @@ import psi.MyPsiUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -72,7 +73,7 @@ public class GrammarElementRef extends PsiReferenceBase<GrammarElementRefNode> {
                         root,
                         element -> {
                             if (element instanceof IdentifierNode
-                                    && element.getText() == this.myElement.getText()) {
+                                    && Objects.equals(element.getText(), this.myElement.getText())) {
                                 return true;
                             }
                             return false;
