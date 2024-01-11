@@ -15,7 +15,6 @@ group 'io.github.zhangshengshan'
 repositories {
 
     mavenLocal()
-    mavenCentral()
     // add aliyun huawei repo
     maven {
         url "https://repo.huaweicloud.com/repository/maven/"
@@ -24,6 +23,7 @@ repositories {
         url "https://maven.aliyun.com/repository/public"
     }
 
+    mavenCentral()
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
@@ -69,13 +69,19 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
     implementation 'org.antlr:antlr4:4.11.1'
     implementation "org.antlr:antlr4-intellij-adaptor:0.1"
-    implementation 'org.scala-lang:scala-library:2.13.8'
+    implementation 'org.scala-lang:scala-library:2.13.10'
     implementation 'com.github.vertical-blank:sql-formatter:2.0.3'
     implementation 'io.github.zhangshengshan:mygraphapp_2.13:0.1.7'
     // mygraphapp中包含此依赖，此处不再需要，防止冲突
 //    implementation 'io.github.zhangshengshan:mycommongraph_2.13:0.0.12'
     implementation 'com.intellij:forms_rt:7.0.3'
     implementation 'com.google.code.gson:gson:2.10'
+
+    // for requests ospath and json parsesupport
+    implementation 'com.lihaoyi:requests_2.13:0.8.0'
+    implementation 'com.lihaoyi:ujson_2.13:1.4.2'
+    implementation 'com.lihaoyi:os-lib_2.13:0.7.8'
+    implementation 'com.lihaoyi:upickle_2.13:1.4.2'
 }
 
 generateGrammarSource {
