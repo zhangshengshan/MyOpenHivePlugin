@@ -104,8 +104,6 @@ public class GrammarElementRef extends PsiReferenceBase<BaseGrammarElementRefNod
      */
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        System.out.println("text:" + myElement + " offset" + myElement.getStartOffset());
-        System.out.println(myElement.getReference().resolve().getTextOffset());
 
         final PsiElement resolve = myElement.getReference().resolve();
 
@@ -128,29 +126,4 @@ public class GrammarElementRef extends PsiReferenceBase<BaseGrammarElementRefNod
         }
         return myElement;
     }
-
-  /*
-    @Override
-    public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
-
-      System.out.println(this.getElement().getTextOffset());
-
-      final PsiFile root = PsiTreeUtil.getTopmostParentOfType(this.myElement, PsiFile.class);
-      final PsiElement[] psiElements = PsiTreeUtil.collectElements(
-              root,
-              element -> element instanceof IdentifierNode && element.getText() == myElement.getText());
-
-      final long count = Arrays.stream(psiElements).count();
-
-      final ResolveResult[] resolveResults = new ResolveResult[(int) count];
-
-      for (int i = 0 ; i < psiElements.length; i++) {
-        resolveResults[i] = new PsiElementResolveResult(psiElements[i]);
-        System.out.println(psiElements[i].getTextOffset() + " " + psiElements[i].getTextLength());
-      }
-
-      System.out.println("length is " + psiElements.length);
-      return resolveResults;
-    }
-  */
 }

@@ -31,9 +31,6 @@ public class ExecuteButtonListener implements ActionListener, KeyListener {
 
         final List<String> params = dataStudioCommonParam.getParams();
 
-        for (String param : params) {
-            System.out.println(param);
-        }
 
         // todo: judge which button is clicked and execute the corresponding command
 

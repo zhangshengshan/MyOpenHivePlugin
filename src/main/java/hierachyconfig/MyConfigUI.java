@@ -83,6 +83,10 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
     private JButton color2Button;
     private JButton color3Button;
     private JButton color4Button;
+    private JTextField USERNAMETextField;
+    private JPasswordField PASSWORDPasswordField;
+    private JTextField IPTextField;
+    private JTextField PORTTextField;
 
 
     public MyConfigUI(MyConfigurable settings) {
@@ -423,6 +427,12 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         this.color2Button.setBackground(new Color(settings.getColor2()));
         this.color3Button.setBackground(new Color(settings.getColor3()));
         this.color4Button.setBackground(new Color(settings.getColor4()));
+
+
+        this.IPTextField.setText(settings.getHost());
+        this.PORTTextField.setText(settings.getPort());
+        this.USERNAMETextField.setText(settings.getUser());
+        this.PASSWORDPasswordField.setText(settings.getPassword());
     }
 
     @Override
@@ -486,6 +496,13 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         isModified |= this.color3Button.getBackground().getRGB() != settings.getColor3();
         isModified |= this.color4Button.getBackground().getRGB() != settings.getColor4();
 
+
+        isModified |= !(this.IPTextField.getText().equals(settings.getHost()));
+        isModified |= !(this.PORTTextField.getText().equals(settings.getPort()));
+        isModified |= !(this.USERNAMETextField.getText().equals(settings.getUser()));
+        isModified |= !(this.PASSWORDPasswordField.getText().equals(settings.getPassword()));
+
+
         return isModified;
     }
 
@@ -543,6 +560,12 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         settings.setColor2(this.color2Button.getBackground().getRGB());
         settings.setColor3(this.color3Button.getBackground().getRGB());
         settings.setColor4(this.color4Button.getBackground().getRGB());
+
+
+        settings.setHost(this.IPTextField.getText());
+        settings.setPort(this.PORTTextField.getText());
+        settings.setUser(this.USERNAMETextField.getText());
+        settings.setPassword(this.PASSWORDPasswordField.getText());
 
     }
 

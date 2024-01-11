@@ -80,6 +80,12 @@ public class MyConfigurable implements PersistentStateComponent<MyConfigurable>,
 
     boolean hiveOnlyHierachy = false;
 
+
+    String host = "";
+    String port = "";
+    String user = "";
+    String password = "";
+
     public static MyConfigurable getInstance() {
         return ApplicationManager.getApplication().getService(MyConfigurable.class);
     }
