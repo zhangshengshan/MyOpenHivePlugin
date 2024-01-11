@@ -45,7 +45,7 @@ public class MyConfigurable implements PersistentStateComponent<MyConfigurable>,
     int MYSQLFONT = GREENSEA_100;
     int HIVEFONT = EMERALD_100;
     int HIVEBG = NEPHRITIS_100;
-    int CLICKHOUSEBG = peterriver100;
+    int CLICKHOUSEBG = PETERRIVER_100;
 
     int CLICKHOUSEFONT = SUNFLOWER_100;
     int DataSetBG = ORANGE_100;

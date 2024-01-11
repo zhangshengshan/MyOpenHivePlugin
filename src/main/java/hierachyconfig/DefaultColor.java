@@ -10,13 +10,13 @@ public class DefaultColor {
     final static int NEPHRITIS_50 = 0xe9f7ef;
     final static int NEPHRITIS_100 = 0xd4efdf;
     final static int PETERRIVER_50 = 0xebf5fb;
-    final static int peterriver100 = 0xd6eaf8;
+    final static int PETERRIVER_100 = 0xd6eaf8;
     final static int BELIZEHOLE_50 = 0xeaf2f8;
     final static int BELIZEHOLE_100 = 0xd4e6f1;
     final static int AMETHYST_50 = 0xf5eef8;
     final static int AMETHYST_100 = 0xebdef0;
     final static int WISTERIA_50 = 0xf4ecf7;
-    final static int wisteria100 = 0xe8daef;
+    final static int WISTERIA_100 = 0xe8daef;
     final static int WETASPHALT_50 = 0xebedef;
     final static int WETASPHALT_100 = 0xd6dbdf;
     final static int MIDNIGHTBLUE_50 = 0xeaecee;
