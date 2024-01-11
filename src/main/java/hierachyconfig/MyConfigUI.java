@@ -477,7 +477,7 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
 
         isModified |= this.downloadAfterExtractRadioButton.isSelected() != settings.isDownloadAfterExtract();
 
-        isModified |= !(this.genScoutCmdsRadioButton.isSelected() == settings.isGenScoutCode());
+        isModified |= this.genScoutCmdsRadioButton.isSelected() != settings.isGenScoutCode();
 
         isModified |= !(this.tennonModeSelector.getSelectedItem().equals(settings.getTennonShowMode()));
 
