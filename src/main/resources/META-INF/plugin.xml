@@ -76,7 +76,7 @@
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl meta alt T"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-        <action id="PsiParseAction" class="action.PsiParseAction" text="PsiParse">
+        <action id="PsiParseAction" class="experimental.PsiParseAction" text="PsiParse">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt P"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
