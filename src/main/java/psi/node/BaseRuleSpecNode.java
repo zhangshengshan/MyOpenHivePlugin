@@ -36,6 +36,9 @@ public abstract class BaseRuleSpecNode extends ASTWrapperPsiElement implements P
         return "unknown-name";
     }
 
+    /**
+     * @return
+     */
     @Override
     public abstract @Nullable ANTLRPsiNode getNameIdentifier();
 
@@ -55,6 +58,9 @@ public abstract class BaseRuleSpecNode extends ASTWrapperPsiElement implements P
         return this;
     }
 
+    /**
+     * @return
+     */
     public abstract IElementType getRuleRefType();
 
     @Override

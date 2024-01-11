@@ -99,7 +99,7 @@ public class GrammarElementRef extends PsiReferenceBase<BaseGrammarElementRefNod
         return max_depth_element;
     }
 
-    /*
+    /**
      * TODO: 2022/9/29 rename处理的存在问题, 不能生效
      */
     @Override

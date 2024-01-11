@@ -45,7 +45,7 @@ public class HiveTokenTypes {
         return TOKEN_ELEMENT_TYPES.get(ruleIndex);
     }
 
-    /*
+    /**
      * TODO: 2022/9/28 需要剔除诸如IDENTIFIER  STRING 这样的TOKEN， 仅保留SELECT  WHERE  FROM 之类的关键字
      */
     public static Boolean isKeyWord(IElementType type) {

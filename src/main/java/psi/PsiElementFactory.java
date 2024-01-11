@@ -11,6 +11,7 @@ public interface PsiElementFactory {
     /**
      * @param node
      * @return
+     * ´´½¨ÔªËØ
      */
     PsiElement createElement(ASTNode node);
 }

@@ -63,7 +63,7 @@ public class HiveStructureViewElement implements StructureViewTreeElement, Sorta
         return new HiveItemPresentation(element);
     }
 
-    /*
+    /**
      * TODO: 2022/9/28 flatten hierarchy here what if nested structure view is needed?
      */
     @NotNull

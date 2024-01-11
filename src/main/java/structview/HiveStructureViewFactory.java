@@ -14,7 +14,7 @@ import plugin.HiveFile;
 import java.util.Collection;
 import java.util.Collections;
 
-/*
+/**
  * TODO: 2022/9/28 RENAME TO HIVE
  */
 public class HiveStructureViewFactory implements PsiStructureViewFactory {
