@@ -10,6 +10,7 @@ import javax.swing.*;
 
 /**
  * Supports creating and managing a {@link JPanel} for the Settings Dialog.
+ * @Author zhangshengshan
  */
 public class AppSettingsComponent {
 

@@ -8,7 +8,7 @@ import com.intellij.psi.tree.IElementType;
  * Refs to tokens, rules
  */
 public abstract class GrammarElementRefNode extends LeafPsiElement implements PsiNamedElement {
-    protected String name = null; // an override to input text ID if we rename via intellij
+    protected String name = null;
 
     public GrammarElementRefNode(IElementType type, CharSequence text) {
         super(type, text);

@@ -63,7 +63,9 @@ public class HiveStructureViewElement implements StructureViewTreeElement, Sorta
         return new HiveItemPresentation(element);
     }
 
-    // TODO: 2022/9/28 flatten hierarchy here what if nested structure view is needed?
+    /*
+     * TODO: 2022/9/28 flatten hierarchy here what if nested structure view is needed?
+     */
     @NotNull
     @Override
     public TreeElement[] getChildren() {
@@ -84,7 +86,6 @@ public class HiveStructureViewElement implements StructureViewTreeElement, Sorta
         return treeElements.toArray(new TreeElement[0]);
     }
 
-    // probably not critical
     @Override
     public boolean equals(Object o) {
         if (this == o) {

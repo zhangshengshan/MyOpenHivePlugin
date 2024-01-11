@@ -91,10 +91,6 @@ public class GrammarElementRef extends PsiReferenceBase<GrammarElementRefNode> {
 
         for (int i1 = 0; i1 < collect.size(); i1++) {
             int curDepth = PsiTreeUtil.getDepth(root, collect.get(i1));
-      /*
-            System.out.println(
-                "curDepth = " + curDepth + " max_depth = " + max_depth + " " + collect.get(i1));
-      */
             if (curDepth > max_depth) {
                 max_depth = PsiTreeUtil.getDepth(root, collect.get(i1));
                 max_depth_element = collect.get(i1);
@@ -103,7 +99,9 @@ public class GrammarElementRef extends PsiReferenceBase<GrammarElementRefNode> {
         return max_depth_element;
     }
 
-    // TODO: 2022/9/29 rename处理的存在问题, 不能生效
+    /*
+     * TODO: 2022/9/29 rename处理的存在问题, 不能生效
+     */
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
         System.out.println("text:" + myElement + " offset" + myElement.getStartOffset());
@@ -128,12 +126,6 @@ public class GrammarElementRef extends PsiReferenceBase<GrammarElementRefNode> {
         for (PsiElement psiElement : psiElements) {
             psiElement.replace(leafFromText);
         }
-        // TODO: 2022/10/14 原来此处直接进行myElement.replace
-    /*
-        myElement.replace(leafFromText);
-        resolve.replace(leafFromText);
-    */
-
         return myElement;
     }
 

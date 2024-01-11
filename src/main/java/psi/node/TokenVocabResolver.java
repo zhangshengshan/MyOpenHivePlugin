@@ -11,6 +11,9 @@ import plugin.HiveFile;
 
 import static plugin.basic.HiveTokenTypes.RULE_ELEMENT_TYPES;
 
+/**
+ * @author shengshan.zhang
+ */
 public class TokenVocabResolver {
 
     /**
@@ -29,7 +32,6 @@ public class TokenVocabResolver {
                 PsiElement optionName = PsiTreeUtil.getDeepestFirst(option);
 
                 if ("tokenVocab".equals(optionName.getText())) {
-//                    String text = StringUtils.strip(reference.getText(), "'");
                     String text = reference.getText().replaceAll("'", "");
                     return findRelativeFile(text, reference.getContainingFile());
                 }
