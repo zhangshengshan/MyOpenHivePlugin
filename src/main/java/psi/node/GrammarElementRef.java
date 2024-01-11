@@ -25,11 +25,11 @@ import java.util.stream.Stream;
 /**
  * A reference to a grammar element (parser rule, lexer rule or lexical mode).
  */
-public class GrammarElementRef extends PsiReferenceBase<GrammarElementRefNode> {
+public class GrammarElementRef extends PsiReferenceBase<BaseGrammarElementRefNode> {
     private final String ruleName;
     Logger log = Logger.getInstance(GrammarElementRef.class);
 
-    public GrammarElementRef(GrammarElementRefNode idNode, String ruleName) {
+    public GrammarElementRef(BaseGrammarElementRefNode idNode, String ruleName) {
         super(idNode, new TextRange(0, ruleName.length()));
         this.ruleName = ruleName;
     }

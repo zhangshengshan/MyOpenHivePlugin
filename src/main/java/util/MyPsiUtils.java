@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import plugin.HiveFile;
 import plugin.HiveLanguage;
 import plugin.basic.HiveTokenTypes;
-import psi.node.RuleSpecNode;
+import psi.node.BaseRuleSpecNode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,7 +81,7 @@ public class MyPsiUtils {
     }
 
     /**
-     * Finds the first {@link RuleSpecNode} or {@link } matching the {@code ruleName}
+     * Finds the first {@link BaseRuleSpecNode} or {@link } matching the {@code ruleName}
      * defined in the given {@code grammar}.
      *
      * <p>Rule specs can be either children of the {@link }, or under one of the {@code

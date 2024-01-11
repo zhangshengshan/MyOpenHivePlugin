@@ -17,10 +17,10 @@ import psi.MyPsiUtils;
  *
  * @author alphabetago
  */
-public abstract class RuleSpecNode extends ASTWrapperPsiElement implements PsiNameIdentifierOwner {
+public abstract class BaseRuleSpecNode extends ASTWrapperPsiElement implements PsiNameIdentifierOwner {
     protected String name = null;
 
-    public RuleSpecNode(@NotNull final ASTNode node) {
+    public BaseRuleSpecNode(@NotNull final ASTNode node) {
         super(node);
     }
 

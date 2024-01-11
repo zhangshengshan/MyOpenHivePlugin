@@ -7,10 +7,10 @@ import com.intellij.psi.tree.IElementType;
 /**
  * Refs to tokens, rules
  */
-public abstract class GrammarElementRefNode extends LeafPsiElement implements PsiNamedElement {
+public abstract class BaseGrammarElementRefNode extends LeafPsiElement implements PsiNamedElement {
     protected String name = null;
 
-    public GrammarElementRefNode(IElementType type, CharSequence text) {
+    public BaseGrammarElementRefNode(IElementType type, CharSequence text) {
         super(type, text);
     }
 
