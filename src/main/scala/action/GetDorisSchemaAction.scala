@@ -15,7 +15,7 @@ class GetDorisSchemaAction extends AnAction {
     val selectList = responseObj.data.properties.map(item => {
       item.name + " AS " + item.name + " -- " + item.comment  +"\n"
     }).mkString(",")
-    s"select $selectList from $db.$tb"
+    s"SELECT ${System.lineSeparator()} $selectList ${System.lineSeparator()} FROM ${System.lineSeparator()} $db.$tb ;"
   }
   override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
     val value: MyConfigurable = MyConfigurable.getInstance()
