@@ -70,6 +70,8 @@ class GetDorisSchemaAction extends AnAction {
       println(item.name)
     })
     val sql = genDorisSelectQuery(responseObj, yourdb, yourtb)
+
+    Messages.showInfoMessage(sql, "Generated Doris SQL")
     ClipBoardUtil.copyToClipBoard(sql)
   }
 }
