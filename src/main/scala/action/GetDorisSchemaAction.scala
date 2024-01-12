@@ -1,6 +1,8 @@
 package action
 
+import com.intellij.build.events.BuildEventsNls.Message
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent}
+import com.intellij.openapi.ui.Messages
 import hierachyconfig.MyConfigurable
 
 case class Author( login: String, subscriptions_url: String, organizations_url: String)
@@ -9,6 +11,12 @@ case class Data(keysType: String, properties: List[Property], status: Int)
 case class Response(msg: String, code: Int, data: Data, count: Int)
 
 class GetDorisSchemaAction extends AnAction {
+  def genDorisSelectQuery(responseObj: Response, db:String, tb:String): String = {
+    val selectList = responseObj.data.properties.map(item => {
+      item.name + " AS " + item.name + "\n"
+    }).mkString(",")
+    s"select $selectList from $db.$tb"
+  }
   override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
     val value: MyConfigurable = MyConfigurable.getInstance()
     println(value.getHost)
@@ -21,8 +29,19 @@ class GetDorisSchemaAction extends AnAction {
     val user = value.getUser
     val password = value.getPassword
     //    anneng_ods.ods_bduan_eam_power_station_base_dt_bduan_dashboard
-    val yourdb = "yourdb"
-    val yourtb = "yourtable"
+
+    // intellij pop up a input to get the db and table name
+    val str = Messages.showInputDialog(
+      "Please input the db and table name",
+      "Input Dialog",
+      Messages.getQuestionIcon)
+
+    val strings = str.split(".")
+    val yourdb = strings(0)
+    val yourtb = strings(1)
+
+    println(yourdb)
+    println(yourtb)
 
     import java.util.Base64
     val encoded = Base64.getEncoder.encodeToString((user + ":" + password).getBytes)
@@ -49,6 +68,7 @@ class GetDorisSchemaAction extends AnAction {
     responseObj.data.properties.foreach(item => {
       println(item.name)
     })
+
     //    try {
     //      jsonValue.arr
     //        .take(2)
@@ -58,7 +78,11 @@ class GetDorisSchemaAction extends AnAction {
     //    } catch {
     //      case e: Exception => println(e)
     //    }
+
+    println(genDorisSelectQuery(responseObj, yourdb, yourtb))
+
   }
+
 }
 
 
