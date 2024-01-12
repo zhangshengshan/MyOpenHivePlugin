@@ -51,7 +51,6 @@ class GetDorisSchemaAction extends AnAction {
     val response = requests.get(url, headers = headers)
     val jsonValue = ujson.read(response.text())
 
-    implicit val authorRW = upickle.default.macroRW[Author]
     implicit val propertyRW = upickle.default.macroRW[Property]
     implicit val dataRW = upickle.default.macroRW[Data]
     implicit val responseRW = upickle.default.macroRW[Response]
