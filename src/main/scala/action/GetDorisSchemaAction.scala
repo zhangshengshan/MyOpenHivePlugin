@@ -4,6 +4,7 @@ import com.intellij.build.events.BuildEventsNls.Message
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent}
 import com.intellij.openapi.ui.Messages
 import hierachyconfig.MyConfigurable
+import misc.ClipBoardUtil
 
 case class Author( login: String, subscriptions_url: String, organizations_url: String)
 case class Property(name: String, aggregation_type: String, comment: String, `type`: String)
@@ -68,7 +69,8 @@ class GetDorisSchemaAction extends AnAction {
     responseObj.data.properties.foreach(item => {
       println(item.name)
     })
-    println(genDorisSelectQuery(responseObj, yourdb, yourtb))
+    val sql = genDorisSelectQuery(responseObj, yourdb, yourtb)
+    ClipBoardUtil.copyToClipBoard(sql)
   }
 }
 
