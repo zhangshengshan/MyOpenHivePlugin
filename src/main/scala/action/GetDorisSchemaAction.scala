@@ -6,7 +6,6 @@ import com.intellij.openapi.ui.Messages
 import hierachyconfig.MyConfigurable
 import misc.ClipBoardUtil
 
-case class Author( login: String, subscriptions_url: String, organizations_url: String)
 case class Property(name: String, aggregation_type: String, comment: String, `type`: String)
 case class Data(keysType: String, properties: List[Property], status: Int)
 case class Response(msg: String, code: Int, data: Data, count: Int)
@@ -50,20 +49,12 @@ class GetDorisSchemaAction extends AnAction {
 
     val url = s"http://$host:$port/api/$yourdb/$yourtb/_schema"
     val response = requests.get(url, headers = headers)
-    //val jsongString = os.read(
-    //      os.Path(
-    //        "/Users/zhangshengshan/Desktop/MyOpenHivePlugin/ammonite-releases.json"
-    //      )
-    //    )
     val jsonValue = ujson.read(response.text())
 
     implicit val authorRW = upickle.default.macroRW[Author]
     implicit val propertyRW = upickle.default.macroRW[Property]
     implicit val dataRW = upickle.default.macroRW[Data]
     implicit val responseRW = upickle.default.macroRW[Response]
-    //    val author : Author = upickle.default.read[Author](jsonValue(0).obj("author"))
-    //    println(author)
-    //    println(author.login)
     println(jsonValue)
     val responseObj : Response = upickle.default.read[Response](jsonValue)
     responseObj.data.properties.foreach(item => {
