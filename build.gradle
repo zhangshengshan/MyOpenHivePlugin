@@ -93,15 +93,17 @@ generateGrammarSource {
             "-Xexact-output-dir"
     ]
 }
+
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = '2023.3.2'
+    version = '2023.2.3'
 }
 patchPluginXml {
     changeNotes = """
       Add change notes here.<br>
       <em>most HTML tags may be used</em>"""
 }
+
 test {
     useJUnitPlatform()
 }
