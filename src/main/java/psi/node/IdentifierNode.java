@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author nobody
  */
-public class IdentifierNode extends GrammarElementRefNode {
+public class IdentifierNode extends BaseGrammarElementRefNode {
     public IdentifierNode(IElementType type, CharSequence text) {
         super(type, text);
     }

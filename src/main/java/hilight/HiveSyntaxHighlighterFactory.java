@@ -7,6 +7,10 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @author zhangshengshan
+ */
+@Deprecated
 public class HiveSyntaxHighlighterFactory extends SyntaxHighlighterFactory {
     @Override
     public @NotNull SyntaxHighlighter getSyntaxHighlighter(

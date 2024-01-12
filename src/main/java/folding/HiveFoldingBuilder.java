@@ -20,16 +20,17 @@ import util.MyPsiUtils;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static plugin.basic.HiveTokenTypes.*;
 
 /**
- * Created by jason on 1/7/15. parts copied from JavaFoldingBuilderBase
- *
- * @see com.intellij.codeInsight.folding.impl.JavaFoldingBuilderBase
+ * @author zhangshengshan
  */
 public class HiveFoldingBuilder extends CustomFoldingBuilder {
+
+    public static final RuleIElementType JOIN = getRuleElementType(SqlBaseParser.RULE_joinCriteria);
 
     public static final RuleIElementType SELECT_CLAUSE =
             getRuleElementType(SqlBaseParser.RULE_namedExpressionSeq);
@@ -50,6 +51,7 @@ public class HiveFoldingBuilder extends CustomFoldingBuilder {
             getTokenElementType(SqlBaseLexer.BRACKETED_COMMENT);
     private static final TokenIElementType LINE_COMMENT_TOKEN =
             getTokenElementType(SqlBaseLexer.SIMPLE_COMMENT);
+    @Deprecated
     private static final TokenIElementType TOKENS = getTokenElementType(SqlBaseLexer.IDENTIFIER);
     private static final TokenSet RULE_BLOCKS =
             TokenSet.create(
@@ -66,6 +68,13 @@ public class HiveFoldingBuilder extends CustomFoldingBuilder {
         });
         Iterable<PsiElement> whereParts = MyPsiUtils.findChildrenOfType(root, WHERE_CLAUSE);
         whereParts.forEach(action -> {
+            if (action != null) {
+                descriptors.add(new FoldingDescriptor(action.getNode(), action.getTextRange()));
+            }
+        });
+
+        Iterable<PsiElement> joinParts = MyPsiUtils.findChildrenOfType(root, JOIN);
+        joinParts.forEach(action -> {
             if (action != null) {
                 descriptors.add(new FoldingDescriptor(action.getNode(), action.getTextRange()));
             }
@@ -97,16 +106,17 @@ public class HiveFoldingBuilder extends CustomFoldingBuilder {
         });
     }
 
-    private static void addOptionsFoldingDescriptor(
-            List<FoldingDescriptor> descriptors, PsiElement root) {
-    }
-
     private static void addCommentDescriptors(List<FoldingDescriptor> descriptors, PsiElement root) {
+        /*
+        processedComments 永远没有被更新
+         */
         Set<PsiElement> processedComments = new HashSet<>();
         for (PsiElement comment : MyPsiUtils.findChildrenOfType(root, COMMENTS)) {
             IElementType type = comment.getNode().getElementType();
             if (processedComments.contains(comment)) {
                 continue;
+            } else {
+                processedComments.add(comment);
             }
             if (type == DOC_COMMENT_TOKEN || type == BLOCK_COMMENT_TOKEN || type == LINE_COMMENT_TOKEN) {
                 descriptors.add(new FoldingDescriptor(comment, comment.getTextRange()));
@@ -120,34 +130,35 @@ public class HiveFoldingBuilder extends CustomFoldingBuilder {
     }
 
     /**
-     * TODO: 2022/10/18 PlaceHoler中的换行符不能添加
+     * TODO: 2022/10/18 PlaceHolder中的换行符不能添加
      */
     private static String getPlaceholderText(PsiElement element) {
 
-        if (element.getNode().getElementType() == LINE_COMMENT_TOKEN) {
+        if (element.getNode().getElementType() == JOIN) {
+            return "JOIN...\r\n" + System.lineSeparator();
+        } else if (element.getNode().getElementType() == LINE_COMMENT_TOKEN) {
             return "...";
         } else if (element.getNode().getElementType() == SELECT_CLAUSE) {
-            return "字段列表..." + System.getProperty("line.separator");
+            return "字段列表...\r\n" + System.lineSeparator();
         } else if (element.getNode().getElementType() == WHERE_CLAUSE) {
-            return "WHERE..." + System.getProperty("line.separator");
+            return "WHERE...\r\n" + System.lineSeparator();
         } else if (element.getNode().getElementType() == GROUPBY) {
-            return "GROUP BY..." + System.getProperty("line.separator");
-
+            return "GROUP BY...\r\n" + System.lineSeparator();
         } else if (element.getNode().getElementType()
                 == getRuleElementType(SqlBaseParser.RULE_relationPrimary)) {
             String text = "";
 
             final PsiElement[] children = element.getChildren();
-            for (int i = 0; i < children.length; i++) {
-                if (children[i].getNode().getElementType()
+            for (PsiElement child : children) {
+                if (child.getNode().getElementType()
                         == getRuleElementType(SqlBaseParser.RULE_tableAlias)) {
-                    if (children[i].getLastChild() != null) {
-                        text = children[i].getLastChild().getText();
+                    if (child.getLastChild() != null) {
+                        text = child.getLastChild().getText();
                     }
                     break;
                 }
             }
-            return "表(块)" + " " + text + System.getProperty("line.separator");
+            return "表(块)" + " " + text + System.lineSeparator();
         } else if (element.getNode().getElementType() == getRuleElementType(SqlBaseParser.RULE_namedQuery)) {
             return "block " + element.getFirstChild().getText() + " ";
         } else if (element.getNode().getElementType() == getRuleElementType(SqlBaseParser.RULE_ctes)) {
@@ -166,12 +177,11 @@ public class HiveFoldingBuilder extends CustomFoldingBuilder {
             addCommentDescriptors(descriptors, root);
             addTokensFoldingDescriptor(descriptors, root);
         }
-        return;
     }
 
     @Override
     protected String getLanguagePlaceholderText(@NotNull ASTNode node, @NotNull TextRange range) {
-        return getPlaceholderText(SourceTreeToPsiMap.treeElementToPsi(node));
+        return getPlaceholderText(Objects.requireNonNull(SourceTreeToPsiMap.treeElementToPsi(node)));
     }
 
     @SuppressWarnings("SimplifiableIfStatement")

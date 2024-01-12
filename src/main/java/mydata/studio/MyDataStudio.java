@@ -14,21 +14,21 @@ import javax.swing.table.DefaultTableModel;
  */
 @Data
 public class MyDataStudio {
-    private JButton Execute;
-    private JPanel Container;
-    private JTextArea Prompt;
-    private JButton OpenFIle;
+    private JButton executeButton;
+    private JPanel containerPanel;
+    private JTextArea promptArea;
+    private JButton openFileButton;
     private JTable workTable;
     private JTabbedPane tabbedPane1;
-    private JPanel CheckBox;
-    private JRadioButton 字段信息RadioButton;
+    private JPanel checkBoxPanel;
+    private JRadioButton fieldsInfoButton;
     private JComboBox comboBox1;
     private JButton plotHierachyButton;
     private JButton plotERButton;
     private JSlider slider1;
     private JButton clearButton;
     private JRadioButton hierachyRadioButton;
-    private JRadioButton 榫卯结构RadioButton;
+    private JRadioButton tennonButton;
     private JRadioButton hierachyFieldRadioButton;
 
     private String inputFile;
@@ -39,19 +39,15 @@ public class MyDataStudio {
      * @param toolWindow
      */
     public MyDataStudio(ToolWindow toolWindow) {
-        Object data[][] = {};
-        //    workTable.setModel(new DefaultTableModel(data, new String[] {}));
-        //    workTable.getColumnModel().getColumn(0).setPreferredWidth(100);
-        /* 让Jtable支持列选择*/
         workTable.setRowSelectionAllowed(true);
         workTable.setColumnSelectionAllowed(true);
         final ExecuteButtonListener executeButtonListener = new ExecuteButtonListener(this);
 
         // TODO: 2022/11/18 刚刚点击checkbox之后，执行按钮不能运行
-        Execute.addActionListener(executeButtonListener);
-        Execute.addKeyListener(executeButtonListener);
+        executeButton.addActionListener(executeButtonListener);
+        executeButton.addKeyListener(executeButtonListener);
 
-        OpenFIle.addActionListener(new OpenButtonListener(this));
+        openFileButton.addActionListener(new OpenButtonListener(this));
         clearButton.addActionListener(new ClearActionListener(this));
     }
 
@@ -59,15 +55,17 @@ public class MyDataStudio {
      * only for ui preview purpose
      */
 
+    @Deprecated
     public void setWorkTable(Object[][] data, String[] columnNames) {
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
         workTable.setModel(model);
     }
 
     public JPanel getContent() {
-        return Container;
+        return containerPanel;
     }
 
+    @Deprecated
     public Boolean inputFileExists() {
         return inputFile != null;
     }

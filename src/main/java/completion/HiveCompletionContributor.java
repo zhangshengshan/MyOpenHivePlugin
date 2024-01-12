@@ -12,7 +12,7 @@ import java.util.Arrays;
  */
 public class HiveCompletionContributor extends CompletionContributor {
 
-    public static final String[] keyWords = {
+    public static final String[] KEY_WORDS = {
             "SEMICOLON",
             "LEFT_PAREN",
             "RIGHT_PAREN",
@@ -346,10 +346,10 @@ public class HiveCompletionContributor extends CompletionContributor {
         extend(
                 CompletionType.BASIC,
                 PlatformPatterns.psiElement(),
-                new HiveKeyWordCompletion(keyWords, HiveFileType.INSTANCE.getIcon()));
+                new HiveKeyWordCompletion(KEY_WORDS, HiveFileType.INSTANCE.getIcon()));
     }
 
     public static boolean isNotKeyword(String s) {
-        return !Arrays.asList(keyWords).contains(s);
+        return !Arrays.asList(KEY_WORDS).contains(s);
     }
 }

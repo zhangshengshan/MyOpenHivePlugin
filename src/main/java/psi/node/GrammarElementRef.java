@@ -18,17 +18,18 @@ import psi.MyPsiUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * A reference to a grammar element (parser rule, lexer rule or lexical mode).
  */
-public class GrammarElementRef extends PsiReferenceBase<GrammarElementRefNode> {
+public class GrammarElementRef extends PsiReferenceBase<BaseGrammarElementRefNode> {
     private final String ruleName;
     Logger log = Logger.getInstance(GrammarElementRef.class);
 
-    public GrammarElementRef(GrammarElementRefNode idNode, String ruleName) {
+    public GrammarElementRef(BaseGrammarElementRefNode idNode, String ruleName) {
         super(idNode, new TextRange(0, ruleName.length()));
         this.ruleName = ruleName;
     }
@@ -72,7 +73,7 @@ public class GrammarElementRef extends PsiReferenceBase<GrammarElementRefNode> {
                         root,
                         element -> {
                             if (element instanceof IdentifierNode
-                                    && element.getText() == this.myElement.getText()) {
+                                    && Objects.equals(element.getText(), this.myElement.getText())) {
                                 return true;
                             }
                             return false;
@@ -90,10 +91,6 @@ public class GrammarElementRef extends PsiReferenceBase<GrammarElementRefNode> {
 
         for (int i1 = 0; i1 < collect.size(); i1++) {
             int curDepth = PsiTreeUtil.getDepth(root, collect.get(i1));
-      /*
-            System.out.println(
-                "curDepth = " + curDepth + " max_depth = " + max_depth + " " + collect.get(i1));
-      */
             if (curDepth > max_depth) {
                 max_depth = PsiTreeUtil.getDepth(root, collect.get(i1));
                 max_depth_element = collect.get(i1);
@@ -102,11 +99,11 @@ public class GrammarElementRef extends PsiReferenceBase<GrammarElementRefNode> {
         return max_depth_element;
     }
 
-    // TODO: 2022/9/29 rename处理的存在问题, 不能生效
+    /**
+     * TODO: 2022/9/29 rename处理的存在问题, 不能生效
+     */
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        System.out.println("text:" + myElement + " offset" + myElement.getStartOffset());
-        System.out.println(myElement.getReference().resolve().getTextOffset());
 
         final PsiElement resolve = myElement.getReference().resolve();
 
@@ -127,37 +124,6 @@ public class GrammarElementRef extends PsiReferenceBase<GrammarElementRefNode> {
         for (PsiElement psiElement : psiElements) {
             psiElement.replace(leafFromText);
         }
-        // TODO: 2022/10/14 原来此处直接进行myElement.replace
-    /*
-        myElement.replace(leafFromText);
-        resolve.replace(leafFromText);
-    */
-
         return myElement;
     }
-
-  /*
-    @Override
-    public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
-
-      System.out.println(this.getElement().getTextOffset());
-
-      final PsiFile root = PsiTreeUtil.getTopmostParentOfType(this.myElement, PsiFile.class);
-      final PsiElement[] psiElements = PsiTreeUtil.collectElements(
-              root,
-              element -> element instanceof IdentifierNode && element.getText() == myElement.getText());
-
-      final long count = Arrays.stream(psiElements).count();
-
-      final ResolveResult[] resolveResults = new ResolveResult[(int) count];
-
-      for (int i = 0 ; i < psiElements.length; i++) {
-        resolveResults[i] = new PsiElementResolveResult(psiElements[i]);
-        System.out.println(psiElements[i].getTextOffset() + " " + psiElements[i].getTextLength());
-      }
-
-      System.out.println("length is " + psiElements.length);
-      return resolveResults;
-    }
-  */
 }

@@ -11,10 +11,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import plugin.HiveLanguage;
 
+/**
+ * @author zhangshengshan
+ */
 public class HiveCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
 
     @Override
-    public CustomCodeStyleSettings createCustomSettings(CodeStyleSettings settings) {
+    public CustomCodeStyleSettings createCustomSettings(@NotNull CodeStyleSettings settings) {
         return new HiveCodeStyleSettings("", settings);
     }
 
@@ -31,7 +34,7 @@ public class HiveCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
         return new CodeStyleAbstractConfigurable(
                 settings, modelSettings, this.getConfigurableDisplayName()) {
             @Override
-            protected CodeStyleAbstractPanel createPanel(CodeStyleSettings settings) {
+            protected @NotNull CodeStyleAbstractPanel createPanel(@NotNull CodeStyleSettings settings) {
                 return new SimpleCodeStyleMainPanel(getCurrentSettings(), settings);
             }
         };

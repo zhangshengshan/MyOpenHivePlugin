@@ -20,12 +20,15 @@ import java.util.Map;
 
 import static plugin.basic.HiveTokenTypes.isKeyWord;
 
+/**
+ * @author zhangshengshan
+ */
 public class HiveASTFactory extends ASTFactory {
-    private static final Map<IElementType, PsiElementFactory> ruleElementTypeToPsiFactory =
+    private static final Map<IElementType, PsiElementFactory> ELEMENT_TYPE_PSI_ELEMENT_FACTORY_HASH_MAP =
             new HashMap<>();
 
     static {
-        ruleElementTypeToPsiFactory.put(
+        ELEMENT_TYPE_PSI_ELEMENT_FACTORY_HASH_MAP.put(
                 HiveTokenTypes.RULE_ELEMENT_TYPES.get(SqlBaseParser.RULE_fromClause),
                 MyRuleSpecNode.Factory.INSTANCE);
     }
@@ -33,7 +36,7 @@ public class HiveASTFactory extends ASTFactory {
     public static PsiElement createInternalParseTreeNode(ASTNode node) {
         PsiElement t;
         IElementType tokenType = node.getElementType();
-        PsiElementFactory factory = ruleElementTypeToPsiFactory.get(tokenType);
+        PsiElementFactory factory = ELEMENT_TYPE_PSI_ELEMENT_FACTORY_HASH_MAP.get(tokenType);
         if (factory != null) {
             t = factory.createElement(node);
         } else {

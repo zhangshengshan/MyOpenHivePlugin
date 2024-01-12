@@ -12,20 +12,25 @@ import com.intellij.psi.impl.PsiFileFactoryImpl;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import plugin.HiveFile;
 import plugin.HiveLanguage;
 import plugin.basic.HiveTokenTypes;
-import psi.node.RuleSpecNode;
+import psi.node.BaseRuleSpecNode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * @author zhangshengshan
+ */
 @SuppressWarnings("SimplifiableIfStatement")
 public class MyPsiUtils {
     @Nullable
+    @Deprecated
     public static PsiElement findFirstChildOfType(final PsiElement parent, IElementType type) {
         return findFirstChildOfType(parent, TokenSet.create(type));
     }
@@ -40,7 +45,9 @@ public class MyPsiUtils {
     @Nullable
     public static PsiElement findFirstChildOfType(final PsiElement parent, final TokenSet types) {
         Iterator<PsiElement> iterator = findChildrenOfType(parent, types).iterator();
-        if (iterator.hasNext()) return iterator.next();
+        if (iterator.hasNext()) {
+            return iterator.next();
+        }
         return null;
     }
 
@@ -50,13 +57,13 @@ public class MyPsiUtils {
     }
 
     /**
-     * Like PsiTreeUtil.findChildrenOfType, except no collection is created and it doesnt use
+     * Like PsiTreeUtil.findChildrenOfType, except no collection is created and it does not use
      * recursion.
      *
      * @param parent the element whose children will be searched
      * @param types  the types to search for
      * @return an iterable that will traverse the psi tree depth-first, including only the elements
-     * whose type is contained in the provided tokenset.
+     * whose type is contained in the provided tocken sets.
      */
     public static Iterable<PsiElement> findChildrenOfType(
             final PsiElement parent, final TokenSet types) {
@@ -64,56 +71,39 @@ public class MyPsiUtils {
                 PsiTreeUtil.collectElements(
                         parent,
                         input -> {
-                            if (input == null) return false;
                             ASTNode node = input.getNode();
-                            if (node == null) return false;
+                            if (node == null) {
+                                return false;
+                            }
                             return types.contains(node.getElementType());
                         });
         return Arrays.asList(psiElements);
     }
 
     /**
-     * Finds the first {@link RuleSpecNode} or {@link ModeSpecNode} matching the {@code ruleName}
+     * Finds the first {@link BaseRuleSpecNode} or {@link } matching the {@code ruleName}
      * defined in the given {@code grammar}.
      *
-     * <p>Rule specs can be either children of the {@link RulesNode}, or under one of the {@code
+     * <p>Rule specs can be either children of the {@link }, or under one of the {@code
      * mode}s defined in the grammar. This means we have to walk the whole grammar to find matching
      * candidates.
      */
-  /*
-      public static PsiElement findSpecNode(GrammarSpecNode grammar, final String ruleName) {
-          PsiElementFilter definitionFilter = element1 -> {
-              if (!(element1 instanceof RuleSpecNode)) {
-                  return false;
-              }
-
-              GrammarElementRefNode id = ((RuleSpecNode) element1).getNameIdentifier();
-              return id != null && id.getText().equals(ruleName);
-          };
-
-          PsiElement[] ruleSpec = PsiTreeUtil.collectElements(grammar, definitionFilter);
-          if (ruleSpec.length > 0) {
-              return ruleSpec[0];
-          }
-          return null;
-      }
-
-  */
+    @Deprecated
     public static PsiElement createLeafFromText(
             Project project, PsiElement context, String text, IElementType type) {
         PsiFileFactoryImpl factory = (PsiFileFactoryImpl) PsiFileFactory.getInstance(project);
         PsiElement el = factory.createElementFromText(text, HiveLanguage.INSTANCE, type, context);
-        return PsiTreeUtil.getDeepestFirst(el); // forces parsing of file!!
-        // start rule depends on root passed in
+        return PsiTreeUtil.getDeepestFirst(el);
     }
 
+    @Deprecated
     public static void replacePsiFileFromText(
             final Project project, final PsiFile psiFile, String text) {
         final PsiFile newPsiFile = createFile(project, text);
         WriteCommandAction setTextAction =
                 new WriteCommandAction(project) {
                     @Override
-                    protected void run(final Result result) {
+                    protected void run(@NotNull final Result result) {
                         psiFile.deleteChildRange(psiFile.getFirstChild(), psiFile.getLastChild());
                         psiFile.addRange(newPsiFile.getFirstChild(), newPsiFile.getLastChild());
                     }
@@ -122,7 +112,8 @@ public class MyPsiUtils {
     }
 
     public static PsiFile createFile(Project project, String text) {
-        String fileName = "a.g4"; // random name but must be .g4
+        // random name but must be .g4
+        String fileName = "a.g4";
         PsiFileFactoryImpl factory = (PsiFileFactoryImpl) PsiFileFactory.getInstance(project);
         return factory.createFileFromText(fileName, HiveLanguage.INSTANCE, text, false, false);
     }
@@ -152,6 +143,7 @@ public class MyPsiUtils {
                 });
     }
 
+    @Deprecated
     public static PsiElement[] collectNodesWithText(PsiElement root, final String text) {
         return PsiTreeUtil.collectElements(root, element -> element.getText().equals(text));
     }
@@ -166,6 +158,7 @@ public class MyPsiUtils {
         return elems.toArray(new PsiElement[elems.size()]);
     }
 
+    @Deprecated
     public static PsiElement findChildOfType(PsiElement root, final IElementType tokenType) {
         List<PsiElement> elems = new ArrayList<>();
         for (PsiElement child : root.getChildren()) {
@@ -186,14 +179,15 @@ public class MyPsiUtils {
         return elems.toArray(new PsiElement[elems.size()]);
     }
 
-    // Look for stuff like: options { tokenVocab=SqlBaseLexer; superClass=Foo; }
+    @Deprecated
     public static String findTokenVocabIfAny(HiveFile file) {
         String vocabName = null;
         PsiElement[] options = collectNodesWithName(file, "option");
         for (PsiElement o : options) {
             PsiElement[] tokenVocab = collectChildrenWithText(o, "tokenVocab");
             if (tokenVocab.length > 0) {
-                PsiElement optionNode = tokenVocab[0].getParent(); // tokenVocab[0] is id node
+                // tokenVocab[0] is id node
+                PsiElement optionNode = tokenVocab[0].getParent();
                 PsiElement[] ids =
                         collectChildrenOfType(
                                 optionNode,
@@ -204,14 +198,12 @@ public class MyPsiUtils {
         return vocabName;
     }
 
+    @Deprecated
     public static PsiElement findElement(PsiElement startNode, int offset) {
         PsiElement p = startNode;
-        if (p == null) return null;
-        //		System.out.println(Thread.currentThread().getName()+": visit root "+p+
-        //							   ", offset="+offset+
-        //							   ", class="+p.getClass().getSimpleName()+
-        //							   ", text="+p.getNode().getText()+
-        //							   ", node range="+p.getTextRange());
+        if (p == null) {
+            return null;
+        }
 
         PsiElement c = p.getFirstChild();
         while (c != null) {

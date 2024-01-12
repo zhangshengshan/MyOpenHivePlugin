@@ -37,7 +37,9 @@ public class MyPsiUtils {
     @Nullable
     public static PsiElement findFirstChildOfType(final PsiElement parent, final TokenSet types) {
         Iterator<PsiElement> iterator = findChildrenOfType(parent, types).iterator();
-        if (iterator.hasNext()) return iterator.next();
+        if (iterator.hasNext()) {
+            return iterator.next();
+        }
         return null;
     }
 
@@ -61,9 +63,13 @@ public class MyPsiUtils {
                 PsiTreeUtil.collectElements(
                         parent,
                         input -> {
-                            if (input == null) return false;
+                            if (input == null) {
+                                return false;
+                            }
                             ASTNode node = input.getNode();
-                            if (node == null) return false;
+                            if (node == null) {
+                                return false;
+                            }
                             return types.contains(node.getElementType());
                         });
         return Arrays.asList(psiElements);
@@ -72,7 +78,7 @@ public class MyPsiUtils {
     /**
      * defined in the given {@code grammar}.
      *
-     * <p>Rule specs can be either children of the {@link RulesNode}, or under one of the {@code
+     * <p>Rule specs can be either children of the {@link }, or under one of the {@code
      * mode}s defined in the grammar. This means we have to walk the whole grammar to find matching
      * candidates.
      */
@@ -80,12 +86,11 @@ public class MyPsiUtils {
             Project project, PsiElement context, String text, IElementType type) {
         PsiFileFactoryImpl factory = (PsiFileFactoryImpl) PsiFileFactory.getInstance(project);
         PsiElement el = factory.createElementFromText(text, HiveLanguage.INSTANCE, type, context);
-        return PsiTreeUtil.getDeepestFirst(el); // forces parsing of file!!
-        // start rule depends on root passed in
+        return PsiTreeUtil.getDeepestFirst(el);
     }
 
     public static PsiFile createFile(Project project, String text) {
-        String fileName = "a.hql"; // random name but must be .g4
+        String fileName = "a.hql";
         PsiFileFactoryImpl factory = (PsiFileFactoryImpl) PsiFileFactory.getInstance(project);
         return factory.createFileFromText(fileName, HiveLanguage.INSTANCE, text, false, false);
     }
@@ -137,14 +142,13 @@ public class MyPsiUtils {
         return elems.toArray(new PsiElement[elems.size()]);
     }
 
-    // Look for stuff like: options { tokenVocab=SqlBaseLexer; superClass=Foo; }
     public static String findTokenVocabIfAny(HiveFile file) {
         String vocabName = null;
         PsiElement[] options = collectNodesWithName(file, "option");
         for (PsiElement o : options) {
             PsiElement[] tokenVocab = collectChildrenWithText(o, "tokenVocab");
             if (tokenVocab.length > 0) {
-                PsiElement optionNode = tokenVocab[0].getParent(); // tokenVocab[0] is id node
+                PsiElement optionNode = tokenVocab[0].getParent();
                 PsiElement[] ids =
                         collectChildrenOfType(
                                 optionNode, HiveTokenTypes.RULE_ELEMENT_TYPES.get(SqlBaseParser.RULE_assignment));
@@ -156,13 +160,9 @@ public class MyPsiUtils {
 
     public static PsiElement findElement(PsiElement startNode, int offset) {
         PsiElement p = startNode;
-        if (p == null) return null;
-        //		System.out.println(Thread.currentThread().getName()+": visit root "+p+
-        //							   ", offset="+offset+
-        //							   ", class="+p.getClass().getSimpleName()+
-        //							   ", text="+p.getNode().getText()+
-        //							   ", node range="+p.getTextRange());
-
+        if (p == null) {
+            return null;
+        }
         PsiElement c = p.getFirstChild();
         while (c != null) {
             PsiElement result = findElement(c, offset);

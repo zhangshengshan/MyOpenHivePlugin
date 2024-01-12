@@ -1,11 +1,11 @@
 <idea-plugin>
     <id>org.example.MyHive</id>
     <name>DataStudio</name>
-    <vendor email="datastudio@xyz.com" url="http://www.xyz.com">YourCompany</vendor>
+    <vendor email="alphabetago@163.com" url="https://io.github.zhangshengshan">MyCompany</vendor>
 
-    <description><![CDATA[
-        欢迎使用DataStudio工具
-    ]]></description>
+    <description>
+        欢迎使用DataStudio工具， 该工具可以帮助您快速的生成hive sql语句，并进行数据分析。
+    </description>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
@@ -57,7 +57,7 @@
                                          displayName="HierachyTools"/>
         -->
         <applicationService serviceImplementation="hierachyconfig.MyConfigurable"/>
-        <applicationConfigurable instance="hierachyconfig.MyConfigEntry" displayName="hierachy"
+        <applicationConfigurable instance="hierachyconfig.MyConfigEntry" displayName="层次工具"
                                  parentId="tools" id="hierachy"
         />
     </extensions>
@@ -76,10 +76,16 @@
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl meta alt T"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-        <action id="PsiParseAction" class="action.PsiParseAction" text="PsiParse">
+        <action id="PsiParseAction" class="experimental.PsiParseAction" text="PsiParse">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt P"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+
+        <action id="getDorisTableAction" class="action.GetDorisSchemaAction" text="getDorisTableAction"
+                description="getDorisTableAction">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
         <action id="extractTablesAction" class="action.ExtractTablesAction" text="extractTablesAction"
                 description="extractTablesAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
@@ -94,6 +100,11 @@
         </action>
         <action id="batchProcess" class="action.BatchReplace" text="batchProcess"
                 description="batchProcess">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+        <action id="CommentSelectLines" class="action.CommentSelectLinesToggle" text="commentSelectLines"
+                description="CommentSelectLines">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt T"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
     </actions>

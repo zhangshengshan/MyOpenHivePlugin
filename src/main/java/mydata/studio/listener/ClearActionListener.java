@@ -17,15 +17,15 @@ public class ClearActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        this.myDataStudio.getPrompt().setText("");
+        this.myDataStudio.getPromptArea().setText("");
         this.myDataStudio.getWorkTable().clearSelection();
         this.myDataStudio
                 .getWorkTable()
                 .setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{}));
 
-        this.myDataStudio.get字段信息RadioButton().setSelected(false);
+        this.myDataStudio.getFieldsInfoButton().setSelected(false);
         this.myDataStudio.getHierachyRadioButton().setSelected(false);
-        this.myDataStudio.get榫卯结构RadioButton().setSelected(false);
+        this.myDataStudio.getTennonButton().setSelected(false);
 
     }
 }

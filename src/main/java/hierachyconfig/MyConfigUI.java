@@ -1,14 +1,14 @@
 package hierachyconfig;
 
 import com.intellij.openapi.options.ConfigurableUi;
-import com.intellij.openapi.options.ConfigurationException;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
+/**
+ * @author zhangshengshan
+ */
 public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
     private JPanel panel1;
     private JTextField textField1;
@@ -16,9 +16,9 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
     private JButton FieldsFontColorButton;
     private JButton FieldBgColorButton;
     private JButton ClusterFontColorButton;
-    private JPanel 颜色配置;
-    private JPanel 形状配置;
-    private JPanel 关系配置;
+    private JPanel colorConfig;
+    private JPanel shapeConfig;
+    private JPanel relationConfig;
     private JButton ClusterBgColorButton;
     private JButton TableBgColorButton;
     private JButton ArrowColorButton;
@@ -53,9 +53,9 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
     private JButton DWMBGButton;
     private JButton APPBGButton;
     private JButton DIMBGButton;
-    private JCheckBox 过滤CheckBox;
-    private JButton 过滤BGButton;
-    private JButton 过滤FontButton;
+    private JCheckBox filterCheckBox;
+    private JButton filterBGButton;
+    private JButton filterFontButton;
     private JTextField textField2;
     private JTextArea textArea1;
     private JTextArea textArea2;
@@ -68,12 +68,9 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
     private JButton DWMFontButton;
     private JButton APPFontButton;
     private JButton DIMFontButton;
-    /**
-     * 此按钮的作用是恢复Hierachy预设的配色方案
-     */
     private JButton colorRestButton;
     private JComboBox hierachyDepth;
-    private JRadioButton 批量处理字段血缘RadioButton;
+    private JRadioButton batchFieldHierachy;
     private JRadioButton OpenAfterGen;
     private JTextField outputPath;
     private JRadioButton downloadAfterExtractRadioButton;
@@ -82,9 +79,17 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
     private JRadioButton OnlyHiveTable;
 
 
-    public MyConfigUI(MyConfigurable settings) {
-        // TODO: 赋予初始化数数值
+    private JButton color1Button;
+    private JButton color2Button;
+    private JButton color3Button;
+    private JButton color4Button;
+    private JTextField USERNAMETextField;
+    private JPasswordField PASSWORDPasswordField;
+    private JTextField IPTextField;
+    private JTextField PORTTextField;
 
+
+    public MyConfigUI(MyConfigurable settings) {
 
         ClusterBgColorButton.addActionListener(e -> {
             Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.RED);
@@ -166,17 +171,17 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
             DIMBGButton.setBackground(color);
             DIMBGButton.setForeground(color);
         });
-        过滤BGButton.addActionListener(e -> {
+        filterBGButton.addActionListener(e -> {
             Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.RED);
             final Color color = new Color(newColor.getRGB());
-            过滤BGButton.setBackground(color);
-            过滤BGButton.setForeground(color);
+            filterBGButton.setBackground(color);
+            filterBGButton.setForeground(color);
         });
-        过滤FontButton.addActionListener(e -> {
+        filterFontButton.addActionListener(e -> {
             Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.RED);
             final Color color = new Color(newColor.getRGB());
-            过滤FontButton.setBackground(color);
-            过滤FontButton.setForeground(color);
+            filterFontButton.setBackground(color);
+            filterFontButton.setForeground(color);
         });
 
         keyWord1BG.addActionListener(e -> {
@@ -326,19 +331,44 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
             DASHBOARDFONTButton.setBackground(color);
             DASHBOARDFONTButton.setForeground(color);
         });
-        colorRestButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                HIVEBGButton.setBackground(new Color(DefaultColor.alizarin100));
-                HIVEBGButton.setForeground(new Color(DefaultColor.alizarin100));
-            }
-        });
-        hierachyDepth.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
-            }
+        color1Button.addActionListener(e -> {
+            Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.RED);
+            final Color color = new Color(newColor.getRGB());
+            color1Button.setBackground(color);
+            color1Button.setForeground(color);
         });
+
+        color2Button.addActionListener(e -> {
+            Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.RED);
+            final Color color = new Color(newColor.getRGB());
+            color2Button.setBackground(color);
+            color2Button.setForeground(color);
+        });
+
+        color3Button.addActionListener(e -> {
+            Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.RED);
+            final Color color = new Color(newColor.getRGB());
+            color3Button.setBackground(color);
+            color3Button.setForeground(color);
+        });
+
+        color4Button.addActionListener(e -> {
+            Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.RED);
+            final Color color = new Color(newColor.getRGB());
+            color4Button.setBackground(color);
+            color4Button.setForeground(color);
+        });
+
+        colorRestButton.addActionListener(e -> {
+            HIVEBGButton.setBackground(new Color(DefaultColor.ALIZARIN_100));
+            HIVEBGButton.setForeground(new Color(DefaultColor.ALIZARIN_100));
+        });
+        hierachyDepth.addActionListener(e -> {
+
+        });
+
+
     }
 
     @Override
@@ -378,11 +408,11 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
 
         this.downStreamCheckBox.setSelected(settings.isDownStream());
         this.upStreamCheckBox.setSelected(settings.isUpStream());
-        this.fieldsDisplay.setSelected(settings.isFields显示());
+        this.fieldsDisplay.setSelected(settings.isFieldsShow());
 
         this.hierachyDepth.setSelectedItem(settings.getHierachyDepth());
 
-        this.批量处理字段血缘RadioButton.setSelected(settings.isBatchFieldHierachy());
+        this.batchFieldHierachy.setSelected(settings.isBatchFieldHierachy());
         this.OpenAfterGen.setSelected(settings.isOpenAfterGen());
         this.outputPath.setText(settings.getOutputPath());
         this.downloadAfterExtractRadioButton.setSelected(settings.isDownloadAfterExtract());
@@ -392,68 +422,92 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         this.tennonModeSelector.setSelectedItem(settings.getTennonShowMode());
 
         this.OnlyHiveTable.setSelected(settings.isHiveOnlyHierachy());
+
+        this.color1Button.setBackground(new Color(settings.getColor1()));
+        this.color2Button.setBackground(new Color(settings.getColor2()));
+        this.color3Button.setBackground(new Color(settings.getColor3()));
+        this.color4Button.setBackground(new Color(settings.getColor4()));
+
+
+        this.IPTextField.setText(settings.getHost());
+        this.PORTTextField.setText(settings.getPort());
+        this.USERNAMETextField.setText(settings.getUser());
+        this.PASSWORDPasswordField.setText(settings.getPassword());
     }
 
     @Override
     public boolean isModified(@NotNull MyConfigurable settings) {
         boolean isModified = false;
         isModified |= !this.textField1.getText().equals(settings.getParam());
-        isModified |= !(this.ClusterBgColorButton.getBackground().getRGB() == (settings.getClusterBgColor()));
-        isModified |= !(this.ClusterFontColorButton.getForeground().getRGB() == (settings.getClusterFontColor()));
-        isModified |= !(this.TableBgColorButton.getForeground().getRGB() == (settings.getTableBgColor()));
-        isModified |= !(this.TableFontColor.getForeground().getRGB() == (settings.getTableFontColor()));
-        isModified |= !(this.FieldBgColorButton.getForeground().getRGB() == (settings.getFieldBgColor()));
-        isModified |= !(this.FieldsFontColorButton.getForeground().getRGB() == (settings.getFieldsFontColor()));
-        isModified |= !(this.ArrowColorButton.getForeground().getRGB() == (settings.getArrowColor()));
-        isModified |= !(this.hiveLayerColorCheckBox.isSelected() == (settings.isHiveLayerColor()));
-        isModified |= !(this.STGBGButton.getBackground().getRGB() == (settings.getSTGBG()));
-        isModified |= !(this.STGFontButton.getForeground().getRGB() == (settings.getSTGFont()));
-        isModified |= !(this.ODSBGButton.getBackground().getRGB() == (settings.getODSBG()));
-        isModified |= !(this.ODSFontButton.getForeground().getRGB() == (settings.getODSFont()));
-        isModified |= !(this.DWDBGButton.getBackground().getRGB() == (settings.getDWDBG()));
-        isModified |= !(this.DWDFontButton.getForeground().getRGB() == (settings.getDWDFont()));
-        isModified |= !(this.DWMBGButton.getBackground().getRGB() == (settings.getDWMBG()));
-        isModified |= !(this.DWMFontButton.getForeground().getRGB() == (settings.getDWMFont()));
-        isModified |= !(this.APPBGButton.getBackground().getRGB() == (settings.getAPPBG()));
-        isModified |= !(this.APPFontButton.getForeground().getRGB() == (settings.getAPPFont()));
-        isModified |= !(this.DIMBGButton.getBackground().getRGB() == (settings.getDIMBG()));
-        isModified |= !(this.DIMFontButton.getForeground().getRGB() == (settings.getDIMFont()));
-        isModified |= !(this.MYSQLBGButton.getBackground().getRGB() == (settings.getMYSQLBG()));
-        isModified |= !(this.MYSQLFONTButton.getForeground().getRGB() == (settings.getMYSQLFONT()));
-        isModified |= !(this.HIVEBGButton.getBackground().getRGB() == (settings.getHIVEBG()));
-        isModified |= !(this.HIVEFONTButton.getForeground().getRGB() == (settings.getHIVEFONT()));
-        isModified |= !(this.CLICKHOUSEBGButton.getBackground().getRGB() == (settings.getCLICKHOUSEBG()));
-        isModified |= !(this.CLICKHOUSEFONTButton.getForeground().getRGB() == (settings.getCLICKHOUSEFONT()));
-        isModified |= !(this.dataSetBGButton.getBackground().getRGB() == (settings.getDataSetBG()));
-        isModified |= !(this.DATASETFONTButton.getForeground().getRGB() == (settings.getDATASETFONT()));
-        isModified |= !(this.DASHBOARDBGButton.getBackground().getRGB() == (settings.getDASHBOARDBG()));
-        isModified |= !(this.DASHBOARDFONTButton.getForeground().getRGB() == (settings.getDASHBOARDFONT()));
+        isModified |= this.ClusterBgColorButton.getBackground().getRGB() != (settings.getClusterBgColor());
+        isModified |= this.ClusterFontColorButton.getForeground().getRGB() != (settings.getClusterFontColor());
+        isModified |= this.TableBgColorButton.getForeground().getRGB() != (settings.getTableBgColor());
+        isModified |= this.TableFontColor.getForeground().getRGB() != (settings.getTableFontColor());
+        isModified |= this.FieldBgColorButton.getForeground().getRGB() != (settings.getFieldBgColor());
+        isModified |= this.FieldsFontColorButton.getForeground().getRGB() != (settings.getFieldsFontColor());
+        isModified |= this.ArrowColorButton.getForeground().getRGB() != (settings.getArrowColor());
+        isModified |= this.hiveLayerColorCheckBox.isSelected() != (settings.isHiveLayerColor());
+        isModified |= this.STGBGButton.getBackground().getRGB() != (settings.getSTGBG());
+        isModified |= this.STGFontButton.getForeground().getRGB() != (settings.getSTGFont());
+        isModified |= this.ODSBGButton.getBackground().getRGB() != (settings.getODSBG());
+        isModified |= this.ODSFontButton.getForeground().getRGB() != (settings.getODSFont());
+        isModified |= this.DWDBGButton.getBackground().getRGB() != (settings.getDWDBG());
+        isModified |= this.DWDFontButton.getForeground().getRGB() != (settings.getDWDFont());
+        isModified |= this.DWMBGButton.getBackground().getRGB() != (settings.getDWMBG());
+        isModified |= this.DWMFontButton.getForeground().getRGB() != (settings.getDWMFont());
+        isModified |= this.APPBGButton.getBackground().getRGB() != (settings.getAPPBG());
+        isModified |= this.APPFontButton.getForeground().getRGB() != (settings.getAPPFont());
+        isModified |= this.DIMBGButton.getBackground().getRGB() != (settings.getDIMBG());
+        isModified |= this.DIMFontButton.getForeground().getRGB() != (settings.getDIMFont());
+        isModified |= this.MYSQLBGButton.getBackground().getRGB() != (settings.getMYSQLBG());
+        isModified |= this.MYSQLFONTButton.getForeground().getRGB() != (settings.getMYSQLFONT());
+        isModified |= this.HIVEBGButton.getBackground().getRGB() != (settings.getHIVEBG());
+        isModified |= this.HIVEFONTButton.getForeground().getRGB() != (settings.getHIVEFONT());
+        isModified |= this.CLICKHOUSEBGButton.getBackground().getRGB() != (settings.getCLICKHOUSEBG());
+        isModified |= this.CLICKHOUSEFONTButton.getForeground().getRGB() != (settings.getCLICKHOUSEFONT());
+        isModified |= this.dataSetBGButton.getBackground().getRGB() != (settings.getDataSetBG());
+        isModified |= this.DATASETFONTButton.getForeground().getRGB() != (settings.getDATASETFONT());
+        isModified |= this.DASHBOARDBGButton.getBackground().getRGB() != (settings.getDASHBOARDBG());
+        isModified |= this.DASHBOARDFONTButton.getForeground().getRGB() != (settings.getDASHBOARDFONT());
 
-        isModified |= !(this.downStreamCheckBox.isSelected() == (settings.isDownStream()));
-        isModified |= !(this.upStreamCheckBox.isSelected() == (settings.isUpStream()));
-        isModified |= !(this.fieldsDisplay.isSelected() == (settings.isFields显示()));
+        isModified |= this.downStreamCheckBox.isSelected() != (settings.isDownStream());
+        isModified |= this.upStreamCheckBox.isSelected() != (settings.isUpStream());
+        isModified |= this.fieldsDisplay.isSelected() != (settings.isFieldsShow());
 
         isModified |= !(this.hierachyDepth.getSelectedItem().equals(settings.hierachyDepth));
 
-        isModified |= !(this.批量处理字段血缘RadioButton.isSelected() != settings.isBatchFieldHierachy());
-        isModified |= !(this.OpenAfterGen.isSelected() == (settings.isOpenAfterGen()));
+        isModified |= this.batchFieldHierachy.isSelected() != settings.isBatchFieldHierachy();
+        isModified |= this.OpenAfterGen.isSelected() != (settings.isOpenAfterGen());
 
 
         isModified |= !(this.outputPath.getText().equals(settings.getOutputPath()));
 
-        isModified |= !(this.downloadAfterExtractRadioButton.isSelected() == settings.isDownloadAfterExtract());
+        isModified |= this.downloadAfterExtractRadioButton.isSelected() != settings.isDownloadAfterExtract();
 
-        isModified |= !(this.genScoutCmdsRadioButton.isSelected() == settings.isGenScoutCode());
+        isModified |= this.genScoutCmdsRadioButton.isSelected() != settings.isGenScoutCode();
 
         isModified |= !(this.tennonModeSelector.getSelectedItem().equals(settings.getTennonShowMode()));
 
-        isModified |= !(this.OnlyHiveTable.isSelected() == settings.isHiveOnlyHierachy());
+        isModified |= this.OnlyHiveTable.isSelected() != settings.isHiveOnlyHierachy();
+
+
+        isModified |= this.color1Button.getBackground().getRGB() != settings.getColor1();
+        isModified |= this.color2Button.getBackground().getRGB() != settings.getColor2();
+        isModified |= this.color3Button.getBackground().getRGB() != settings.getColor3();
+        isModified |= this.color4Button.getBackground().getRGB() != settings.getColor4();
+
+
+        isModified |= !(this.IPTextField.getText().equals(settings.getHost()));
+        isModified |= !(this.PORTTextField.getText().equals(settings.getPort()));
+        isModified |= !(this.USERNAMETextField.getText().equals(settings.getUser()));
+        isModified |= !(this.PASSWORDPasswordField.getText().equals(settings.getPassword()));
+
 
         return isModified;
     }
 
     @Override
-    public void apply(@NotNull MyConfigurable settings) throws ConfigurationException {
+    public void apply(@NotNull MyConfigurable settings) {
         settings.setParam(this.textField1.getText());
         settings.setClusterBgColor(this.ClusterBgColorButton.getForeground().getRGB());
         settings.setClusterFontColor(this.ClusterFontColorButton.getForeground().getRGB());
@@ -489,10 +543,10 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
 
         settings.setDownStream(this.downStreamCheckBox.isSelected());
         settings.setUpStream(this.upStreamCheckBox.isSelected());
-        settings.setFields显示(this.fieldsDisplay.isSelected());
+        settings.setFieldsShow(this.fieldsDisplay.isSelected());
 
         settings.setHierachyDepth(this.hierachyDepth.getSelectedItem().toString());
-        settings.setBatchFieldHierachy(this.批量处理字段血缘RadioButton.isSelected());
+        settings.setBatchFieldHierachy(this.batchFieldHierachy.isSelected());
         settings.setOpenAfterGen(this.OpenAfterGen.isSelected());
         settings.setOutputPath(this.outputPath.getText());
         settings.setDownloadAfterExtract(this.downloadAfterExtractRadioButton.isSelected());
@@ -500,6 +554,19 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         settings.setTennonShowMode(this.tennonModeSelector.getSelectedItem().toString());
 
         settings.setHiveOnlyHierachy(this.OnlyHiveTable.isSelected());
+
+
+        settings.setColor1(this.color1Button.getBackground().getRGB());
+        settings.setColor2(this.color2Button.getBackground().getRGB());
+        settings.setColor3(this.color3Button.getBackground().getRGB());
+        settings.setColor4(this.color4Button.getBackground().getRGB());
+
+
+        settings.setHost(this.IPTextField.getText());
+        settings.setPort(this.PORTTextField.getText());
+        settings.setUser(this.USERNAMETextField.getText());
+        settings.setPassword(this.PASSWORDPasswordField.getText());
+
     }
 
     @Override

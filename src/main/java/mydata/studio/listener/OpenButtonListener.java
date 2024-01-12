@@ -52,13 +52,10 @@ public class OpenButtonListener implements ActionListener {
                 FileChooser.chooseFile(
                         FileChooserDescriptorFactory.createSingleFileDescriptor(), null, null);
 
+        assert virtualFile != null;
         this.myDataStudio.setInputFile(virtualFile.getPath());
-        this.myDataStudio.getPrompt().setText(virtualFile.getPath());
-        final String path = virtualFile.getPath();
-        final String name = virtualFile.getNameWithoutExtension();
-        // TODO: 2022/11/4 添加专门的ERPLOT LISTENER
-        //    final Graph graph = GraphBuilder.make(path);
-        //    graph.render(name);
+        this.myDataStudio.getPromptArea().setText(virtualFile.getPath());
+
         ExcelReader excelReader = new ExcelReader(virtualFile.getPath());
         final List<String> sheetNames = excelReader.getSheetNames();
         String[] array = new String[sheetNames.size()];
@@ -76,11 +73,5 @@ public class OpenButtonListener implements ActionListener {
                 .setModel(
                         new javax.swing.table.DefaultTableModel(getRows(dataFrame), getHeaders(dataFrame)));
 
-        /*
-         * //deprecated
-         * final ExcelReader erConfig = new ExcelReader(path);
-         * graph.GraphMeta graphMeta = new graph.GraphMeta(erConfig);
-         * graphMeta.toGraphViz();
-         */
     }
 }

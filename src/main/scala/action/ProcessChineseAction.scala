@@ -1,7 +1,7 @@
 package action
 
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
-import com.intellij.openapi.application.{Application, ApplicationManager}
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.{Document, Editor}
 import com.intellij.openapi.ui.Messages
 import misc.ClipBoardUtil
@@ -34,16 +34,14 @@ class ProcessChineseAction extends AnAction {
         }
       })
     } catch {
-      case e => {
+      case e: Throwable =>
         e.printStackTrace()
         Messages.showMessageDialog(
           e.getMessage,
           "Error",
           Messages.getErrorIcon
         )
-      }
     }
-    return
   }
 }
 

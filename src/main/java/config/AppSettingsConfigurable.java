@@ -8,6 +8,7 @@ import javax.swing.*;
 
 /**
  * Provides controller functionality for application settings.
+ * @author zhangshengshan
  */
 public class AppSettingsConfigurable implements Configurable {
 

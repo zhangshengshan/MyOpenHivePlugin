@@ -41,28 +41,35 @@ public class MyConfigurable implements PersistentStateComponent<MyConfigurable>,
     int DIMBG = 0x00ff00;
     int DIMFont = 0x00ff00;
 
-    int MYSQLBG = turquoise100;
-    int MYSQLFONT = greensea100;
-    int HIVEFONT = emerald100;
-    int HIVEBG = nephritis100;
-    int CLICKHOUSEBG = peterriver100;
+    int MYSQLBG = TURQUOISE_100;
+    int MYSQLFONT = GREENSEA_100;
+    int HIVEFONT = EMERALD_100;
+    int HIVEBG = NEPHRITIS_100;
+    int CLICKHOUSEBG = PETERRIVER_100;
 
-    int CLICKHOUSEFONT = sunflower100;
-    int DataSetBG = orange100;
-    int DATASETFONT = carrot100;
-    int DASHBOARDBG = pumpkin100;
-    int DASHBOARDFONT = alizarin100;
+    int CLICKHOUSEFONT = SUNFLOWER_100;
+    int DataSetBG = ORANGE_100;
+    int DATASETFONT = CARROT_100;
+    int DASHBOARDBG = PUMPKIN_100;
+    int DASHBOARDFONT = ALIZARIN_100;
+
+
+    int color1 = SUNFLOWER_50;
+    int color2 = SUNFLOWER_100;
+    int color3 = ORANGE_50;
+    int color4 = ORANGE_100;
+
 
 
     boolean DownStream = true;
     boolean UpStream = true;
-    boolean Fields显示 = true;
+    boolean fieldsShow = true;
 
     String hierachyDepth = "5";
 
     boolean batchFieldHierachy = false;
     boolean openAfterGen = true;
-    String outputPath = "~/Desktop";
+    String outputPath = "/Users/zhangshengshan/Desktop";
 
 
     boolean downloadAfterExtract = false;
@@ -72,6 +79,12 @@ public class MyConfigurable implements PersistentStateComponent<MyConfigurable>,
     String tennonShowMode = "Simple";
 
     boolean hiveOnlyHierachy = false;
+
+
+    String host = "";
+    String port = "";
+    String user = "";
+    String password = "";
 
     public static MyConfigurable getInstance() {
         return ApplicationManager.getApplication().getService(MyConfigurable.class);

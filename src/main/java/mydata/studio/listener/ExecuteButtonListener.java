@@ -31,19 +31,16 @@ public class ExecuteButtonListener implements ActionListener, KeyListener {
 
         final List<String> params = dataStudioCommonParam.getParams();
 
-        for (String param : params) {
-            System.out.println(param);
-        }
 
         // todo: judge which button is clicked and execute the corresponding command
 
-        params.stream().forEach(param -> {
+        params.forEach(param -> {
 
-            if (this.myDataStudio.get字段信息RadioButton().isSelected()) {
+            if (this.myDataStudio.getFieldsInfoButton().isSelected()) {
                 GenOp.getSelectPart(param);
             }
 
-            if (this.myDataStudio.get榫卯结构RadioButton().isSelected()) {
+            if (this.myDataStudio.getTennonButton().isSelected()) {
                 TenonStructureOp$.MODULE$.genTenonStructureGraph(param);
             }
 

@@ -35,47 +35,45 @@ public class DataStudioCommonParam {
             twoColumns = false;
         }
 
-        for (int i = 0; i < selectedRows.length; i++) {
+        for (int selectedRow : selectedRows) {
             for (int j = 0; j < selectedColumns.length; j++) {
 
                 if (twoColumns) {
                     final Object db =
-                            myDataStudio.getWorkTable().getValueAt(selectedRows[i], selectedColumns[j]);
+                            myDataStudio.getWorkTable().getValueAt(selectedRow, selectedColumns[j]);
                     j += 1;
                     final Object tb =
-                            myDataStudio.getWorkTable().getValueAt(selectedRows[i], selectedColumns[j]);
+                            myDataStudio.getWorkTable().getValueAt(selectedRow, selectedColumns[j]);
                     this.params.add(db.toString() + "." + tb.toString());
                 } else {
                     final Object dbtb =
-                            myDataStudio.getWorkTable().getValueAt(selectedRows[i], selectedColumns[j]);
+                            myDataStudio.getWorkTable().getValueAt(selectedRow, selectedColumns[j]);
                     this.params.add(dbtb.toString());
                 }
             }
         }
-        final String text = myDataStudio.getPrompt().getText();
+        final String text = myDataStudio.getPromptArea().getText();
         // 如果没有选中任何行，从prompt中提取
-        if (this.params.size() == 0 && !text.equals("")) {
+        if (this.params.isEmpty() && !"".equals(text)) {
             final String[] split = text.split("\n");
-            for (int i = 0; i < split.length; i++) {
-                if (!split[i].equals("") && !split[i].equals(" ")) {
-                    this.params.add(split[i]);
+            for (String s : split) {
+                if (!"".equals(s) && !" ".equals(s)) {
+                    this.params.add(s);
                 }
             }
         }
         // 如果没有选中
-        if (this.params.size() == 0) {
+        if (this.params.isEmpty()) {
             final Transferable contents = CopyPasteManager.getInstance().getContents();
             final DataFlavor stringFlavor = DataFlavor.stringFlavor;
             final Object transferData = contents.getTransferData(stringFlavor);
             final String[] split = transferData.toString().split("\n");
-            for (String s : split) {
-                this.params.add(s);
-            }
+            this.params.addAll(List.of(split));
         }
 
         // 如果没有选中任何行
         // なにも選択されていない場合
-        if (this.params.size() == 0) {
+        if (this.params.isEmpty()) {
             final String s = Messages.showInputDialog("请输入要执行的库表", "提示", Messages.getInformationIcon());
             // TODO: 2022/11/8 check input correctness
             this.params.add(s);

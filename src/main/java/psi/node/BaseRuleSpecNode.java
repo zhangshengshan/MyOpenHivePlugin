@@ -17,10 +17,10 @@ import psi.MyPsiUtils;
  *
  * @author alphabetago
  */
-public abstract class RuleSpecNode extends ASTWrapperPsiElement implements PsiNameIdentifierOwner {
+public abstract class BaseRuleSpecNode extends ASTWrapperPsiElement implements PsiNameIdentifierOwner {
     protected String name = null;
 
-    public RuleSpecNode(@NotNull final ASTNode node) {
+    public BaseRuleSpecNode(@NotNull final ASTNode node) {
         super(node);
     }
 
@@ -36,6 +36,9 @@ public abstract class RuleSpecNode extends ASTWrapperPsiElement implements PsiNa
         return "unknown-name";
     }
 
+    /**
+     * @return
+     */
     @Override
     public abstract @Nullable ANTLRPsiNode getNameIdentifier();
 
@@ -55,6 +58,9 @@ public abstract class RuleSpecNode extends ASTWrapperPsiElement implements PsiNa
         return this;
     }
 
+    /**
+     * @return
+     */
     public abstract IElementType getRuleRefType();
 
     @Override

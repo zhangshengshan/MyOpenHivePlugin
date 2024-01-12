@@ -8,6 +8,9 @@ import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
 import org.jetbrains.annotations.NotNull;
 import plugin.HiveLanguage;
 
+/**
+ * @author zhangshengshan
+ */
 public class HiveLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettingsProvider {
 
     @NotNull
@@ -32,13 +35,15 @@ public class HiveLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
 
     @Override
     public String getCodeSample(@NotNull SettingsType settingsType) {
-        return "SELECT\n"
-                + "a AS a,\n"
-                + "b    AS b\n"
-                + "\n"
-                + "FROM\n"
-                + "a.b\n"
-                + "WHERE\n"
-                + "id IS NOT NULL\n";
+        return """
+                SELECT
+                a AS a,
+                b    AS b
+
+                FROM
+                a.b
+                WHERE
+                id IS NOT NULL
+                """;
     }
 }

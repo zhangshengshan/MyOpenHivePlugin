@@ -1,4 +1,4 @@
-package action
+package experimental
 
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent}
 import com.intellij.openapi.editor._
@@ -37,11 +37,9 @@ class PsiParseAction extends AnAction {
     PsiTreeUtil
       .collectElements(
         root,
-        (e: PsiElement) => {
-          e match {
-            case _: IdentifierNode => e.getText == element.getText
-            case _ => false
-          }
+        {
+          case e@(_: IdentifierNode) => e.getText == element.getText
+          case _ => false
         }
       )
       .foreach((e: PsiElement) => {
@@ -56,7 +54,7 @@ class PsiParseAction extends AnAction {
       element.asInstanceOf[IdentifierNode].getReference.resolve()
 
     val i: Int = PsiTreeUtil.getDepth(root, ref)
-    val i1 = PsiTreeUtil.getDepth(root, element)
+    val i1: Int = PsiTreeUtil.getDepth(root, element)
 
     Messages.showInfoMessage(
       project,
