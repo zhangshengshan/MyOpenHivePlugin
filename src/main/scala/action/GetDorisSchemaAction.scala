@@ -1,7 +1,7 @@
 package action
 
-import com.intellij.build.events.BuildEventsNls.Message
-import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent}
+import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
+import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.ui.Messages
 import hierachyconfig.MyConfigurable
 import misc.ClipBoardUtil
@@ -30,6 +30,32 @@ class GetDorisSchemaAction extends AnAction {
     val password = value.getPassword
     //    anneng_ods.ods_bduan_eam_power_station_base_dt_bduan_dashboard
 
+    val editor: Editor = anActionEvent.getData(CommonDataKeys.EDITOR)
+
+    val selectText = editor.getSelectionModel.getSelectedText
+
+    // 判断 selectText 是否符合xxxx.bbbb 这种形式
+    // 如果符合，则直接使用这个db和table
+    // 如果不符合，则弹出一个输入框，让用户输入db和table
+    var db = ""
+    var tb = ""
+    if (selectText != null && selectText.contains(".")) {
+      val strings = selectText.split("\\.")
+      db = strings(0)
+      tb = strings(1)
+    } else {
+      // intellij pop up a input to get the db and table name
+      val str = Messages.showInputDialog(
+        "Please input the db and table name",
+        "Input Dialog",
+        Messages.getQuestionIcon)
+      val strings = str.split("\\.")
+      db = strings(0)
+      tb = strings(1)
+    }
+
+    println(db)
+    println(tb)
     // intellij pop up a input to get the db and table name
     val str = Messages.showInputDialog(
       "Please input the db and table name",
@@ -37,8 +63,8 @@ class GetDorisSchemaAction extends AnAction {
       Messages.getQuestionIcon)
 
     val strings = str.split("\\.")
-    val yourdb = strings(0)
-    val yourtb = strings(1)
+    val yourdb = db
+    val yourtb = tb
 
     println(yourdb)
     println(yourtb)
@@ -50,6 +76,11 @@ class GetDorisSchemaAction extends AnAction {
     val url = s"http://$host:$port/api/$yourdb/$yourtb/_schema"
     val response = requests.get(url, headers = headers)
     val jsonValue = ujson.read(response.text())
+
+    if(jsonValue("code").num != 0) {
+      Messages.showInfoMessage(jsonValue("msg").str, "Error")
+      return
+    }
 
     implicit val propertyRW = upickle.default.macroRW[Property]
     implicit val dataRW = upickle.default.macroRW[Data]
