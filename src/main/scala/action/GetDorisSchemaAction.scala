@@ -36,7 +36,7 @@ class GetDorisSchemaAction extends AnAction {
 
     var db = ""
     var tb = ""
-    if (selectText != null && selectText.contains(".")) {
+    if (selectText != null && selectText.contains(".") && selectText.split("\\.").length == 2) {
       val strings = selectText.split("\\.")
       db = strings(0)
       tb = strings(1)
@@ -50,19 +50,8 @@ class GetDorisSchemaAction extends AnAction {
       db = strings(0)
       tb = strings(1)
     }
-
-    println(db)
-    println(tb)
-    // intellij pop up a input to get the db and table name
-//    val str = Messages.showInputDialog(
-//      "Please input the db and table name",
-//      "Input Dialog",
-//      Messages.getQuestionIcon)
-//
-//    val strings = str.split("\\.")
     val yourdb = db
     val yourtb = tb
-
     println(yourdb)
     println(yourtb)
 
