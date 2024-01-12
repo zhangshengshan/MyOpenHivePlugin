@@ -11,6 +11,12 @@ case class Data(keysType: String, properties: List[Property], status: Int)
 case class Response(msg: String, code: Int, data: Data, count: Int)
 
 class GetDorisSchemaAction extends AnAction {
+  /**
+   * @param responseObj
+   * @param db
+   * @param tb
+   * @return
+   */
   def genDorisSelectQuery(responseObj: Response, db:String, tb:String): String = {
     val selectList = responseObj.data.properties.map(item => {
       item.name + " AS " + item.name + " -- " + item.comment  +"\n"
