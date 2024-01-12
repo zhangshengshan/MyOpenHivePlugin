@@ -34,9 +34,6 @@ class GetDorisSchemaAction extends AnAction {
 
     val selectText = editor.getSelectionModel.getSelectedText
 
-    // 判断 selectText 是否符合xxxx.bbbb 这种形式
-    // 如果符合，则直接使用这个db和table
-    // 如果不符合，则弹出一个输入框，让用户输入db和table
     var db = ""
     var tb = ""
     if (selectText != null && selectText.contains(".")) {
@@ -57,12 +54,12 @@ class GetDorisSchemaAction extends AnAction {
     println(db)
     println(tb)
     // intellij pop up a input to get the db and table name
-    val str = Messages.showInputDialog(
-      "Please input the db and table name",
-      "Input Dialog",
-      Messages.getQuestionIcon)
-
-    val strings = str.split("\\.")
+//    val str = Messages.showInputDialog(
+//      "Please input the db and table name",
+//      "Input Dialog",
+//      Messages.getQuestionIcon)
+//
+//    val strings = str.split("\\.")
     val yourdb = db
     val yourtb = tb
 
