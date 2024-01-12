@@ -13,7 +13,7 @@ case class Response(msg: String, code: Int, data: Data, count: Int)
 class GetDorisSchemaAction extends AnAction {
   def genDorisSelectQuery(responseObj: Response, db:String, tb:String): String = {
     val selectList = responseObj.data.properties.map(item => {
-      item.name + " AS " + item.name + "\n"
+      item.name + " AS " + item.name + " -- " + item.comment  +"\n"
     }).mkString(",")
     s"select $selectList from $db.$tb"
   }
@@ -36,7 +36,7 @@ class GetDorisSchemaAction extends AnAction {
       "Input Dialog",
       Messages.getQuestionIcon)
 
-    val strings = str.split(".")
+    val strings = str.split("\\.")
     val yourdb = strings(0)
     val yourtb = strings(1)
 
@@ -68,21 +68,8 @@ class GetDorisSchemaAction extends AnAction {
     responseObj.data.properties.foreach(item => {
       println(item.name)
     })
-
-    //    try {
-    //      jsonValue.arr
-    //        .take(2)
-    //        .foreach(item => {
-    //          println(item.obj("node_id"))
-    //        })
-    //    } catch {
-    //      case e: Exception => println(e)
-    //    }
-
     println(genDorisSelectQuery(responseObj, yourdb, yourtb))
-
   }
-
 }
 
 
