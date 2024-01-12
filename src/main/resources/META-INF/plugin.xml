@@ -81,8 +81,8 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
 
-        <action id="getDorisTableAction" class="action.GetDorisSchemaAction" text="getDorisTableAction"
-                description="getDorisTableAction">
+        <action id="getDorisTableAction" class="action.GetDorisSchemaAction" text="getDorisTableAction" description="getDorisTableAction">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt G"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
 
