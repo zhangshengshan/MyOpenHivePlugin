@@ -18,10 +18,27 @@ class GetDorisSchemaAction extends AnAction {
    * @return
    */
   def genDorisSelectQuery(responseObj: Response, db:String, tb:String): String = {
+
+    val maxLength = responseObj.data.properties.map(item => item.name.length + 2).max
+    val maxCommentLength = 2 * maxLength + 4
+
+    val SEP = System.lineSeparator()
+
+    def fillAsSpaces(str: String): String = {
+      val spaceNum = maxLength - str.length
+      " " * spaceNum
+    }
+
+    def fillCommentSpaces(str:String): String = {
+      val spaceNum = maxCommentLength - str.length + maxLength
+      " " * spaceNum
+    }
+
+
     val selectList = responseObj.data.properties.map(item => {
-      item.name + " AS " + item.name + " -- " + item.comment  +"\n"
-    }).mkString(",")
-    s"SELECT ${System.lineSeparator()} $selectList ${System.lineSeparator()} FROM ${System.lineSeparator()} $db.$tb ;"
+      item.name + fillAsSpaces(item.name) +" AS " + item.name + fillCommentSpaces(item.name)+ " -- " + item.comment + SEP
+    }).mkString("\t,")
+    s"SELECT${SEP}\t $selectList${SEP}FROM${SEP}\t$db.$tb ;"
   }
   override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
     val value: MyConfigurable = MyConfigurable.getInstance()
