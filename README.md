@@ -12,21 +12,15 @@
 - [ ] code style support
 - [ ] structure view support all tables extract
 - [ ] Graphviz can sequence is a little wrong when nested select clauses are used in a hive file
-- [x] GraphViz 设置默认的存储路径和SVG名称 
 - [ ] https://github.com/JetBrains/intellij-sdk-code-samples/blob/main/psi_demo/src/main/java/org/intellij/sdk/psi/PsiNavigationDemoAction.java
 - [ ] 图形化界面的Hierachy工具 仿照本文写一个HIVE的Action
 - [ ] display syntax error by the
   parser https://plugins.jetbrains.com/docs/intellij/syntax-errors.html#controlling-syntax-errors-highlighting
-- [x] MyToolWindow 中如果输入的文件名称有问题，现在没有错误提示，需要进行修正˚
 - [ ] Studio TableTaskCode
 - [ ] Studio 任务编辑 实例运维 提交历史
 - [ ] Studio Hierachy 榫卯结构 设计
 - [ ] 拖拉拽的榫卯设计雏形可行性尝试。
 - [ ] 执行按钮的快捷键设置还有问题，可以做成可以配置的
-- [x] Hierachy绘图样式的配置
-- [x] Hierachy Color Config
-- [x] 颜色支持Node类型自定义， 也支持成套的颜色配置
-- [x] 输出地址可以配置
 - [ ] 根据Hierachy 字段级或者表级的依赖关系下载HQL代码
 - [ ] 处理资源文件
 - [ ] 抽取抽表格拷贝到看板中
@@ -73,3 +67,9 @@
 - [x] comment support
 - [x] graphviz integration but still depend on other library 图形化集成
 - [x] add scala support 添加scala支持
+- [x] GraphViz 设置默认的存储路径和SVG名称 
+- [x] Hierachy绘图样式的配置
+- [x] Hierachy Color Config
+- [x] 颜色支持Node类型自定义， 也支持成套的颜色配置
+- [x] 输出地址可以配置
+- [x] MyToolWindow 中如果输入的文件名称有问题，现在没有错误提示，需要进行修正˚
