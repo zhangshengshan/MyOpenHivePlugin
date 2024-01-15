@@ -20,7 +20,7 @@ class GetDorisSchemaAction extends AnAction {
   def genDorisSelectQuery(responseObj: Response, db:String, tb:String): String = {
 
     val maxLength = responseObj.data.properties.map(item => item.name.length + 2).max
-    val maxCommentLength = responseObj.data.properties.map(item => item.name.length + 2 + 9 ).max
+    val maxCommentLength = responseObj.data.properties.map(item => item.name.length * 2 + 9 ).max
 
     val SEP = System.lineSeparator()
 
