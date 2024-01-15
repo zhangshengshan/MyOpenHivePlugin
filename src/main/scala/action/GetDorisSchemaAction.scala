@@ -51,8 +51,6 @@ class GetDorisSchemaAction extends AnAction {
     val port = value.getPort
     val user = value.getUser
     val password = value.getPassword
-    //    anneng_ods.ods_bduan_eam_power_station_base_dt_bduan_dashboard
-
     val editor: Editor = anActionEvent.getData(CommonDataKeys.EDITOR)
 
     val selectText = editor.getSelectionModel.getSelectedText
