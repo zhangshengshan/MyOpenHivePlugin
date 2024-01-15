@@ -34,6 +34,7 @@ class GetDorisSchemaAction extends AnAction {
       " " * spaceNum
     }
 
+
     val selectList = responseObj.data.properties.map(item => {
       item.name + fillAsSpaces(item.name) +" AS " + item.name + fillCommentSpaces(item.name)+ " -- " + item.comment + SEP
     }).mkString("\t,")
