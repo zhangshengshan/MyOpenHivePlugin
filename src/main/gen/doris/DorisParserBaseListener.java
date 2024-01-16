@@ -1,4 +1,4 @@
-// Generated from E:/¹¤×÷´æµµ/MyOpenHivePlugin/src/main/scala/doris/DorisParser.g4 by ANTLR 4.13.1
+// Generated from E:/MyOpenHivePlugin/src/main/scala/doris/DorisParser.g4 by ANTLR 4.13.1
 package doris;
 
 import org.antlr.v4.runtime.ParserRuleContext;
