@@ -26,51 +26,61 @@ class ExtractTablesAction extends AnAction {
 
 
     // TODO: duplicated code to be refactored
+
+
+
     fileType match {
       case "Hive File" => {
-        val lexer: SqlBaseLexer =
-          new SqlBaseLexer(
-            new CaseChangingCharStream(CharStreams.fromString(text), true)
-          )
-
-        val commonTokenStream: CommonTokenStream = new CommonTokenStream(lexer)
-        val parser: SqlBaseParser = new SqlBaseParser(commonTokenStream)
-        val context: SqlBaseParser.StatementContext = parser.statement()
-        val visitor = new SparkSqlTablesExtractVisitor()
-        visitor.visit(context)
-        val plot: List[String] = visitor.plot()
-        if (MyConfigurable.getInstance().isDownloadAfterExtract) {
-
-        }
-        Messages.showInfoMessage(
-          plot.mkString("\r"),
-          "Extracted Tables"
-        )
-        ClipBoardUtil.copyToClipBoard(plot.mkString("\r"))
+        processHiveTables(text)
       }
       case "SQL" => {
-        println("SQL")
-        val lexer = new MySqlLexer(
-            new CaseChangingCharStream(CharStreams.fromString(text), true)
-            )
-
-        val commonTokenStream: CommonTokenStream = new CommonTokenStream(lexer)
-        val parser = new MySqlParser(commonTokenStream)
-        val context: MySqlParser.RootContext = parser.root()
-        val visitor = new MySQLTablesExtractor()
-        visitor.visit(context)
-        val plot: List[String] = visitor.plot()
-
-        if (MyConfigurable.getInstance().isDownloadAfterExtract) {
-
-        }
-        Messages.showInfoMessage(
-          plot.mkString("\r"),
-          "Extracted Tables"
-        )
+        processMySQLTables(text)
       }
     }
 
 
+  }
+
+  def processHiveTables(text:String): Unit = {
+    val lexer: SqlBaseLexer =
+      new SqlBaseLexer(
+        new CaseChangingCharStream(CharStreams.fromString(text), true)
+      )
+
+    val commonTokenStream: CommonTokenStream = new CommonTokenStream(lexer)
+    val parser: SqlBaseParser = new SqlBaseParser(commonTokenStream)
+    val context: SqlBaseParser.StatementContext = parser.statement()
+    val visitor = new SparkSqlTablesExtractVisitor()
+    visitor.visit(context)
+    val plot: List[String] = visitor.plot()
+    if (MyConfigurable.getInstance().isDownloadAfterExtract) {
+
+    }
+    Messages.showInfoMessage(
+      plot.mkString("\r"),
+      "Extracted Tables"
+    )
+    ClipBoardUtil.copyToClipBoard(plot.mkString("\r"))
+  }
+  private def processMySQLTables(text: String): Unit = {
+    println("SQL")
+    val lexer = new MySqlLexer(
+      new CaseChangingCharStream(CharStreams.fromString(text), true)
+    )
+
+    val commonTokenStream: CommonTokenStream = new CommonTokenStream(lexer)
+    val parser = new MySqlParser(commonTokenStream)
+    val context: MySqlParser.RootContext = parser.root()
+    val visitor = new MySQLTablesExtractor()
+    visitor.visit(context)
+    val plot: List[String] = visitor.plot()
+
+    if (MyConfigurable.getInstance().isDownloadAfterExtract) {
+
+    }
+    Messages.showInfoMessage(
+      plot.mkString("\r"),
+      "Extracted Tables"
+    )
   }
 }
