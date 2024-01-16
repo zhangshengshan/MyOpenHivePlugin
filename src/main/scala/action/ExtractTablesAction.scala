@@ -82,5 +82,6 @@ class ExtractTablesAction extends AnAction {
       plot.mkString("\r"),
       "Extracted Tables"
     )
+    ClipBoardUtil.copyToClipBoard(plot.mkString("\r"))
   }
 }
