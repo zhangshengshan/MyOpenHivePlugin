@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKey
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.ui.Messages
 import com.intellij.psi.PsiFile
+import doris.{DorisLexer, DorisParser}
 import hierachyconfig.MyConfigurable
 import misc.ClipBoardUtil
 import mysql.{MySqlLexer, MySqlParser, MySqlParserBaseListener}
@@ -64,14 +65,14 @@ class ExtractTablesAction extends AnAction {
   }
   private def processMySQLTables(text: String): Unit = {
     println("SQL")
-    val lexer = new MySqlLexer(
+    val lexer = new DorisLexer(
       new CaseChangingCharStream(CharStreams.fromString(text), true)
     )
 
     val commonTokenStream: CommonTokenStream = new CommonTokenStream(lexer)
-    val parser = new MySqlParser(commonTokenStream)
-    val context: MySqlParser.RootContext = parser.root()
-    val visitor = new MySQLTablesExtractor()
+    val parser = new DorisParser(commonTokenStream)
+    val context: DorisParser.MultiStatementsContext = parser.multiStatements()
+    val visitor = new DorisTablesExtractor()
     visitor.visit(context)
     val plot: List[String] = visitor.plot()
 
