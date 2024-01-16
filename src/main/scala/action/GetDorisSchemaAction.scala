@@ -1,10 +1,19 @@
 package action
 
+import another.ClusDbTbNode
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
+import com.intellij.openapi.project.{Project, ProjectManager}
 import com.intellij.openapi.ui.Messages
+import com.intellij.openapi.util.SystemInfo
+import com.intellij.openapi.vfs.VirtualFile
+import com.zss.graph.{Graph, Node}
+import config.os.OsConfig
 import hierachyconfig.MyConfigurable
 import misc.ClipBoardUtil
+
+import scala.sys.SystemProperties.headless.option
 
 case class Property(name: String, aggregation_type: String, comment: String, `type`: String)
 case class Data(keysType: String, properties: List[Property], status: Int)
@@ -97,6 +106,61 @@ class GetDorisSchemaAction extends AnAction {
     responseObj.data.properties.foreach(item => {
       println(item.name)
     })
+
+
+    val fieldComments = responseObj.data.properties.map(item => (item.name, item.comment)).toList
+    val graphNode = Node(
+      ClusDbTbNode(
+        "doris",
+        yourdb,
+        yourtb,
+        Some("https://www.baidu.com"),
+        Some(false),
+        None,
+        None
+      )
+    )
+
+    graphNode.x.asInstanceOf[ClusDbTbNode].setFieldComment(fieldComments)
+    val graph = Graph("doris" + yourdb + yourtb)
+    val subgraph = Graph("subgraph" + yourdb + yourtb)
+    subgraph.add(graphNode)
+    graph.add(subgraph)
+
+    graphNode.toGraphViz(true)
+
+    val descriptor =
+      new FileChooserDescriptor(false, true, false, false, false, false)
+    val project: Project = ProjectManager.getInstance().getDefaultProject
+
+    val dialog: FileChooserDialog = FileChooserFactory
+      .getInstance()
+      .createFileChooser(descriptor, project, null)
+
+    val option: Option[VirtualFile] = dialog.choose(project).headOption
+    val outPutDir: String = {
+      if (option.isDefined) option.get.getPath
+      else if (SystemInfo.isMac) OsConfig.macOutputPath
+      else OsConfig.winOutputPath
+    }
+
+    val fileName: String = Messages.showInputDialog(
+      project,
+      "请输入文件名",
+      "文件名",
+      Messages.getQuestionIcon,
+      null,
+      null
+    )
+
+    graph.render(
+      fileName,
+      Some(outPutDir),
+      Some(true),
+      Some(OsConfig.winDotPath),
+      Some(true)
+    )
+
     val sql = genDorisSelectQuery(responseObj, yourdb, yourtb)
 
     Messages.showInfoMessage(sql, "Generated Doris SQL")
