@@ -51,11 +51,6 @@ class GetDorisSchemaAction extends AnAction {
   }
   override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
     val value: MyConfigurable = MyConfigurable.getInstance()
-    println(value.getHost)
-    println(value.getPort)
-    println(value.getUser)
-    println(value.getPassword)
-
     val host = value.getHost
     val port = value.getPort
     val user = value.getUser
