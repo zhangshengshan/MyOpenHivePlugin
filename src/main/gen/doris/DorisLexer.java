@@ -1,4 +1,3 @@
-// Generated from E:/¹¤×÷´æµµ/MyOpenHivePlugin/src/main/scala/doris/DorisLexer.g4 by ANTLR 4.13.1
 package doris;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
