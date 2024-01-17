@@ -92,16 +92,22 @@ class GetDorisSchemaAction extends AnAction {
     var leftOffset = offset
     var rightOffset = offset
 
+    // 判断是空格还是换行符,或者\t
+    Character.isWhitespace(
+      editor.getDocument.getText.charAt(offset - 1)
+    )
+
+
     while (
-      offset > 0 && !Character.isWhitespace(
-        editor.getDocument.getText.charAt(offset - 1)
+      leftOffset > 0 && !Character.isWhitespace(
+        editor.getDocument.getText.charAt(leftOffset - 1)
       )
     ) {
       leftOffset = leftOffset - 1
     }
     while (
-      offset < editor.getDocument.getTextLength && !Character.isWhitespace(
-        editor.getDocument.getText.charAt(offset)
+      rightOffset < editor.getDocument.getTextLength && !Character.isWhitespace(
+        editor.getDocument.getText.charAt(rightOffset)
       )
     ) {
       rightOffset = rightOffset + 1
