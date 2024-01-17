@@ -108,7 +108,7 @@ class GetDorisSchemaAction extends AnAction {
     }
 
     val str1: String = editor.getDocument.getText(
-      new TextRange(left, rightOffset)
+      new TextRange(leftOffset, rightOffset)
     )
 
     Messages.showInfoMessage(str1, "STRING1")
