@@ -111,7 +111,6 @@ test {
 
 release {
     ignoredSnapshotDependencies = ["io.github.zhangshengshan:mygraphapp_2.13"]
-    versionPropertyFile = 'mygradle.properties'
 }
 
 task sourceJar(type: Jar) {
