@@ -4,10 +4,13 @@ import another.ClusDbTbNode
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
+import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.{Project, ProjectManager}
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.{PsiDocumentManager, PsiElement, PsiFile, PsiManager}
 import com.zss.graph.{Graph, Node}
 import config.os.OsConfig
 import hierachyconfig.MyConfigurable
@@ -20,6 +23,7 @@ case class Data(keysType: String, properties: List[Property], status: Int)
 case class Response(msg: String, code: Int, data: Data, count: Int)
 
 class GetDorisSchemaAction extends AnAction {
+  final val DOT = "\\."
   /**
    * @param responseObj
    * @param db
@@ -63,6 +67,22 @@ class GetDorisSchemaAction extends AnAction {
     val editor: Editor = anActionEvent.getData(CommonDataKeys.EDITOR)
 
     val selectText = editor.getSelectionModel.getSelectedText
+    val model = editor.getCaretModel
+    val offset = model.getOffset
+    val project: Project = editor.getProject
+    val psiFile: PsiFile = PsiDocumentManager getInstance project getPsiFile editor.getDocument;
+
+    val element = psiFile.findElementAt(offset)
+    val word: PsiElement = PsiTreeUtil.getParentOfType(element, classOf[PsiElement])
+    println(word.getText)
+    Messages.showInfoMessage(word.getText, "Error")
+
+
+    val file = FileDocumentManager.getInstance().getFile(editor.getDocument())
+    val off = editor.getCaretModel().getOffset()
+
+    val ele = PsiManager.getInstance(project).findFile(file).findElementAt(off)
+
 
     var db = ""
     var tb = ""
@@ -128,7 +148,6 @@ class GetDorisSchemaAction extends AnAction {
 
     val descriptor: FileChooserDescriptor =
       new FileChooserDescriptor(false, true, false, false, false, false)
-    val project: Project = ProjectManager.getInstance().getDefaultProject
 
     val dialog: FileChooserDialog = FileChooserFactory
       .getInstance()
