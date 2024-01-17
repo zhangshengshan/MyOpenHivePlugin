@@ -1,4 +1,3 @@
-// Generated from E:/¹¤×÷´æµµ/MyOpenHivePlugin/src/main/scala/mysql/MySqlParser.g4 by ANTLR 4.13.1
 package mysql;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
