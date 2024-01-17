@@ -113,22 +113,21 @@ class GetDorisSchemaAction extends AnAction {
       rightOffset = rightOffset + 1
     }
 
-    val str1: String = editor.getDocument.getText(
+    val expandObj: String = editor.getDocument.getText(
       new TextRange(leftOffset, rightOffset)
     )
-
     Messages.showInfoMessage(str1, "STRING1")
 
-    val element = psiFile.findElementAt(offset)
-    val word: PsiElement =
-      PsiTreeUtil.getParentOfType(element, classOf[PsiElement])
-    println(word.getText)
-    Messages.showInfoMessage(word.getText, "Error")
+//    val element = psiFile.findElementAt(offset)
+//    val word: PsiElement =
+//      PsiTreeUtil.getParentOfType(element, classOf[PsiElement])
+//    println(word.getText)
+//    Messages.showInfoMessage(word.getText, "Error")
 
-    val file = FileDocumentManager.getInstance().getFile(editor.getDocument())
-    val off = editor.getCaretModel().getOffset()
-
-    val ele = PsiManager.getInstance(project).findFile(file).findElementAt(off)
+//    val file = FileDocumentManager.getInstance().getFile(editor.getDocument())
+//    val off = editor.getCaretModel().getOffset()
+//
+//    val ele = PsiManager.getInstance(project).findFile(file).findElementAt(off)
 
     var db = ""
     var tb = ""
