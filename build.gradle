@@ -111,6 +111,7 @@ test {
 
 release {
     ignoredSnapshotDependencies = ["io.github.zhangshengshan:mygraphapp_2.13"]
+    versionPropertyFile = 'myopenhiveplugin.properties'
 }
 
 task sourceJar(type: Jar) {
