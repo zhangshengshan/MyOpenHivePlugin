@@ -1,9 +1,15 @@
 import java.sql.{Connection, DriverManager, ResultSet}
 
-class DorisClient(jdbcUrl: String, user: String, password: String) {
+class DorisClient(
+    jdbcUrl: String,
+    user: String,
+    password: String,
+    driverName: String
+) {
   private var connection: Connection = _
 
   def connect(): Unit = {
+    Class.forName(driverName)
     connection = DriverManager.getConnection(jdbcUrl, user, password)
   }
 
