@@ -4,13 +4,11 @@ import another.ClusDbTbNode
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
-import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.{SystemInfo, TextRange}
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.{PsiDocumentManager, PsiElement, PsiFile, PsiManager}
+import com.intellij.psi.{PsiDocumentManager, PsiFile}
 import com.zss.graph.{Graph, Node}
 import config.os.OsConfig
 import hierachyconfig.MyConfigurable
@@ -97,7 +95,6 @@ class GetDorisSchemaAction extends AnAction {
       editor.getDocument.getText.charAt(offset - 1)
     )
 
-
     while (
       leftOffset > 0 && !Character.isWhitespace(
         editor.getDocument.getText.charAt(leftOffset - 1)
@@ -116,7 +113,7 @@ class GetDorisSchemaAction extends AnAction {
     val expandObj: String = editor.getDocument.getText(
       new TextRange(leftOffset, rightOffset)
     )
-    Messages.showInfoMessage(str1, "STRING1")
+    Messages.showInfoMessage(expandObj, "get table from current cursor")
 
 //    val element = psiFile.findElementAt(offset)
 //    val word: PsiElement =
