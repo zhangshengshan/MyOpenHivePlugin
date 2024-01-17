@@ -123,13 +123,10 @@ class GetDorisSchemaAction extends AnAction {
 
     graphNode.x.asInstanceOf[ClusDbTbNode].setFieldComment(fieldComments)
     val graph = Graph("doris" + yourdb + yourtb)
-    val subgraph = Graph("subgraph" + yourdb + yourtb)
-    subgraph.add(graphNode)
-    graph.add(subgraph)
-
+    graph.add(graphNode)
     graphNode.toGraphViz(true)
 
-    val descriptor =
+    val descriptor: FileChooserDescriptor =
       new FileChooserDescriptor(false, true, false, false, false, false)
     val project: Project = ProjectManager.getInstance().getDefaultProject
 
@@ -149,7 +146,7 @@ class GetDorisSchemaAction extends AnAction {
       "请输入文件名",
       "文件名",
       Messages.getQuestionIcon,
-      null,
+      graphNode.x.getTableAlias(),
       null
     )
 
