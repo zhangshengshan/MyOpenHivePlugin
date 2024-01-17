@@ -82,6 +82,8 @@ dependencies {
     implementation 'com.lihaoyi:ujson_2.13:1.4.2'
     implementation 'com.lihaoyi:os-lib_2.13:0.7.8'
     implementation 'com.lihaoyi:upickle_2.13:1.4.2'
+
+    implementation 'mysql:mysql-connector-java:8.0.28'
 }
 
 generateGrammarSource {
