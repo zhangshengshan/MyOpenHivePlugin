@@ -128,7 +128,12 @@ class GetDorisSchemaAction extends AnAction {
 
     var db = ""
     var tb = ""
-    if (
+    if ( expandObj != null && expandObj.contains(".") && expandObj.split("\\.").length == 2){
+      val strings = expandObj.split("\\.")
+      db = strings(0)
+      tb = strings(1)
+    }
+    else if (
       selectText != null && selectText
         .contains(".") && selectText.split("\\.").length == 2
     ) {
