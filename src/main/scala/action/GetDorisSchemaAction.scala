@@ -151,6 +151,31 @@ class GetDorisSchemaAction extends AnAction {
     println(yourdb)
     println(yourtb)
 
+    // 在这里写一段slick查询每一个数据中都有哪些数据表的代码
+    import slick.jdbc.MySQLProfile.api._
+    import scala.concurrent.ExecutionContext.Implicits.global
+    import scala.concurrent.Await
+    import scala.concurrent.duration.Duration
+
+    val dbConfig = Database.forURL(
+      url = s"jdbc:mysql://${host}:${port}/zsszss",
+      user = s"$user",
+      password = s"$password",
+      driver = "com.mysql.jdbc.Driver"
+    )
+
+    val showDatabasesAction = sql"SHOW DATABASES".as[String]
+    val showDatabasesFuture = dbConfig.run(showDatabasesAction)
+    val databases = Await.result(showDatabasesFuture, Duration.Inf)
+
+    databases.foreach { database =>
+      val showTablesAction = sql"SHOW TABLES IN #$database".as[String]
+      val showTablesFuture = dbConfig.run(showTablesAction)
+      val tables = Await.result(showTablesFuture, Duration.Inf)
+      println(s"Database: $database")
+      tables.foreach(table => println(s"Table: $table"))
+    }
+
     import java.util.Base64
     val encoded =
       Base64.getEncoder.encodeToString((user + ":" + password).getBytes)
