@@ -2,6 +2,8 @@
 
 ## TODO
 
+- [ ] Doris数据源的端口要支持URL和JDBC的端口配置， 要支持默认的Schema
+- [ ] 要能剔除默认的Schema
 - [ ] Meta Info Action 接口走通
 - [ ] Query Schema Action 接口走通
 - 
