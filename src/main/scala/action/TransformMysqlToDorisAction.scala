@@ -53,8 +53,6 @@ class TransformMysqlToDorisAction extends AnAction {
     val expandObj: String = editor.getDocument.getText(
       new TextRange(leftOffset, rightOffset)
     )
-    Messages.showInfoMessage(expandObj, "get table from current cursor")
-
     // if expandObj is db.tb then get the tb if expandObj is tb then get tb
     val Pattern = "(.*\\.)?(.*)".r
     val searchTableName = expandObj match {
@@ -78,7 +76,6 @@ class TransformMysqlToDorisAction extends AnAction {
     var choosedTable: String = null
 
     // if cache hit then get the table from cache
-
     def chooseFile(): String = {
       val init = if (dorisTableList.isEmpty) null else dorisTableList.head
       val tableName = Messages.showEditableChooseDialog(
@@ -91,9 +88,7 @@ class TransformMysqlToDorisAction extends AnAction {
       )
       tableName
     }
-
     if (CacheUtil.cache.isEmpty()) {
-      Messages.showInfoMessage("Cache empty", "Information")
       val showDatabasesAction = sql"SHOW DATABASES".as[String]
       val showDatabasesFuture = dbConfig.run(showDatabasesAction)
       val databases = Await.result(showDatabasesFuture, Duration.Inf)
@@ -105,7 +100,6 @@ class TransformMysqlToDorisAction extends AnAction {
           val showTablesFuture = dbConfig.run(showTablesAction)
           val tables = Await.result(showTablesFuture, Duration.Inf)
           tables.foreach((table: String) => {
-            println(s"Table: $table")
             CacheUtil.cache.put(s"$database.$table", s"$database.$table")
             if (table.contains(searchTableName)) {
               dorisTableList.append(s"$database.$table")
@@ -113,17 +107,12 @@ class TransformMysqlToDorisAction extends AnAction {
           })
         }
       }
-
-      println("size", dorisTableList.size)
       choosedTable = chooseFile()
-      println("choosedTable:" + choosedTable)
     } else {
       if (CacheUtil.cache.exists(searchTableName)) {
-        Messages.showInfoMessage("Cache hit", "Information")
         CacheUtil.cache
           .getSimilar(searchTableName)
           .foreach(table => {
-            println(s"Table: $table")
             dorisTableList.append(table)
           })
         // choose file from dorisTableList
@@ -144,7 +133,6 @@ class TransformMysqlToDorisAction extends AnAction {
               val showTablesFuture = dbConfig.run(showTablesAction)
               val tables = Await.result(showTablesFuture, Duration.Inf)
               tables.foreach(table => {
-                println(s"Table: $table")
                 CacheUtil.cache.put(s"$database.$table", s"$database.$table")
                 dorisTableList.append(s"$database.$table")
               })
@@ -153,7 +141,6 @@ class TransformMysqlToDorisAction extends AnAction {
           choosedTable = chooseFile()
         }
       } else {
-        Messages.showInfoMessage("Cache miss", "Information")
         val showDatabasesAction = sql"SHOW DATABASES".as[String]
         val showDatabasesFuture = dbConfig.run(showDatabasesAction)
         val databases = Await.result(showDatabasesFuture, Duration.Inf)
@@ -165,7 +152,6 @@ class TransformMysqlToDorisAction extends AnAction {
             val showTablesFuture = dbConfig.run(showTablesAction)
             val tables = Await.result(showTablesFuture, Duration.Inf)
             tables.foreach((table: String) => {
-              println(s"Table: $table")
               CacheUtil.cache.put(s"$database.$table", s"$database.$table")
               if (table.contains(searchTableName)) {
                 dorisTableList.append(s"$database.$table")
@@ -173,16 +159,9 @@ class TransformMysqlToDorisAction extends AnAction {
             })
           }
         }
-        println("size", dorisTableList.size)
         choosedTable = chooseFile()
-        println("choosedTable:" + choosedTable)
       }
     }
-
-    println("==================================")
-    println(choosedTable)
-    println("==================================")
-
     if (choosedTable != null) {
       // substitude the search table with the choosed table
       ApplicationManager.getApplication.runWriteAction(new Runnable {
