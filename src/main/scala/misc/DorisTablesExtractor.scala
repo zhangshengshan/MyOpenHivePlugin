@@ -1,7 +1,6 @@
-package action
+package misc
 
 import doris.{DorisParser, DorisParserBaseVisitor}
-import mysql.{MySqlParser, MySqlParserBaseVisitor}
 
 import scala.collection.mutable
 

@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.TextRange
 import hierachyconfig.MyConfigurable
+import misc.TableExtractUtil.processMySQLTables
 
 class TransformMysqlToDorisAction extends AnAction {
   override def actionPerformed(e: AnActionEvent): Unit = {
@@ -19,12 +20,15 @@ class TransformMysqlToDorisAction extends AnAction {
 
     val password = value.getPassword
     val editor: Editor = e.getData(CommonDataKeys.EDITOR)
+    val document = editor.getDocument
 
     val model = editor.getCaretModel
     val offset = model.getOffset
     val project: Project = editor.getProject
     var leftOffset = offset
     var rightOffset = offset
+
+    processMySQLTables(document.getText)
 
     // 判断是空格还是换行符,或者\t
     Character.isWhitespace(
@@ -111,7 +115,6 @@ class TransformMysqlToDorisAction extends AnAction {
     ApplicationManager.getApplication.runWriteAction(new Runnable {
       override def run(): Unit = {
         // 获取Document对象
-        val document = editor.getDocument
         // 获取文档的文本
         val originalText = document.getText()
         // 替换所有出现的searchTableName为choosedTable
