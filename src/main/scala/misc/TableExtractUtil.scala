@@ -51,7 +51,7 @@ object TableExtractUtil {
     ClipBoardUtil.copyToClipBoard(plot.mkString("\r"))
   }
 
-  def processMySQLTables(text: String): Unit = {
+  def processMySQLTables(text: String) = {
     val lexer = new MySqlLexer(
       new CaseChangingCharStream(CharStreams.fromString(text), true)
     )
@@ -65,11 +65,10 @@ object TableExtractUtil {
     val plot: List[String] = visitor.plot()
 
     if (MyConfigurable.getInstance().isDownloadAfterExtract) {}
-
     Messages.showInfoMessage(
       plot.mkString(System.lineSeparator()) ,
       "Extracted Tables"
     )
-    ClipBoardUtil.copyToClipBoard(plot.mkString(System.lineSeparator()))
+    plot
   }
 }

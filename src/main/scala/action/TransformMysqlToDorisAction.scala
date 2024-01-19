@@ -1,13 +1,21 @@
 package action
 
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
+import com.intellij.openapi.actionSystem.{
+  AnAction,
+  AnActionEvent,
+  CommonDataKeys
+}
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.TextRange
 import hierachyconfig.MyConfigurable
 import misc.TableExtractUtil.processMySQLTables
+import slick.jdbc.MySQLProfile.api._
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
 
 class TransformMysqlToDorisAction extends AnAction {
   override def actionPerformed(e: AnActionEvent): Unit = {
@@ -28,7 +36,7 @@ class TransformMysqlToDorisAction extends AnAction {
     var leftOffset = offset
     var rightOffset = offset
 
-    processMySQLTables(document.getText)
+    val sourceTables: List[String] = processMySQLTables(document.getText)
 
     // 判断是空格还是换行符,或者\t
     Character.isWhitespace(
@@ -62,10 +70,6 @@ class TransformMysqlToDorisAction extends AnAction {
     }
 
     // 在这里写一段slick查询每一个数据中都有哪些数据表的代码
-    import slick.jdbc.MySQLProfile.api._
-    import scala.concurrent.ExecutionContext.Implicits.global
-    import scala.concurrent.Await
-    import scala.concurrent.duration.Duration
 
     val dbConfig = Database.forURL(
       url = jdbcUrl,
@@ -80,7 +84,8 @@ class TransformMysqlToDorisAction extends AnAction {
 
     val dorisTableList = new scala.collection.mutable.ListBuffer[String]()
     databases.foreach { database =>
-      val showTablesAction = sql"SHOW TABLES IN #$database LIKE '%#$searchTableName%' ".as[String]
+      val showTablesAction =
+        sql"SHOW TABLES IN #$database LIKE '%#$searchTableName%' ".as[String]
       val showTablesFuture = dbConfig.run(showTablesAction)
       val tables = Await.result(showTablesFuture, Duration.Inf)
       tables.foreach(table => {
@@ -89,15 +94,17 @@ class TransformMysqlToDorisAction extends AnAction {
       })
     }
 
-
-    if(dorisTableList.isEmpty) {
+    if (dorisTableList.isEmpty) {
       Messages.showInfoMessage("No table found", "Error")
       return
     }
 
-    if(dorisTableList.size >= 5 ) {
-        Messages.showInfoMessage("Too many tables found, please input more specific table name", "Error")
-        return
+    if (dorisTableList.size >= 5) {
+      Messages.showInfoMessage(
+        "Too many tables found, please input more specific table name",
+        "Error"
+      )
+      return
     }
 
     // PopUp a dialog to choose the tabledialog to choose the table
@@ -124,6 +131,9 @@ class TransformMysqlToDorisAction extends AnAction {
       }
     })
     // 重新格式化代码
-    Messages.showInfoMessage("TransformMysqlToDorisAction Completed", "Information")
+    Messages.showInfoMessage(
+      "TransformMysqlToDorisAction Completed",
+      "Information"
+    )
   }
 }
