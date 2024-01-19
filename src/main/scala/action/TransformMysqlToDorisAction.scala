@@ -8,11 +8,10 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.TextRange
 import hierachyconfig.MyConfigurable
+import misc.ClipBoardUtil
 import misc.TableExtractUtil.processMySQLTables
 import slick.jdbc.MySQLProfile.api._
 
-import scala.collection.mutable.ListBuffer
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import scala.util.matching.Regex
@@ -20,6 +19,8 @@ import scala.util.matching.Regex
 class TransformMysqlToDorisAction extends AnAction {
 
   override def actionPerformed(e: AnActionEvent): Unit = {
+
+    val successSubstitude = new scala.collection.mutable.ListBuffer[String]()
 
     val value: MyConfigurable = MyConfigurable.getInstance()
     val host = value.getHost
@@ -81,14 +82,14 @@ class TransformMysqlToDorisAction extends AnAction {
       var choosedTable: String = null
 
       // if cache hit then get the table from cache
-      def chooseFile(): String = {
-        val init = if (dorisTableList.isEmpty) null else dorisTableList.head
+      def chooseTargetTable(sourceTable: String): String = {
+        val init = if (dorisTableList.isEmpty) return null
         val tableName = Messages.showEditableChooseDialog(
-          "Choose the table",
+          s"Choose the table for $sourceTable",
           "Choose the table",
           Messages.getInformationIcon,
           dorisTableList.toArray,
-          init,
+          dorisTableList.head,
           null
         )
         tableName
@@ -112,7 +113,7 @@ class TransformMysqlToDorisAction extends AnAction {
             })
           }
         }
-        choosedTable = chooseFile()
+        choosedTable = chooseTargetTable(searchTableName)
       } else {
         if (CacheUtil.cache.exists(searchTableName)) {
           CacheUtil.cache
@@ -121,7 +122,7 @@ class TransformMysqlToDorisAction extends AnAction {
               dorisTableList.append(table)
             })
           // choose file from dorisTableList
-          choosedTable = chooseFile()
+          choosedTable = chooseTargetTable(searchTableName)
           if (choosedTable == null) {
             dorisTableList.clear()
             val showDatabasesAction = sql"SHOW DATABASES".as[String]
@@ -143,7 +144,7 @@ class TransformMysqlToDorisAction extends AnAction {
                 })
               }
             }
-            choosedTable = chooseFile()
+            choosedTable = chooseTargetTable(searchTableName)
           }
         } else {
           val showDatabasesAction = sql"SHOW DATABASES".as[String]
@@ -164,13 +165,17 @@ class TransformMysqlToDorisAction extends AnAction {
               })
             }
           }
-          choosedTable = chooseFile()
+          choosedTable = chooseTargetTable(searchTableName)
         }
       }
       if (choosedTable != null) {
+        // here record the sourcetable and target table
+        successSubstitude.append(s"$searchTableName -> $choosedTable")
         // substitude the search table with the choosed table
         ApplicationManager.getApplication.runWriteAction(new Runnable {
+
           override def run(): Unit = {
+
             // 获取文档的文本
             val originalText = document.getText()
             // 替换所有出现的searchTableName为choosedTable
@@ -198,5 +203,11 @@ class TransformMysqlToDorisAction extends AnAction {
     sourceTables.foreach(table => {
       replaceMysqlWithDoris(table)
     })
+
+    Messages.showInfoMessage(
+      successSubstitude.mkString(System.lineSeparator()),
+      "TransformMysqlToDorisAction Completed"
+    )
+    ClipBoardUtil.copyToClipBoard(successSubstitude.mkString(System.lineSeparator()))
   }
 }
