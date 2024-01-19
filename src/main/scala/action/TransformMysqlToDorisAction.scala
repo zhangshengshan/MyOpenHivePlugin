@@ -80,12 +80,13 @@ class TransformMysqlToDorisAction extends AnAction {
     // if cache hit then get the table from cache
 
     def chooseFile(): String = {
+      val init = if (dorisTableList.isEmpty) null else dorisTableList.head
       val tableName = Messages.showEditableChooseDialog(
         "Choose the table",
         "Choose the table",
         Messages.getInformationIcon,
         dorisTableList.toArray,
-        dorisTableList.head,
+        init,
         null
       )
       tableName
