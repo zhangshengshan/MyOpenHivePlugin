@@ -19,6 +19,8 @@ class TransformMysqlToDorisAction extends AnAction {
 
   override def actionPerformed(e: AnActionEvent): Unit = {
 
+    val successSubstitude = new scala.collection.mutable.ListBuffer[String]()
+
     val value: MyConfigurable = MyConfigurable.getInstance()
     val host = value.getHost
     val port = value.getPort
@@ -82,7 +84,7 @@ class TransformMysqlToDorisAction extends AnAction {
       def chooseTargetTable(sourceTable: String): String = {
         val init = if (dorisTableList.isEmpty) null else dorisTableList.head
         val tableName = Messages.showEditableChooseDialog(
-          "Choose the table for $sourceTable",
+          s"Choose the table for $sourceTable",
           "Choose the table",
           Messages.getInformationIcon,
           dorisTableList.toArray,
@@ -166,9 +168,13 @@ class TransformMysqlToDorisAction extends AnAction {
         }
       }
       if (choosedTable != null) {
+        // here record the sourcetable and target table
+        successSubstitude.append(s"$searchTableName -> $choosedTable")
         // substitude the search table with the choosed table
         ApplicationManager.getApplication.runWriteAction(new Runnable {
+
           override def run(): Unit = {
+
             // 获取文档的文本
             val originalText = document.getText()
             // 替换所有出现的searchTableName为choosedTable
@@ -196,5 +202,10 @@ class TransformMysqlToDorisAction extends AnAction {
     sourceTables.foreach(table => {
       replaceMysqlWithDoris(table)
     })
+
+    Messages.showInfoMessage(
+      successSubstitude.mkString(System.lineSeparator()),
+      "TransformMysqlToDorisAction Completed"
+    )
   }
 }
