@@ -78,7 +78,21 @@ class TransformMysqlToDorisAction extends AnAction {
     var choosedTable: String = null
 
     // if cache hit then get the table from cache
+
+    def chooseFile(): String = {
+      val tableName = Messages.showEditableChooseDialog(
+        "Choose the table",
+        "Choose the table",
+        Messages.getInformationIcon,
+        dorisTableList.toArray,
+        dorisTableList.head,
+        null
+      )
+      tableName
+    }
+
     if (CacheUtil.cache.isEmpty()) {
+      Messages.showInfoMessage("Cache empty", "Information")
       val showDatabasesAction = sql"SHOW DATABASES".as[String]
       val showDatabasesFuture = dbConfig.run(showDatabasesAction)
       val databases = Await.result(showDatabasesFuture, Duration.Inf)
@@ -100,14 +114,7 @@ class TransformMysqlToDorisAction extends AnAction {
       }
 
       println("size", dorisTableList.size)
-      choosedTable = Messages.showEditableChooseDialog(
-        "Choose the table",
-        "Choose the table",
-        Messages.getInformationIcon,
-        dorisTableList.toArray,
-        null,
-        null
-      )
+      choosedTable = chooseFile()
       println("choosedTable:" + choosedTable)
     } else {
       if (CacheUtil.cache.exists(searchTableName)) {
@@ -119,41 +126,33 @@ class TransformMysqlToDorisAction extends AnAction {
             dorisTableList.append(table)
           })
         // choose file from dorisTableList
-        choosedTable = Messages.showEditableChooseDialog(
-          "Choose the table",
-          "Choose the table",
-          Messages.getInformationIcon,
-          dorisTableList.toArray,
-          null,
-          null
-        )
+        choosedTable = chooseFile()
         if (choosedTable == null) {
+          dorisTableList.clear()
           val showDatabasesAction = sql"SHOW DATABASES".as[String]
           val showDatabasesFuture = dbConfig.run(showDatabasesAction)
           val databases = Await.result(showDatabasesFuture, Duration.Inf)
           databases.foreach { database =>
-            // if cache is empty then get all the tables
-            val showTablesAction =
-              sql"SHOW TABLES IN #$database LIKE '%#$searchTableName%' "
-                .as[String]
-            val showTablesFuture = dbConfig.run(showTablesAction)
-            val tables = Await.result(showTablesFuture, Duration.Inf)
-            tables.foreach(table => {
-              println(s"Table: $table")
-              CacheUtil.cache.put(s"$database.$table", s"$database.$table")
-              dorisTableList.append(s"$database.$table")
-            })
-            choosedTable = Messages.showEditableChooseDialog(
-              "Choose the table",
-              "Choose the table",
-              Messages.getInformationIcon,
-              dorisTableList.toArray,
-              null,
-              null
-            )
+            if (
+              database != "information_schema" && database != "mysql" && database != "performance_schema" && database != "sys"
+            ) {
+              // if cache is empty then get all the tables
+              val showTablesAction =
+                sql"SHOW TABLES IN #$database LIKE '%#$searchTableName%' "
+                  .as[String]
+              val showTablesFuture = dbConfig.run(showTablesAction)
+              val tables = Await.result(showTablesFuture, Duration.Inf)
+              tables.foreach(table => {
+                println(s"Table: $table")
+                CacheUtil.cache.put(s"$database.$table", s"$database.$table")
+                dorisTableList.append(s"$database.$table")
+              })
+            }
           }
+          choosedTable = chooseFile()
         }
-      }else {
+      } else {
+        Messages.showInfoMessage("Cache miss", "Information")
         val showDatabasesAction = sql"SHOW DATABASES".as[String]
         val showDatabasesFuture = dbConfig.run(showDatabasesAction)
         val databases = Await.result(showDatabasesFuture, Duration.Inf)
@@ -173,16 +172,8 @@ class TransformMysqlToDorisAction extends AnAction {
             })
           }
         }
-
         println("size", dorisTableList.size)
-        choosedTable = Messages.showEditableChooseDialog(
-          "Choose the table",
-          "Choose the table",
-          Messages.getInformationIcon,
-          dorisTableList.toArray,
-          null,
-          null
-        )
+        choosedTable = chooseFile()
         println("choosedTable:" + choosedTable)
       }
     }
@@ -210,11 +201,15 @@ class TransformMysqlToDorisAction extends AnAction {
           document.setText(newText)
         }
       })
+      Messages.showInfoMessage(
+        "TransformMysqlToDorisAction Completed",
+        "Information"
+      )
+    } else {
+      Messages.showInfoMessage(
+        "Doris Table Not Found!",
+        "Information"
+      )
     }
-    // 重新格式化代码
-    Messages.showInfoMessage(
-      "TransformMysqlToDorisAction Completed",
-      "Information"
-    )
   }
 }
