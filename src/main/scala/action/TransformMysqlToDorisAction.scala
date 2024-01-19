@@ -1,8 +1,8 @@
 package action
 
-import cache.ExpiringCache
-import com.intellij.openapi.application.ApplicationManager
+import cache.CacheUtil
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
@@ -32,7 +32,6 @@ class TransformMysqlToDorisAction extends AnAction {
 
     // 判断是空格还是换行符,或者\t
     Character.isWhitespace(
-
       editor.getDocument.getText.charAt(offset - 1)
     )
 
@@ -64,7 +63,7 @@ class TransformMysqlToDorisAction extends AnAction {
 
     // 在这里写一段slick查询每一个数据中都有哪些数据表的代码
     import slick.jdbc.MySQLProfile.api._
-    import scala.concurrent.ExecutionContext.Implicits.global
+
     import scala.concurrent.Await
     import scala.concurrent.duration.Duration
 
@@ -81,25 +80,49 @@ class TransformMysqlToDorisAction extends AnAction {
 
     val dorisTableList = new scala.collection.mutable.ListBuffer[String]()
     databases.foreach { database =>
-      val showTablesAction = sql"SHOW TABLES IN #$database LIKE '%#$searchTableName%' ".as[String]
-      val showTablesFuture = dbConfig.run(showTablesAction)
-      val tables = Await.result(showTablesFuture, Duration.Inf)
-
-      tables.foreach(table => {
-        println(s"Table: $table")
-        dorisTableList.append(s"$database.$table")
-      })
-
+      // if cache is empty then get all the tables
+      if (CacheUtil.cache.isEmpty()) {
+        val showTablesAction = sql"SHOW TABLES IN #$database".as[String]
+        val showTablesFuture = dbConfig.run(showTablesAction)
+        val tables = Await.result(showTablesFuture, Duration.Inf)
+        tables.foreach(table => {
+          println(s"Table: $table")
+          CacheUtil.cache.put(s"$database.$table", s"$database.$table")
+        })
+      } else {
+        if (CacheUtil.cache.exists(searchTableName)) {
+          Messages.showInfoMessage("Cache hit", "Information")
+          CacheUtil.cache.getSimilar(searchTableName).foreach(table => {
+            println(s"Table: $table")
+            dorisTableList.append(table)
+          })
+        } else {
+          Messages.showInfoMessage("Cache miss", "Information")
+          val showTablesAction =
+            sql"SHOW TABLES IN #$database LIKE '%#$searchTableName%' "
+              .as[String]
+          val showTablesFuture = dbConfig.run(showTablesAction)
+          val tables = Await.result(showTablesFuture, Duration.Inf)
+          tables.foreach(table => {
+            println(s"Table: $table")
+            CacheUtil.cache.put(s"$database.$table", s"$database.$table")
+            dorisTableList.append(s"$database.$table")
+          })
+        }
+      }
     }
 
-    if(dorisTableList.isEmpty) {
+    if (dorisTableList.isEmpty) {
       Messages.showInfoMessage("No table found", "Error")
       return
     }
 
-    if(dorisTableList.size >= 5 ) {
-        Messages.showInfoMessage("Too many tables found, please input more specific table name", "Error")
-        return
+    if (dorisTableList.size >= 5) {
+      Messages.showInfoMessage(
+        "Too many tables found, please input more specific table name",
+        "Error"
+      )
+      return
     }
 
     // PopUp a dialog to choose the tabledialog to choose the table
@@ -123,12 +146,18 @@ class TransformMysqlToDorisAction extends AnAction {
         // 替换所有出现的searchTableName为choosedTable
         val searchQuoteName = Regex.quote(searchTableName)
         // searchTableName 两边有空白字符才进行替换
-        val newText = originalText.replaceAll("(?<=\\s|^)" + searchQuoteName + "(?=\\s|$)", choosedTable)
+        val newText = originalText.replaceAll(
+          "(?<=\\s|^)" + searchQuoteName + "(?=\\s|$)",
+          choosedTable
+        )
         // 在Document对象中替换整个文本
         document.setText(newText)
       }
     })
     // 重新格式化代码
-    Messages.showInfoMessage("TransformMysqlToDorisAction Completed", "Information")
+    Messages.showInfoMessage(
+      "TransformMysqlToDorisAction Completed",
+      "Information"
+    )
   }
 }

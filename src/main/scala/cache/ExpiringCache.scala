@@ -2,12 +2,12 @@ package cache
 import java.util.concurrent.{Executors, ScheduledExecutorService, TimeUnit}
 import scala.collection.mutable
 
-class ExpiringCache[K, V](timeout: Long, unit: TimeUnit) {
-  private val cache: mutable.Map[K, V] = mutable.Map.empty
+class ExpiringCache(timeout: Long, unit: TimeUnit) {
+  private val cache: mutable.Map[String, String] = mutable.Map.empty
   private val scheduler: ScheduledExecutorService =
     Executors.newScheduledThreadPool(1)
 
-  def put(key: K, value: V): Unit = {
+  def put(key: String, value: String): Unit = {
     cache.put(key, value)
     val runnable = new Runnable {
       def run(): Unit = cache.remove(key)
@@ -15,7 +15,14 @@ class ExpiringCache[K, V](timeout: Long, unit: TimeUnit) {
     scheduler.schedule(runnable, timeout, unit)
   }
 
-  def isEmpty(): Boolean = cache.isEmpty
+  def exists(key: String): Boolean = {
+    cache.keys.exists(x => x.contains(key.toString))
+  }
 
-  def get(key: K): Option[V] = cache.get(key)
+  def getSimilar(key: String): List[String] = {
+    cache.keys.filter(x => x.contains(key.toString)).toList
+  }
+
+  def isEmpty(): Boolean = cache.isEmpty
+  def get(key: String): Option[String] = cache.get(key)
 }
