@@ -118,9 +118,8 @@ class TransformMysqlToDorisAction extends AnAction {
             println(s"Table: $table")
             dorisTableList.append(table)
           })
-
         // choose file from dorisTableList
-        var choosedTable = Messages.showEditableChooseDialog(
+        choosedTable = Messages.showEditableChooseDialog(
           "Choose the table",
           "Choose the table",
           Messages.getInformationIcon,
@@ -128,8 +127,6 @@ class TransformMysqlToDorisAction extends AnAction {
           null,
           null
         )
-
-        // if choosedTable is null then get all the tables
         if (choosedTable == null) {
           val showDatabasesAction = sql"SHOW DATABASES".as[String]
           val showDatabasesFuture = dbConfig.run(showDatabasesAction)
@@ -146,7 +143,7 @@ class TransformMysqlToDorisAction extends AnAction {
               CacheUtil.cache.put(s"$database.$table", s"$database.$table")
               dorisTableList.append(s"$database.$table")
             })
-            var choosedTable = Messages.showEditableChooseDialog(
+            choosedTable = Messages.showEditableChooseDialog(
               "Choose the table",
               "Choose the table",
               Messages.getInformationIcon,
@@ -156,6 +153,37 @@ class TransformMysqlToDorisAction extends AnAction {
             )
           }
         }
+      }else {
+        val showDatabasesAction = sql"SHOW DATABASES".as[String]
+        val showDatabasesFuture = dbConfig.run(showDatabasesAction)
+        val databases = Await.result(showDatabasesFuture, Duration.Inf)
+        databases.foreach { database =>
+          if (
+            database != "information_schema" && database != "mysql" && database != "performance_schema" && database != "sys"
+          ) {
+            val showTablesAction = sql"SHOW TABLES IN #$database".as[String]
+            val showTablesFuture = dbConfig.run(showTablesAction)
+            val tables = Await.result(showTablesFuture, Duration.Inf)
+            tables.foreach((table: String) => {
+              println(s"Table: $table")
+              CacheUtil.cache.put(s"$database.$table", s"$database.$table")
+              if (table.contains(searchTableName)) {
+                dorisTableList.append(s"$database.$table")
+              }
+            })
+          }
+        }
+
+        println("size", dorisTableList.size)
+        choosedTable = Messages.showEditableChooseDialog(
+          "Choose the table",
+          "Choose the table",
+          Messages.getInformationIcon,
+          dorisTableList.toArray,
+          null,
+          null
+        )
+        println("choosedTable:" + choosedTable)
       }
     }
 
