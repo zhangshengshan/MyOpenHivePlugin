@@ -1,5 +1,6 @@
 package action
 
+import cache.ExpiringCache
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.editor.Editor
@@ -11,6 +12,7 @@ import hierachyconfig.MyConfigurable
 import scala.util.matching.Regex
 
 class TransformMysqlToDorisAction extends AnAction {
+
   override def actionPerformed(e: AnActionEvent): Unit = {
 
     val value: MyConfigurable = MyConfigurable.getInstance()
@@ -30,6 +32,7 @@ class TransformMysqlToDorisAction extends AnAction {
 
     // 判断是空格还是换行符,或者\t
     Character.isWhitespace(
+
       editor.getDocument.getText.charAt(offset - 1)
     )
 
@@ -81,12 +84,13 @@ class TransformMysqlToDorisAction extends AnAction {
       val showTablesAction = sql"SHOW TABLES IN #$database LIKE '%#$searchTableName%' ".as[String]
       val showTablesFuture = dbConfig.run(showTablesAction)
       val tables = Await.result(showTablesFuture, Duration.Inf)
+
       tables.foreach(table => {
         println(s"Table: $table")
         dorisTableList.append(s"$database.$table")
       })
-    }
 
+    }
 
     if(dorisTableList.isEmpty) {
       Messages.showInfoMessage("No table found", "Error")
@@ -117,9 +121,7 @@ class TransformMysqlToDorisAction extends AnAction {
         // 获取文档的文本
         val originalText = document.getText()
         // 替换所有出现的searchTableName为choosedTable
-
         val searchQuoteName = Regex.quote(searchTableName)
-
         // searchTableName 两边有空白字符才进行替换
         val newText = originalText.replaceAll("(?<=\\s|^)" + searchQuoteName + "(?=\\s|$)", choosedTable)
         // 在Document对象中替换整个文本
