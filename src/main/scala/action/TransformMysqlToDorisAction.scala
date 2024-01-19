@@ -11,8 +11,6 @@ import hierachyconfig.MyConfigurable
 import misc.TableExtractUtil.processMySQLTables
 import slick.jdbc.MySQLProfile.api._
 
-import scala.collection.mutable.ListBuffer
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import scala.util.matching.Regex
@@ -81,10 +79,10 @@ class TransformMysqlToDorisAction extends AnAction {
       var choosedTable: String = null
 
       // if cache hit then get the table from cache
-      def chooseFile(): String = {
+      def chooseTargetTable(sourceTable: String): String = {
         val init = if (dorisTableList.isEmpty) null else dorisTableList.head
         val tableName = Messages.showEditableChooseDialog(
-          "Choose the table",
+          "Choose the table for $sourceTable",
           "Choose the table",
           Messages.getInformationIcon,
           dorisTableList.toArray,
@@ -112,7 +110,7 @@ class TransformMysqlToDorisAction extends AnAction {
             })
           }
         }
-        choosedTable = chooseFile()
+        choosedTable = chooseTargetTable(searchTableName)
       } else {
         if (CacheUtil.cache.exists(searchTableName)) {
           CacheUtil.cache
@@ -121,7 +119,7 @@ class TransformMysqlToDorisAction extends AnAction {
               dorisTableList.append(table)
             })
           // choose file from dorisTableList
-          choosedTable = chooseFile()
+          choosedTable = chooseTargetTable(searchTableName)
           if (choosedTable == null) {
             dorisTableList.clear()
             val showDatabasesAction = sql"SHOW DATABASES".as[String]
@@ -143,7 +141,7 @@ class TransformMysqlToDorisAction extends AnAction {
                 })
               }
             }
-            choosedTable = chooseFile()
+            choosedTable = chooseTargetTable(searchTableName)
           }
         } else {
           val showDatabasesAction = sql"SHOW DATABASES".as[String]
@@ -164,7 +162,7 @@ class TransformMysqlToDorisAction extends AnAction {
               })
             }
           }
-          choosedTable = chooseFile()
+          choosedTable = chooseTargetTable(searchTableName)
         }
       }
       if (choosedTable != null) {
