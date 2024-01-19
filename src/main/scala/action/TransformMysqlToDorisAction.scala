@@ -13,6 +13,8 @@ import com.intellij.openapi.util.TextRange
 import hierachyconfig.MyConfigurable
 import misc.TableExtractUtil.processMySQLTables
 import slick.jdbc.MySQLProfile.api._
+
+import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
@@ -78,62 +80,76 @@ class TransformMysqlToDorisAction extends AnAction {
       driver = "com.mysql.cj.jdbc.Driver"
     )
 
-    val showDatabasesAction = sql"SHOW DATABASES".as[String]
-    val showDatabasesFuture = dbConfig.run(showDatabasesAction)
-    val databases = Await.result(showDatabasesFuture, Duration.Inf)
+    def replaceMysqlWithDoris(searchTableName: String): Boolean = {
 
-    val dorisTableList = new scala.collection.mutable.ListBuffer[String]()
-    databases.foreach { database =>
-      val showTablesAction =
-        sql"SHOW TABLES IN #$database LIKE '%#$searchTableName%' ".as[String]
-      val showTablesFuture = dbConfig.run(showTablesAction)
-      val tables = Await.result(showTablesFuture, Duration.Inf)
-      tables.foreach(table => {
-        println(s"Table: $table")
-        dorisTableList.append(s"$database.$table")
-      })
-    }
-
-    if (dorisTableList.isEmpty) {
-      Messages.showInfoMessage("No table found", "Error")
-      return
-    }
-
-    if (dorisTableList.size >= 5) {
       Messages.showInfoMessage(
-        "Too many tables found, please input more specific table name",
-        "Error"
+        s"searchTableName: $searchTableName",
+        "Information"
       )
-      return
-    }
 
-    // PopUp a dialog to choose the tabledialog to choose the table
-    val choosedTable = Messages.showEditableChooseDialog(
-      "Choose the table",
-      "Choose the table",
-      Messages.getInformationIcon,
-      dorisTableList.toArray,
-      dorisTableList.head,
-      null
-    )
-    println(choosedTable)
+      val showDatabasesAction = sql"SHOW DATABASES".as[String]
+      val showDatabasesFuture = dbConfig.run(showDatabasesAction)
+      val databases = Await.result(showDatabasesFuture, Duration.Inf)
 
-    // substitude the search table with the choosed table
-    ApplicationManager.getApplication.runWriteAction(new Runnable {
-      override def run(): Unit = {
-        // 获取Document对象
-        // 获取文档的文本
-        val originalText = document.getText()
-        // 替换所有出现的searchTableName为choosedTable
-        val newText = originalText.replaceAll(searchTableName, choosedTable)
-        // 在Document对象中替换整个文本
-        document.setText(newText)
+      val dorisTableList = new scala.collection.mutable.ListBuffer[String]()
+
+
+      databases.foreach { database =>
+        val showTablesAction =
+          sql"SHOW TABLES IN #$database LIKE '%#$searchTableName%' ".as[String]
+        val showTablesFuture = dbConfig.run(showTablesAction)
+        val tables = Await.result(showTablesFuture, Duration.Inf)
+        tables.foreach(table => {
+          println(s"Table: $table")
+          dorisTableList.append(s"$database.$table")
+        })
       }
+
+      if (dorisTableList.isEmpty) {
+        Messages.showInfoMessage("No table found", "Error")
+        return true
+      }
+
+      if (dorisTableList.size >= 1000) {
+        Messages.showInfoMessage(
+          "Too many tables found, please input more specific table name",
+          "Error"
+        )
+        return true
+      }
+
+      // PopUp a dialog to choose the tabledialog to choose the table
+      val choosedTable = Messages.showEditableChooseDialog(
+        "Choose the table",
+        "Choose the table",
+        Messages.getInformationIcon,
+        dorisTableList.toArray,
+        dorisTableList.head,
+        null
+      )
+      println(choosedTable)
+
+      // substitude the search table with the choosed table
+      ApplicationManager.getApplication.runWriteAction(new Runnable {
+        override def run(): Unit = {
+          // 获取Document对象
+          // 获取文档的文本
+          val originalText = document.getText()
+          // 替换所有出现的searchTableName为choosedTable
+          val newText = originalText.replaceAll(searchTableName, choosedTable)
+          // 在Document对象中替换整个文本
+          document.setText(newText)
+        }
+      })
+      // 重新格式化代码
+      Messages.showInfoMessage(
+        "TransformMysqlToDorisAction Completed",
+        "Information"
+      )
+      false
+    }
+    sourceTables.foreach(table => {
+      replaceMysqlWithDoris(table)
     })
-    // 重新格式化代码
-    Messages.showInfoMessage(
-      "TransformMysqlToDorisAction Completed",
-      "Information"
-    )
   }
 }
