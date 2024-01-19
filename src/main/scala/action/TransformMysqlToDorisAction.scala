@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.TextRange
 import hierachyconfig.MyConfigurable
+import misc.ClipBoardUtil
 import misc.TableExtractUtil.processMySQLTables
 import slick.jdbc.MySQLProfile.api._
 
@@ -207,5 +208,6 @@ class TransformMysqlToDorisAction extends AnAction {
       successSubstitude.mkString(System.lineSeparator()),
       "TransformMysqlToDorisAction Completed"
     )
+    ClipBoardUtil.copyToClipBoard(successSubstitude.mkString(System.lineSeparator()))
   }
 }
