@@ -85,6 +85,7 @@ public class MyConfigurable implements PersistentStateComponent<MyConfigurable>,
     String port = "";
     String user = "";
     String password = "";
+    String jdbcURL = "";
 
     public static MyConfigurable getInstance() {
         return ApplicationManager.getApplication().getService(MyConfigurable.class);

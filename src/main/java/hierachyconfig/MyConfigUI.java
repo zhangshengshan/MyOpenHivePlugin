@@ -87,6 +87,7 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
     private JPasswordField PASSWORDPasswordField;
     private JTextField IPTextField;
     private JTextField PORTTextField;
+    private JTextField jdbcURL;
 
 
     public MyConfigUI(MyConfigurable settings) {
@@ -433,6 +434,7 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         this.PORTTextField.setText(settings.getPort());
         this.USERNAMETextField.setText(settings.getUser());
         this.PASSWORDPasswordField.setText(settings.getPassword());
+        this.jdbcURL.setText(settings.getJdbcURL());
     }
 
     @Override
@@ -502,6 +504,8 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         isModified |= !(this.USERNAMETextField.getText().equals(settings.getUser()));
         isModified |= !(this.PASSWORDPasswordField.getText().equals(settings.getPassword()));
 
+        isModified |= !(this.jdbcURL.getText().equals(settings.getJdbcURL()));
+
 
         return isModified;
     }
@@ -566,6 +570,8 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         settings.setPort(this.PORTTextField.getText());
         settings.setUser(this.USERNAMETextField.getText());
         settings.setPassword(this.PASSWORDPasswordField.getText());
+
+        settings.setJdbcURL(this.jdbcURL.getText());
 
     }
 

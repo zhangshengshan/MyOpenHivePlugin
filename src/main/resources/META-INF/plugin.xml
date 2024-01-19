@@ -86,6 +86,11 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
 
+        <action id="transformMysqlToDoris" class="action.TransformMysqlToDorisAction" text="TranformMysqlToDoris" description="MYSQL2DORIS">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt h"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
         <action id="extractTablesAction" class="action.ExtractTablesAction" text="extractTablesAction"
                 description="extractTablesAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
