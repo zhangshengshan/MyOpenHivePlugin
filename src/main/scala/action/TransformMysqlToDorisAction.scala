@@ -115,7 +115,8 @@ class TransformMysqlToDorisAction extends AnAction {
         // 获取文档的文本
         val originalText = document.getText()
         // 替换所有出现的searchTableName为choosedTable
-        val newText = originalText.replaceAll(searchTableName, choosedTable)
+        // searchTableName 两边有空白字符才进行替换
+        val newText = originalText.replaceAll("\\b" + searchTableName + "\\b", choosedTable)
         // 在Document对象中替换整个文本
         document.setText(newText)
       }
