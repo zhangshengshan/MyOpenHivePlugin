@@ -74,86 +74,115 @@ class TransformMysqlToDorisAction extends AnAction {
       driver = "com.mysql.cj.jdbc.Driver"
     )
 
-    val showDatabasesAction = sql"SHOW DATABASES".as[String]
-    val showDatabasesFuture = dbConfig.run(showDatabasesAction)
-    val databases = Await.result(showDatabasesFuture, Duration.Inf)
-
     val dorisTableList = new scala.collection.mutable.ListBuffer[String]()
-    databases.foreach { database =>
-      // if cache is empty then get all the tables
-      if (CacheUtil.cache.isEmpty()) {
-        val showTablesAction = sql"SHOW TABLES IN #$database".as[String]
-        val showTablesFuture = dbConfig.run(showTablesAction)
-        val tables = Await.result(showTablesFuture, Duration.Inf)
-        tables.foreach(table => {
-          println(s"Table: $table")
-          CacheUtil.cache.put(s"$database.$table", s"$database.$table")
-        })
-      } else {
-        if (CacheUtil.cache.exists(searchTableName)) {
-          Messages.showInfoMessage("Cache hit", "Information")
-          CacheUtil.cache.getSimilar(searchTableName).foreach(table => {
+    var choosedTable: String = null
+
+    // if cache hit then get the table from cache
+    if (CacheUtil.cache.isEmpty()) {
+      val showDatabasesAction = sql"SHOW DATABASES".as[String]
+      val showDatabasesFuture = dbConfig.run(showDatabasesAction)
+      val databases = Await.result(showDatabasesFuture, Duration.Inf)
+      databases.foreach { database =>
+        if (
+          database != "information_schema" && database != "mysql" && database != "performance_schema" && database != "sys"
+        ) {
+          val showTablesAction = sql"SHOW TABLES IN #$database".as[String]
+          val showTablesFuture = dbConfig.run(showTablesAction)
+          val tables = Await.result(showTablesFuture, Duration.Inf)
+          tables.foreach((table: String) => {
+            println(s"Table: $table")
+            CacheUtil.cache.put(s"$database.$table", s"$database.$table")
+            if (table.contains(searchTableName)) {
+              dorisTableList.append(s"$database.$table")
+            }
+          })
+        }
+      }
+
+      println("size", dorisTableList.size)
+      choosedTable = Messages.showEditableChooseDialog(
+        "Choose the table",
+        "Choose the table",
+        Messages.getInformationIcon,
+        dorisTableList.toArray,
+        null,
+        null
+      )
+      println("choosedTable:" + choosedTable)
+    } else {
+      if (CacheUtil.cache.exists(searchTableName)) {
+        Messages.showInfoMessage("Cache hit", "Information")
+        CacheUtil.cache
+          .getSimilar(searchTableName)
+          .foreach(table => {
             println(s"Table: $table")
             dorisTableList.append(table)
           })
-        } else {
-          Messages.showInfoMessage("Cache miss", "Information")
-          val showTablesAction =
-            sql"SHOW TABLES IN #$database LIKE '%#$searchTableName%' "
-              .as[String]
-          val showTablesFuture = dbConfig.run(showTablesAction)
-          val tables = Await.result(showTablesFuture, Duration.Inf)
-          tables.foreach(table => {
-            println(s"Table: $table")
-            CacheUtil.cache.put(s"$database.$table", s"$database.$table")
-            dorisTableList.append(s"$database.$table")
-          })
+
+        // choose file from dorisTableList
+        var choosedTable = Messages.showEditableChooseDialog(
+          "Choose the table",
+          "Choose the table",
+          Messages.getInformationIcon,
+          dorisTableList.toArray,
+          null,
+          null
+        )
+
+        // if choosedTable is null then get all the tables
+        if (choosedTable == null) {
+          val showDatabasesAction = sql"SHOW DATABASES".as[String]
+          val showDatabasesFuture = dbConfig.run(showDatabasesAction)
+          val databases = Await.result(showDatabasesFuture, Duration.Inf)
+          databases.foreach { database =>
+            // if cache is empty then get all the tables
+            val showTablesAction =
+              sql"SHOW TABLES IN #$database LIKE '%#$searchTableName%' "
+                .as[String]
+            val showTablesFuture = dbConfig.run(showTablesAction)
+            val tables = Await.result(showTablesFuture, Duration.Inf)
+            tables.foreach(table => {
+              println(s"Table: $table")
+              CacheUtil.cache.put(s"$database.$table", s"$database.$table")
+              dorisTableList.append(s"$database.$table")
+            })
+            var choosedTable = Messages.showEditableChooseDialog(
+              "Choose the table",
+              "Choose the table",
+              Messages.getInformationIcon,
+              dorisTableList.toArray,
+              null,
+              null
+            )
+          }
         }
       }
     }
 
-    if (dorisTableList.isEmpty) {
-      Messages.showInfoMessage("No table found", "Error")
-      return
-    }
-
-    if (dorisTableList.size >= 5) {
-      Messages.showInfoMessage(
-        "Too many tables found, please input more specific table name",
-        "Error"
-      )
-      return
-    }
-
-    // PopUp a dialog to choose the tabledialog to choose the table
-    val choosedTable = Messages.showEditableChooseDialog(
-      "Choose the table",
-      "Choose the table",
-      Messages.getInformationIcon,
-      dorisTableList.toArray,
-      dorisTableList.head,
-      null
-    )
+    println("==================================")
     println(choosedTable)
+    println("==================================")
 
-    // substitude the search table with the choosed table
-    ApplicationManager.getApplication.runWriteAction(new Runnable {
-      override def run(): Unit = {
-        // 获取Document对象
-        val document = editor.getDocument
-        // 获取文档的文本
-        val originalText = document.getText()
-        // 替换所有出现的searchTableName为choosedTable
-        val searchQuoteName = Regex.quote(searchTableName)
-        // searchTableName 两边有空白字符才进行替换
-        val newText = originalText.replaceAll(
-          "(?<=\\s|^)" + searchQuoteName + "(?=\\s|$)",
-          choosedTable
-        )
-        // 在Document对象中替换整个文本
-        document.setText(newText)
-      }
-    })
+    if (choosedTable != null) {
+      // substitude the search table with the choosed table
+      ApplicationManager.getApplication.runWriteAction(new Runnable {
+        override def run(): Unit = {
+          // 获取Document对象
+          val document = editor.getDocument
+          // 获取文档的文本
+          val originalText = document.getText()
+          // 替换所有出现的searchTableName为choosedTable
+          val searchQuoteName = Regex.quote(searchTableName)
+          // searchTableName 两边有空白字符才进行替换
+          val newText = originalText.replaceAll(
+            "(?<=\\s|^)" + searchQuoteName + "(?=\\s|$)",
+            choosedTable
+          )
+          // 在Document对象中替换整个文本
+          document.setText(newText)
+        }
+      })
+    }
     // 重新格式化代码
     Messages.showInfoMessage(
       "TransformMysqlToDorisAction Completed",
