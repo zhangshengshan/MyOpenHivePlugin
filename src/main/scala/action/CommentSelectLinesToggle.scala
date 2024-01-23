@@ -18,7 +18,10 @@ class CommentSelectLinesToggle extends AnAction {
 
     // Get the start and end positions of the selected text
     val start: Int = selectionModel.getSelectionStart
-    val end: Int = selectionModel.getSelectionEnd
+    val end: Int =
+      if (selectionModel.getSelectionEnd >= 1)
+        selectionModel.getSelectionEnd - 1
+      else selectionModel.getSelectionEnd
     val document: Document = editor.getDocument
 
     val lineStart: Int = document.getLineNumber(start)
