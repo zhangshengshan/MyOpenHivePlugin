@@ -1,6 +1,6 @@
 package misc
 
-import action.SparkSqlTablesExtractVisitor
+import action.extract.{DorisTablesExtractor, MySqlTablesExtractor, SparkSqlTablesExtractVisitor}
 import antlr.g4.{SqlBaseLexer, SqlBaseParser}
 import antlr4.mysql.{MySqlLexer, MySqlParser}
 import com.intellij.openapi.ui.Messages

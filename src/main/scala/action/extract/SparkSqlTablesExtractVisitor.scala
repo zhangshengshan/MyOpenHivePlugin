@@ -1,13 +1,13 @@
-package misc
+package action.extract
 
-import doris.{DorisParser, DorisParserBaseVisitor}
+import antlr.g4.{SqlBaseParser, SqlBaseParserBaseVisitor}
 
 import scala.collection.mutable
 
-class DorisTablesExtractor extends DorisParserBaseVisitor[String]{
+class SparkSqlTablesExtractVisitor extends SqlBaseParserBaseVisitor[String] {
   private val tablesMap: mutable.Map[String, Int] = scala.collection.mutable.HashMap[String, Int]()
 
-override def visitTableName(ctx: DorisParser.TableNameContext): String = {
+  override def visitTableName(ctx: SqlBaseParser.TableNameContext): String = {
     val dbtb: String = ctx.multipartIdentifier().getText
     if (tablesMap.contains(dbtb)) {
       tablesMap(dbtb) += 1
@@ -16,7 +16,8 @@ override def visitTableName(ctx: DorisParser.TableNameContext): String = {
     }
     null
   }
+
   def plot(): List[String] = {
-      tablesMap.keys.toList
+    tablesMap.keys.toList
   }
 }
