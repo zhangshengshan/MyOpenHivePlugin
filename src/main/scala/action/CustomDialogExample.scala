@@ -1,10 +1,10 @@
-package action.customui
+package action
 
 import javax.swing._
 
 
 object CustomDialogExample {
-  def showDialog(): JDialog = {
+  def showDialog() = {
     // 创建一个顶级菜单
     val menu = new JMenu("请选择替换模式")
 
@@ -37,7 +37,7 @@ object CustomDialogExample {
     dialog.setJMenuBar(menuBar)
     dialog.setSize(300, 200)
     dialog.setVisible(true)
-
-    dialog
+    val contentPane = dialog.getContentPane.asInstanceOf[JComponent]
+    contentPane
   }
 }

@@ -1,6 +1,5 @@
 package action
 
-import action.customui.CustomDialogExample
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.{Document, Editor}
@@ -35,9 +34,6 @@ class BatchReplace extends AnAction {
     * @param e 动作事件
     */
   override def actionPerformed(e: AnActionEvent): Unit = {
-
-
-
 
 
     val project: Project = e.getData(CommonDataKeys.PROJECT)

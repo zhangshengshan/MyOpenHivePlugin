@@ -80,17 +80,14 @@
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt P"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-
         <action id="getDorisTableAction" class="action.GetDorisSchemaAction" text="getDorisTableAction" description="getDorisTableAction">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt G"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-
         <action id="transformMysqlToDoris" class="action.TransformMysqlToDorisAction" text="TranformMysqlToDoris" description="MYSQL2DORIS">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt h"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-
         <action id="extractTablesAction" class="action.ExtractTablesAction" text="extractTablesAction"
                 description="extractTablesAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
@@ -112,5 +109,15 @@
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt T"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+        <action id="ShowCustomDialogAction" class="action.ShowCustomDialogAction" text="customui"
+                description="show">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
+        <group id="MyActionGroup" class="action.MyActionGroup" text="MyActionGroup" description="MyActionGroup">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <action id="MySubAction1" class="action.MySubAction1" text="My Sub Action 1" />
+            <action id="MySubAction2" class="action.MySubAction2" text="My Sub Action 2" />
+        </group>
     </actions>
 </idea-plugin>
