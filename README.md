@@ -77,3 +77,8 @@
 - [x] 输出地址可以配置
 - [x] MyToolWindow 中如果输入的文件名称有问题，现在没有错误提示，需要进行修正˚
 - [x] 拖拉拽的榫卯设计雏形可行性尝试。
+
+
+
+https://github.com/sqlparser/python_data_lineage
+https://www.gudusoft.com/automatic-lineage-analysis-for-postgres-sql-queries/?utm_source=instantSQLFormatter&utm_medium=banner&utm_campaign=sqlflow_introduce3&utm_content=IntroducePostgres
