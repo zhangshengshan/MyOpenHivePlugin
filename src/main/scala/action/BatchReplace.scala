@@ -62,90 +62,81 @@ class BatchReplace extends AnAction {
 
     val anotherStringBuffer: StringBuffer = new StringBuffer()
 
-    if(subMode == CLIPBOARD_WRAP) {
-      val clipboard = ClipBoardUtil.getFromClipboard
-      val str = clipboard.split("\n").map(x => "'" + x.strip() + "'").mkString("(", ",", ")")
-      Messages.showInfoMessage(str, "剪切板内容")
-      ClipBoardUtil.copyToClipBoard(str)
+    // 对每一行进行处理
+    lines
+      .split("\n")
+      .foreach((line: String) => {
 
-    } else {
-
-      // 对每一行进行处理
-      lines
-        .split("\n")
-        .foreach((line: String) => {
-
-          if (subMode == NORMAL_MODE) {
-            // 获取源字符串和目标字符串
-            val source: String = line.split("\\|")(0)
-            val target: String = line.split("\\|")(1)
-            // 获取编辑器中的文本
-            val text: String = document.getText
-            try {
-              // 使用正则表达式替换文本中的源字符串为目标字符串
-              val newText: String = text
-                .replaceAll("\\s+" + source + "\\s+", target)
-              // 将新文本写入编辑器并保存
-              ApplicationManager.getApplication.runWriteAction(new Runnable {
-                override def run(): Unit = {
-                  document.setText(newText)
-                  editor.getCaretModel.moveToOffset(0)
-                }
-              })
-            } catch {
-              case e: Throwable =>
-                e.printStackTrace()
-                // 弹出错误对话框显示错误信息
-                Messages.showMessageDialog(
-                  e.getMessage,
-                  "Error",
-                  Messages.getErrorIcon
-                )
-            }
-          } else if (subMode == REGEX_MODE) {
-            // 获取源正则表达式和目标字符串
-            val source: String = line.split("\\|")(0)
-            val target: String = line.split("\\|")(1)
-            // 获取编辑器中的文本
-            val text: String = document.getText
-            try {
-              // 使用源正则表达式替换文本中的匹配项为目标字符串
-              val r: Regex = source.r
-              val str: String = r.replaceAllIn(
-                text,
-                (m: Regex.Match) => {
-                  target
-                }
+        if (subMode == NORMAL_MODE) {
+          // 获取源字符串和目标字符串
+          val source: String = line.split("\\|")(0)
+          val target: String = line.split("\\|")(1)
+          // 获取编辑器中的文本
+          val text: String = document.getText
+          try {
+            // 使用正则表达式替换文本中的源字符串为目标字符串
+            val newText: String = text
+              .replaceAll("\\s+" + source + "\\s+", target)
+            // 将新文本写入编辑器并保存
+            ApplicationManager.getApplication.runWriteAction(new Runnable {
+              override def run(): Unit = {
+                document.setText(newText)
+                editor.getCaretModel.moveToOffset(0)
+              }
+            })
+          } catch {
+            case e: Throwable =>
+              e.printStackTrace()
+              // 弹出错误对话框显示错误信息
+              Messages.showMessageDialog(
+                e.getMessage,
+                "Error",
+                Messages.getErrorIcon
               )
-              // 将新文本写入编辑器并保存
-              ApplicationManager.getApplication.runWriteAction(new Runnable {
-                override def run(): Unit = {
-                  document.setText(str)
-                  editor.getCaretModel.moveToOffset(0)
-                }
-              })
-            } catch {
-              case e: Throwable =>
-                e.printStackTrace()
-                // 弹出错误对话框显示错误信息
-                Messages.showMessageDialog(
-                  e.getMessage,
-                  "Error",
-                  Messages.getErrorIcon
-                )
-            }
-          } else {
-            // 获取正则表达式
-            val r: Regex = line.r
-            val text: String = document.getText
-            // 查找匹配项并提取
-            r.findAllMatchIn(text)
-              .foreach((m: Regex.Match) => {
-                anotherStringBuffer.append(m.toString() + "\n")
-              })
           }
-        })
-    }
+        } else if (subMode == REGEX_MODE) {
+          // 获取源正则表达式和目标字符串
+          val source: String = line.split("\\|")(0)
+          val target: String = line.split("\\|")(1)
+          // 获取编辑器中的文本
+          val text: String = document.getText
+          try {
+            // 使用源正则表达式替换文本中的匹配项为目标字符串
+            val r: Regex = source.r
+            val str: String = r.replaceAllIn(
+              text,
+              (m: Regex.Match) => {
+                target
+              }
+            )
+            // 将新文本写入编辑器并保存
+            ApplicationManager.getApplication.runWriteAction(new Runnable {
+              override def run(): Unit = {
+                document.setText(str)
+                editor.getCaretModel.moveToOffset(0)
+              }
+            })
+          } catch {
+            case e: Throwable =>
+              e.printStackTrace()
+              // 弹出错误对话框显示错误信息
+              Messages.showMessageDialog(
+                e.getMessage,
+                "Error",
+                Messages.getErrorIcon
+              )
+          }
+        } else {
+          // 获取正则表达式
+          val r: Regex = line.r
+          val text: String = document.getText
+          // 查找匹配项并提取
+          r.findAllMatchIn(text)
+            .foreach((m: Regex.Match) => {
+              anotherStringBuffer.append(m.toString() + "\n")
+            })
+        }
+      })
 
 
     // 如果有提取结果，则显示提取结果并复制到剪贴板
