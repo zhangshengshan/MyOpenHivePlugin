@@ -1,10 +1,10 @@
-package action
+package action.extract
 
 import antlr.g4.{SqlBaseParser, SqlBaseParserBaseVisitor}
 
 import scala.collection.mutable
 
-class SparkSqlTablesExtractVisitor extends SqlBaseParserBaseVisitor[String] {
+class SparkSqlTablesExtractor extends SqlBaseParserBaseVisitor[String] {
   private val tablesMap: mutable.Map[String, Int] = scala.collection.mutable.HashMap[String, Int]()
 
   override def visitTableName(ctx: SqlBaseParser.TableNameContext): String = {

@@ -1,4 +1,4 @@
-package misc
+package action.extract
 
 import doris.{DorisParser, DorisParserBaseVisitor}
 

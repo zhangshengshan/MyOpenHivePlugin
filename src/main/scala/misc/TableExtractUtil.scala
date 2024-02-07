@@ -1,6 +1,6 @@
 package misc
 
-import action.SparkSqlTablesExtractVisitor
+import action.extract.{DorisTablesExtractor, MySqlTablesExtractor, SparkSqlTablesExtractor}
 import antlr.g4.{SqlBaseLexer, SqlBaseParser}
 import antlr4.mysql.{MySqlLexer, MySqlParser}
 import com.intellij.openapi.ui.Messages
@@ -20,7 +20,7 @@ object TableExtractUtil {
     val commonTokenStream: CommonTokenStream = new CommonTokenStream(lexer)
     val parser: SqlBaseParser = new SqlBaseParser(commonTokenStream)
     val context: SqlBaseParser.StatementContext = parser.statement()
-    val visitor = new SparkSqlTablesExtractVisitor()
+    val visitor = new SparkSqlTablesExtractor()
     visitor.visit(context)
     val plot: List[String] = visitor.plot()
     if (MyConfigurable.getInstance().isDownloadAfterExtract) {}
