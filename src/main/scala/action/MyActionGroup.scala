@@ -10,7 +10,8 @@ class MyActionGroup extends DefaultActionGroup {
   override def getChildren(e: AnActionEvent): Array[AnAction] = {
     Array(
       new SingleQuoteWrapper,
-      new DoubleQuoteWrapper
+      new DoubleQuoteWrapper,
+      new CommentProcess
     )
   }
 }

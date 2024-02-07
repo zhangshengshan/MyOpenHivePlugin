@@ -96,10 +96,6 @@
                 description="processChineseAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-        <action id="commentProcess" class="action.CommentProcess" text="commentProcess"
-                description="commentProcess">
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-        </action>
         <action id="batchProcess" class="action.BatchReplace" text="batchProcess"
                 description="batchProcess">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
@@ -116,8 +112,9 @@
 
         <group id="MyActionGroup" class="action.MyActionGroup" text="批量操作组" description="MyActionGroup">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <action id="MySubAction1" class="action.SingleQuoteWrapper" text="My Sub Action 1" />
-            <action id="MySubAction2" class="action.DoubleQuoteWrapper" text="My Sub Action 2" />
+            <action id="singleQuoteWrapper" class="action.SingleQuoteWrapper" text="SingleQuoteWrapper" />
+            <action id="doubleQuoteWrapper" class="action.DoubleQuoteWrapper" text="DoubleQuoteWrapper" />
+            <action id="commentProcess" class="action.CommentProcess" text="commentProcess" description="commentProcess"> </action>
         </group>
     </actions>
 </idea-plugin>
