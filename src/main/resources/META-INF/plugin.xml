@@ -116,8 +116,8 @@
 
         <group id="MyActionGroup" class="action.MyActionGroup" text="批量操作组" description="MyActionGroup">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <action id="MySubAction1" class="action.MySubAction1" text="My Sub Action 1" />
-            <action id="MySubAction2" class="action.MySubAction2" text="My Sub Action 2" />
+            <action id="MySubAction1" class="action.SingleQuoteWrapper" text="My Sub Action 1" />
+            <action id="MySubAction2" class="action.DoubleQuoteWrapper" text="My Sub Action 2" />
         </group>
     </actions>
 </idea-plugin>
