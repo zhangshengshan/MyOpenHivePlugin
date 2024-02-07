@@ -68,7 +68,7 @@ class BatchReplace extends AnAction {
 
     if(subMode == CLIPBOARD_WRAP) {
       val clipboard = ClipBoardUtil.getFromClipboard
-      val str = clipboard.split("\n").map(x => "'" + x + "'").mkString("(", ",", ")")
+      val str = clipboard.split("\n").map(x => "'" + x.strip() + "'").mkString("(", ",", ")")
       Messages.showInfoMessage(str, "剪切板内容")
       ClipBoardUtil.copyToClipBoard(str)
 
