@@ -110,7 +110,7 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
 
-        <group id="MyActionGroup" class="action.MyActionGroup" text="批量操作组" description="MyActionGroup">
+        <group id="MyActionGroup" class="action.BatchProcessGroup" text="批量操作组" description="MyActionGroup">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <action id="singleQuoteWrapper" class="action.SingleQuoteWrapper" text="SingleQuoteWrapper" />
             <action id="doubleQuoteWrapper" class="action.DoubleQuoteWrapper" text="DoubleQuoteWrapper" />

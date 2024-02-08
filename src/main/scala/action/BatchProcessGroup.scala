@@ -4,7 +4,7 @@ import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, DefaultAction
 import com.intellij.openapi.ui.Messages
 import misc.ClipBoardUtil
 
-class MyActionGroup extends DefaultActionGroup {
+class BatchProcessGroup extends DefaultActionGroup {
 
   override def isPopup: Boolean = true
   override def getChildren(e: AnActionEvent): Array[AnAction] = {
