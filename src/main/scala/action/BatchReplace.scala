@@ -1,6 +1,10 @@
 package action
 
-import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
+import com.intellij.openapi.actionSystem.{
+  AnAction,
+  AnActionEvent,
+  CommonDataKeys
+}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.{Document, Editor}
 import com.intellij.openapi.project.Project
@@ -24,17 +28,11 @@ class BatchReplace extends AnAction {
     */
   private final val ANOTHER_EXTRACT: String = "另一种提取方式"
 
-
-  private final val CLIPBOARD_WRAP: String = "剪切板包裹"
-
-
-
   /** 处理动作触发时的事件
     *
     * @param e 动作事件
     */
   override def actionPerformed(e: AnActionEvent): Unit = {
-
 
     val project: Project = e.getData(CommonDataKeys.PROJECT)
     val editor: Editor = e.getData(CommonDataKeys.EDITOR)
@@ -55,7 +53,7 @@ class BatchReplace extends AnAction {
       "请选择替换模式",
       "替换模式",
       Messages.getQuestionIcon,
-      Array(NORMAL_MODE, REGEX_MODE, ANOTHER_EXTRACT, CLIPBOARD_WRAP),
+      Array(NORMAL_MODE, REGEX_MODE, ANOTHER_EXTRACT),
       NORMAL_MODE,
       null
     )
@@ -137,7 +135,6 @@ class BatchReplace extends AnAction {
             })
         }
       })
-
 
     // 如果有提取结果，则显示提取结果并复制到剪贴板
     if (anotherStringBuffer.length() > 0) {
