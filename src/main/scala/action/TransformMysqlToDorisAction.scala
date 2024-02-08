@@ -87,10 +87,14 @@ class TransformMysqlToDorisAction extends AnAction {
 
         val msg = if (dorisTableList.size == 1) s" ONLY ONE TABLE FOUND FOR $sourceTable"
         else s" CHOOSE THE TABLE FOR $sourceTable"
+
+        val icon = if (dorisTableList.size == 1) Messages.getErrorIcon
+        else Messages.getQuestionIcon
+
         val tableName = Messages.showEditableChooseDialog(
           msg,
-          "Choose the table",
-          Messages.getInformationIcon,
+          "CHOOSE THE TABLE",
+          icon,
           dorisTableList.toArray,
           dorisTableList.head,
           null
@@ -173,7 +177,7 @@ class TransformMysqlToDorisAction extends AnAction {
       }
       if (choosedTable != null) {
         // here record the sourcetable and target table
-        successSubstitude.append(s"$searchTableName -> $choosedTable")
+        successSubstitude.append(s"-- $searchTableName -> $choosedTable")
         // substitude the search table with the choosed table
         ApplicationManager.getApplication.runWriteAction(new Runnable {
 
