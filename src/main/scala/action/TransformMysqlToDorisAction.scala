@@ -84,8 +84,11 @@ class TransformMysqlToDorisAction extends AnAction {
       // if cache hit then get the table from cache
       def chooseTargetTable(sourceTable: String): String = {
         val init = if (dorisTableList.isEmpty) return null
+
+        val msg = if (dorisTableList.size == 1) s" ONLY ONE TABLE FOUND FOR $sourceTable"
+        else s" CHOOSE THE TABLE FOR $sourceTable"
         val tableName = Messages.showEditableChooseDialog(
-          s"Choose the table for $sourceTable",
+          msg,
           "Choose the table",
           Messages.getInformationIcon,
           dorisTableList.toArray,
