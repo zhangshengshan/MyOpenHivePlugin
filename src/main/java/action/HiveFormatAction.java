@@ -9,6 +9,9 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
+import misc.ClipBoardUtil;
+import net.schmizz.sshj.common.Message;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -21,7 +24,7 @@ public class HiveFormatAction extends AnAction {
         Editor editor = event.getData(CommonDataKeys.EDITOR);
 
         final String format =
-                SqlFormatter.of(Dialect.SparkSql)
+                SqlFormatter.of(Dialect.MySql)
                         .format(
                                 editor.getDocument().getText(),
                                 FormatConfig.builder()
@@ -32,11 +35,7 @@ public class HiveFormatAction extends AnAction {
                                         .build());
 
         final Document document = editor.getDocument();
-
-        if (document != null) {
-            document.setText(format);
-        }
-
-        return;
+        ClipBoardUtil.copyToClipBoard(format);
+        Messages.showInfoMessage("Formatted SQL has been copied to clipboard", "Success");
     }
 }
