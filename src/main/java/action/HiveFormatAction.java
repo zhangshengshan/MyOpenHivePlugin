@@ -48,10 +48,23 @@ public class HiveFormatAction extends AnAction {
 
         // Replace the original SQL with the formatted SQL
         if (result == Messages.YES) {
-            try{
-                ApplicationManager.getApplication().runWriteAction(() -> document.setText(format));
-            } catch (Exception e) {
-                Messages.showInfoMessage("Failed to replace the original SQL with the formatted SQL", "Error");
+
+            // here we need to remind the user to make sure the file has been saved in a version control system such as git
+            // before replacing the original SQL with the formatted SQL and after the operation, the user can use the git diff command to check the changes
+            int check = Messages.showYesNoDialog(
+                    project,
+                    "Please make sure the file has been saved in a version control system such as git before replacing the original SQL with the formatted SQL. After the operation, you can use the git diff command to check the changes.",
+                    "Warning",
+                    Messages.getWarningIcon()
+            );
+            if( check == Messages.NO){
+                return;
+            } else {
+                try{
+                    ApplicationManager.getApplication().runWriteAction(() -> document.setText(format));
+                } catch (Exception e) {
+                    Messages.showInfoMessage("Failed to replace the original SQL with the formatted SQL", "Error");
+                }
             }
         }
     }
