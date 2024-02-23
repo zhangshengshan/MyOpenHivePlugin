@@ -36,8 +36,15 @@ object TableExtractUtil {
   }
   def processDorisTables(text: String): Unit = {
     println("SQL")
+
+    // delete the line that contains "truncate"
+    val lines = text.split("\n")
+    val newLines =
+      lines.filterNot(x => x.contains("truncate") || x.contains("TRUNCATE"))
+    val newText = newLines.mkString("\n")
+
     val lexer = new DorisLexer(
-      new CaseChangingCharStream(CharStreams.fromString(text), true)
+      new CaseChangingCharStream(CharStreams.fromString(newText), true)
     )
 
     val commonTokenStream: CommonTokenStream = new CommonTokenStream(lexer)
