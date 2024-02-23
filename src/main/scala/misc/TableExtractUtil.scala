@@ -1,6 +1,10 @@
 package misc
 
-import action.extract.{DorisTablesExtractor, MySqlTablesExtractor, SparkSqlTablesExtractor}
+import action.extract.{
+  DorisTablesExtractor,
+  MySqlTablesExtractor,
+  SparkSqlTablesExtractor
+}
 import antlr.g4.{SqlBaseLexer, SqlBaseParser}
 import antlr4.mysql.{MySqlLexer, MySqlParser}
 import com.intellij.openapi.ui.Messages
@@ -41,11 +45,11 @@ object TableExtractUtil {
     val context: DorisParser.MultiStatementsContext = parser.multiStatements()
     val visitor = new DorisTablesExtractor()
     visitor.visit(context)
-    val plot: List[String] = visitor.plot()
+    val plot: List[(String, Int)] = visitor.plot()
 
     if (MyConfigurable.getInstance().isDownloadAfterExtract) {}
     Messages.showInfoMessage(
-      plot.mkString("\r"),
+      plot.map(x => x._1 + ":" + x._2).mkString("\r"),
       "Extracted Tables"
     )
     ClipBoardUtil.copyToClipBoard(plot.mkString("\r"))
@@ -66,7 +70,7 @@ object TableExtractUtil {
 
     if (MyConfigurable.getInstance().isDownloadAfterExtract) {}
     Messages.showInfoMessage(
-      plot.mkString(System.lineSeparator()) ,
+      plot.mkString(System.lineSeparator()),
       "Extracted Tables"
     )
     plot
