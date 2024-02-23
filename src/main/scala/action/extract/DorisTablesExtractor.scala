@@ -4,10 +4,11 @@ import doris.{DorisParser, DorisParserBaseVisitor}
 
 import scala.collection.mutable
 
-class DorisTablesExtractor extends DorisParserBaseVisitor[String]{
-  private val tablesMap: mutable.Map[String, Int] = scala.collection.mutable.HashMap[String, Int]()
+class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
+  private val tablesMap: mutable.Map[String, Int] =
+    scala.collection.mutable.HashMap[String, Int]()
 
-override def visitTableName(ctx: DorisParser.TableNameContext): String = {
+  override def visitTableName(ctx: DorisParser.TableNameContext): String = {
     val dbtb: String = ctx.multipartIdentifier().getText
     if (tablesMap.contains(dbtb)) {
       tablesMap(dbtb) += 1
@@ -16,7 +17,7 @@ override def visitTableName(ctx: DorisParser.TableNameContext): String = {
     }
     null
   }
-  def plot(): List[String] = {
-      tablesMap.keys.toList
+  def plot(): List[(String, Int)] = {
+    tablesMap.toList
   }
 }
