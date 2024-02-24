@@ -202,7 +202,7 @@ class TransformMysqlToDorisAction extends AnAction {
         )
       } else {
         Messages.showInfoMessage(
-          "Doris Table Not Found!",
+          s"Doris Table ${searchTableName} Not Found!",
           "Information"
         )
       }
