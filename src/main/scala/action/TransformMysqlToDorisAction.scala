@@ -215,6 +215,9 @@ class TransformMysqlToDorisAction extends AnAction {
       successSubstitude.mkString(System.lineSeparator()),
       "TransformMysqlToDorisAction Completed"
     )
+
+
+
     ClipBoardUtil.copyToClipBoard(successSubstitude.mkString(System.lineSeparator()))
   }
 }

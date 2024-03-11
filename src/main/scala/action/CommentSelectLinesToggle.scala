@@ -1,6 +1,10 @@
 package action
 
-import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
+import com.intellij.openapi.actionSystem.{
+  AnAction,
+  AnActionEvent,
+  CommonDataKeys
+}
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.{Document, Editor, SelectionModel}
 import com.intellij.openapi.project.Project
@@ -27,6 +31,16 @@ class CommentSelectLinesToggle extends AnAction {
     val lineStart: Int = document.getLineNumber(start)
     val lineEnd: Int = document.getLineNumber(end)
 
+    // 弹出可编辑选择对话框选择替换模式
+    val subMode: String = Messages.showEditableChooseDialog(
+      "请选择替换模式",
+      "替换模式",
+      Messages.getQuestionIcon,
+      Array("comment", "ddl"),
+      "comment",
+      null
+    )
+
     WriteCommandAction.runWriteCommandAction(
       project,
       new Runnable {
@@ -38,13 +52,35 @@ class CommentSelectLinesToggle extends AnAction {
                 // 如果该行的行首没有 -- 则在行首添加 --
                 // 如果该行的行首有 -- 则去掉行首的 --
 
-                if (
-                  document
-                    .getText(new TextRange(insertPos, insertPos + 3)) == "-- "
-                ) {
-                  document.deleteString(insertPos, insertPos + 3)
+                if (subMode == "ddl") {
+                  // get the text of the current line
+                  val lineText: String = document.getText(
+                    new TextRange(
+                      document.getLineStartOffset(curLine),
+                      document.getLineEndOffset(curLine)
+                    )
+                  )
+                  // if the line contains varchar(*) 这种模式，替换为string
+                  if (lineText.contains("varchar") || lineText.contains("text")) {
+                    val newLineText =
+                      lineText.replaceAll("varchar\\(.*\\)|text", "string")
+
+                    document.replaceString(
+                      document.getLineStartOffset(curLine),
+                      document.getLineEndOffset(curLine),
+                      newLineText
+                    )
+                  }
+
                 } else {
-                  document.insertString(insertPos, "-- ")
+                  if (
+                    document
+                      .getText(new TextRange(insertPos, insertPos + 3)) == "-- "
+                  ) {
+                    document.deleteString(insertPos, insertPos + 3)
+                  } else {
+                    document.insertString(insertPos, "-- ")
+                  }
                 }
 
               }
