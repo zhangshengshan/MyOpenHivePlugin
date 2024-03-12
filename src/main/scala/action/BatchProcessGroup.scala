@@ -67,16 +67,22 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
   import org.apache.poi.xssf.usermodel.XSSFWorkbook
   import org.apache.poi.ss.usermodel.{Cell, Row, Sheet, Workbook}
 
+  var listRowIdx = 2
+
+
   private def getXlsxFileFromDoris(
       responseObj: Response,
       workbook: Workbook,
       db: String,
-      tb: String
+      tb: String,
+      listsheet: Sheet
   ) = {
+
+
 
     val tableName = db + "." + tb
 
-    val sheet: Sheet = workbook.createSheet(db + "." + tb)
+    val sheet: Sheet = workbook.createSheet(tb)
 
     val row0 = sheet.createRow(0)
     val cell0 = row0.createCell(0)
@@ -95,6 +101,16 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
 
         val cell2: Cell = row.createCell(2)
         cell2.setCellValue(item.comment)
+
+        val listRow = listsheet.createRow(listRowIdx)
+        val listCell0: Cell = listRow.createCell(0)
+        listCell0.setCellValue(tableName)
+        val listCell1: Cell = listRow.createCell(1)
+        listCell1.setCellValue(item.name)
+        val listCell2: Cell = listRow.createCell(2)
+        listCell2.setCellValue(item.comment)
+
+        listRowIdx += 1
       }
     }
   }
@@ -124,6 +140,8 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
     var workbook: Workbook =
       new XSSFWorkbook() // new HSSFWorkbook() for generating `.xls` file
 
+    var listsheet = workbook.createSheet("all")
+
     val fileName: String = Messages.showInputDialog(
       project,
       "请输入文件名",
@@ -136,8 +154,11 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
     tableList.foreach(table => {
       val yourdb = table.split("\\.")(0)
       val yourtb = table.split("\\.")(1)
-      println(yourdb)
-      println(yourtb)
+
+      Messages.showInfoMessage(
+        s"正在处理 $yourdb.$yourtb",
+        "正在处理 $yourdb.$yourtb"
+      )
 
       import java.util.Base64
       val encoded =
@@ -165,7 +186,7 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
         responseObj.data.properties
           .map(item => (item.name, item.comment))
           .toList
-      getXlsxFileFromDoris(responseObj, workbook, yourdb, yourtb)
+      getXlsxFileFromDoris(responseObj, workbook, yourdb, yourtb, listsheet)
     })
 
     val fileOut = new FileOutputStream(
@@ -191,13 +212,24 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
     val offset = model.getOffset
     val project: Project = editor.getProject
 
-    processDorisSchema(
-      clipboard.split("\n").toList,
-      user,
-      password,
-      host,
-      port,
-      project
-    )
+    try{
+      processDorisSchema(
+        clipboard.strip().split("\n").toList,
+        user,
+        password,
+        host,
+        port,
+        project
+      )
+      Messages.showInfoMessage("保存成功", "保存成功")
+    } catch {
+      case e: Throwable =>
+        e.printStackTrace()
+        Messages.showMessageDialog(
+          e.getMessage,
+          "Error",
+          Messages.getErrorIcon
+        )
+    }
   }
 }
