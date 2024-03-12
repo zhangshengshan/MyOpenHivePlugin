@@ -114,6 +114,7 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <action id="singleQuoteWrapper" class="action.SingleQuoteWrapper" text="SingleQuoteWrapper" />
             <action id="doubleQuoteWrapper" class="action.DoubleQuoteWrapper" text="DoubleQuoteWrapper" />
+            <action id="savedorismetatoxlsx" class="action.SaveDorisMetaToXlsx" text="SaveDorisMetaToXlsx" />
             <action id="commentProcess" class="action.CommentProcess" text="commentProcess" description="commentProcess"> </action>
         </group>
     </actions>
