@@ -32,7 +32,8 @@ class BatchProcessGroup extends DefaultActionGroup {
       new SingleQuoteWrapper,
       new DoubleQuoteWrapper,
       new CommentProcess,
-      new SaveDorisMetaToXlsx
+      new SaveDorisMetaToXlsx,
+      new CompareTwoTables
     )
   }
 }
@@ -62,13 +63,71 @@ class DoubleQuoteWrapper extends AnAction("双引号") {
 
 }
 
+class CompareTwoTables extends AnAction("表格比对") {
+
+  override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
+    val (clipboard, host, port, user, password, project) =
+      misc.GetConfig.getConfig(anActionEvent)
+
+    Messages.showInfoMessage(clipboard, "剪切板内容")
+    try {
+      val sourceTable = clipboard.strip().split("\n")(0)
+      val targetTable = clipboard.strip().split("\n")(1)
+      val sourceTableMeta = misc.DorisHttpUtil.getTableMeta(
+        user,
+        password,
+        host,
+        port,
+        sourceTable.split("\\.")(0),
+        sourceTable.split("\\.")(1)
+      )
+      val targetTableMeta = misc.DorisHttpUtil.getTableMeta(
+        user,
+        password,
+        host,
+        port,
+        targetTable.split("\\.")(0),
+        targetTable.split("\\.")(1)
+      )
+      val sourceTableMetaMap =
+        sourceTableMeta.get.data.properties.map(x => (x.name, x.comment)).toMap
+      val targetTableMetaMap =
+        targetTableMeta.get.data.properties.map(x => (x.name, x.comment)).toMap
+      // here we can compare the two maps
+      if (sourceTableMetaMap sameElements targetTableMetaMap) {
+        //进一步生成SQL来进行比较
+        val sstr = sourceTableMeta.get.data.properties
+          .map(item =>
+            s"SUM(${item.name}) AS SUM_${item.name}, MAX(${item.name}) AS MAX_${item.name} "
+          )
+          .mkString("SELECT ", ",", s" FROM ${sourceTable};")
+        val tstr = targetTableMeta.get.data.properties
+          .map(item =>
+            s"SUM(${item.name}) AS SUM_${item.name}, MAX(${item.name}) AS MAX_${item.name} "
+          )
+          .mkString("SELECT ", ",", s" FROM ${targetTable};")
+        ClipBoardUtil.copyToClipBoard(sstr + System.lineSeparator + tstr)
+      } else {
+        Messages.showInfoMessage("两个表格不一致", "两个表格不一致")
+      }
+    } catch {
+      case e: Throwable =>
+        e.printStackTrace()
+        Messages.showMessageDialog(
+          e.getMessage,
+          "Error",
+          Messages.getErrorIcon
+        )
+
+    }
+  }
+}
 class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
 
   import org.apache.poi.xssf.usermodel.XSSFWorkbook
   import org.apache.poi.ss.usermodel.{Cell, Row, Sheet, Workbook}
 
   var listRowIdx = 2
-
 
   private def getXlsxFileFromDoris(
       responseObj: Response,
@@ -77,8 +136,6 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
       tb: String,
       listsheet: Sheet
   ) = {
-
-
 
     val tableName = db + "." + tb
 
@@ -160,27 +217,11 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
         "正在处理 $yourdb.$yourtb"
       )
 
-      import java.util.Base64
-      val encoded =
-        Base64.getEncoder.encodeToString((user + ":" + password).getBytes)
-      val headers = Map("Authorization" -> s"Basic $encoded")
-
-      val url = s"http://$host:$port/api/$yourdb/$yourtb/_schema"
-      val response = requests.get(url, headers = headers)
-      val jsonValue = ujson.read(response.text())
-
-      if (jsonValue("code").num != 0) {
-        Messages.showInfoMessage(jsonValue("msg").str, "Error")
-        return
+      val responseObj: Response = misc.DorisHttpUtil
+        .getTableMeta(user, password, host, port, yourdb, yourtb) match {
+        case Some(result) => result
+        case None         => return
       }
-      implicit val propertyRW = upickle.default.macroRW[Property]
-      implicit val dataRW = upickle.default.macroRW[Data]
-      implicit val responseRW = upickle.default.macroRW[Response]
-      println(jsonValue)
-      val responseObj: Response = upickle.default.read[Response](jsonValue)
-      responseObj.data.properties.foreach(item => {
-        println(item.name)
-      })
 
       val fieldComments =
         responseObj.data.properties
@@ -199,20 +240,16 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
   }
 
   override def actionPerformed(e: AnActionEvent): Unit = {
-    val clipboard = ClipBoardUtil.getFromClipboard
-    val value: MyConfigurable = MyConfigurable.getInstance()
-    val host = value.getHost
-    val port = value.getPort
-    val user = value.getUser
-    val password = value.getPassword
-    val editor: Editor = e.getData(CommonDataKeys.EDITOR)
+    val (
+      clipboard: String,
+      host: String,
+      port: String,
+      user: String,
+      password: String,
+      project: Project
+    ) = misc.GetConfig.getConfig(e)
 
-    val selectText = editor.getSelectionModel.getSelectedText
-    val model = editor.getCaretModel
-    val offset = model.getOffset
-    val project: Project = editor.getProject
-
-    try{
+    try {
       processDorisSchema(
         clipboard.strip().split("\n").toList,
         user,
@@ -232,4 +269,5 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
         )
     }
   }
+
 }
