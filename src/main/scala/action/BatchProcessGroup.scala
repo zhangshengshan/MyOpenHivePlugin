@@ -120,7 +120,8 @@ class CompareTwoTables extends AnAction("表格比对") {
           .mkString("不一致的字段有", System.lineSeparator, "请检查")
         Messages.showWarningDialog(str, "不一致的字段")
 
-        val result = Messages.showYesNoDialog("是否继续?", "确认", Messages.getWarningIcon)
+        val result =
+          Messages.showYesNoDialog("是否继续?", "确认", Messages.getWarningIcon)
         if (result == Messages.YES) {
           // 用户点击了 "Yes"
         } else if (result == Messages.NO) {
@@ -128,20 +129,23 @@ class CompareTwoTables extends AnAction("表格比对") {
           return
         }
       }
-
       // here we can compare the two maps
       //进一步生成SQL来进行比较
       val sstr = sourceTableMeta.get.data.properties
-        .map(item =>
-          s"SUM(${item.name}) AS SUM_${item.name}, MAX(${item.name}) AS MAX_${item.name} "
-        )
-        .mkString("SELECT ", ",", s" FROM ${sourceTable};")
+        .map(item => {
+          s"MIN(${item.name}) AS MIN_${item.name}, MAX(${item.name}) AS MAX_${item.name}, COUNT(DISTINCT(${item.name})) AS COUNT_${item.name} "
+        })
+        .mkString("SELECT ", ",\n", s" FROM ${sourceTable}")
       val tstr = targetTableMeta.get.data.properties
         .map(item =>
-          s"SUM(${item.name}) AS SUM_${item.name}, MAX(${item.name}) AS MAX_${item.name} "
+          s"MIN(${item.name}) AS MIN_${item.name}, MAX(${item.name}) AS MAX_${item.name}, COUNT(DISTINCT(${item.name})) AS COUNT_${item.name} "
         )
-        .mkString("SELECT ", ",", s" FROM ${targetTable};")
-      ClipBoardUtil.copyToClipBoard(sstr + System.lineSeparator + tstr)
+        .mkString("SELECT \n", ",\n", s" FROM ${targetTable}")
+      ClipBoardUtil.copyToClipBoard(
+        sstr + System.lineSeparator + "UNION ALL" + System
+          .lineSeparator() + tstr
+      )
+      Messages.showInfoMessage("已复制到剪切板", "提示")
 
     } catch {
       case e: Throwable =>
