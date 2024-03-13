@@ -93,41 +93,56 @@ class CompareTwoTables extends AnAction("表格比对") {
         sourceTableMeta.get.data.properties.map(x => (x.name, x.`type`)).toMap
       val targetTableMetaMap =
         targetTableMeta.get.data.properties.map(x => (x.name, x.`type`)).toMap
-      // here we can compare the two maps
-      if (sourceTableMetaMap sameElements targetTableMetaMap) {
-        //进一步生成SQL来进行比较
-        val sstr = sourceTableMeta.get.data.properties
-          .map(item =>
-            s"SUM(${item.name}) AS SUM_${item.name}, MAX(${item.name}) AS MAX_${item.name} "
-          )
-          .mkString("SELECT ", ",", s" FROM ${sourceTable};")
-        val tstr = targetTableMeta.get.data.properties
-          .map(item =>
-            s"SUM(${item.name}) AS SUM_${item.name}, MAX(${item.name}) AS MAX_${item.name} "
-          )
-          .mkString("SELECT ", ",", s" FROM ${targetTable};")
-        ClipBoardUtil.copyToClipBoard(sstr + System.lineSeparator + tstr)
-      } else {
-        Messages.showInfoMessage("两个表格不一致", "两个表格不一致")
-        val inconsistentKeyValuePairs1 = sourceTableMetaMap.filter {
-          case (k, v) => targetTableMetaMap.get(k) match {
-            case Some(value) => value != v
-            case None => true
-          }
-        }
 
-        val inconsistentKeyValuePairs2 = targetTableMetaMap.filter {
-          case (k, v) => sourceTableMetaMap.get(k) match {
-            case Some(value) => value != v
-            case None => true
-          }
-        }
-        val inconsistentKeyValuePairs = inconsistentKeyValuePairs1 ++ inconsistentKeyValuePairs2
-        val inconsistentKeyValuePairsStr = inconsistentKeyValuePairs.map {
-          case (k, v) => s"$k: $v"
-        }.mkString(System.lineSeparator)
-        Messages.showInfoMessage(inconsistentKeyValuePairsStr, "不一致的键值对")
+      if (!sourceTableMetaMap.keys.sameElements(targetTableMetaMap.keys)) {
+        val inter =
+          sourceTableMetaMap.keys.toSeq intersect sourceTableMetaMap.keys.toSeq
+        val all =
+          sourceTableMetaMap.keys.toSeq union targetTableMetaMap.keys.toSeq
+        val diff = all diff inter
+        Messages.showInfoMessage(s"不一致的字段有${diff.mkString(",")}", "不一致的字段")
+        return
       }
+
+      if (!sourceTableMetaMap.sameElements(targetTableMetaMap)) {
+
+        val joinedMap: Map[String, (String, String)] =
+          sourceTableMetaMap.keys.flatMap { key =>
+            for {
+              sourceValue <- sourceTableMetaMap.get(key)
+              targetValue <- targetTableMetaMap.get(key)
+            } yield key -> (sourceValue, targetValue)
+          }.toMap
+
+        val str = joinedMap
+          .filter(x => x._2._1 != x._2._2)
+          .map(x => s"${x._1} ${x._2._1} not equal ${x._2._2}")
+          .mkString("不一致的字段有", System.lineSeparator, "请检查")
+        Messages.showWarningDialog(str, "不一致的字段")
+
+        val result = Messages.showYesNoDialog("是否继续?", "确认", Messages.getWarningIcon)
+        if (result == Messages.YES) {
+          // 用户点击了 "Yes"
+        } else if (result == Messages.NO) {
+          // 用户点击了 "No"
+          return
+        }
+      }
+
+      // here we can compare the two maps
+      //进一步生成SQL来进行比较
+      val sstr = sourceTableMeta.get.data.properties
+        .map(item =>
+          s"SUM(${item.name}) AS SUM_${item.name}, MAX(${item.name}) AS MAX_${item.name} "
+        )
+        .mkString("SELECT ", ",", s" FROM ${sourceTable};")
+      val tstr = targetTableMeta.get.data.properties
+        .map(item =>
+          s"SUM(${item.name}) AS SUM_${item.name}, MAX(${item.name}) AS MAX_${item.name} "
+        )
+        .mkString("SELECT ", ",", s" FROM ${targetTable};")
+      ClipBoardUtil.copyToClipBoard(sstr + System.lineSeparator + tstr)
+
     } catch {
       case e: Throwable =>
         e.printStackTrace()
