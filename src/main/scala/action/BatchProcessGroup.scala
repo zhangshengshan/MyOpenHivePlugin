@@ -90,9 +90,9 @@ class CompareTwoTables extends AnAction("表格比对") {
         targetTable.split("\\.")(1)
       )
       val sourceTableMetaMap =
-        sourceTableMeta.get.data.properties.map(x => (x.name, x.comment)).toMap
+        sourceTableMeta.get.data.properties.map(x => (x.name, x.`type`)).toMap
       val targetTableMetaMap =
-        targetTableMeta.get.data.properties.map(x => (x.name, x.comment)).toMap
+        targetTableMeta.get.data.properties.map(x => (x.name, x.`type`)).toMap
       // here we can compare the two maps
       if (sourceTableMetaMap sameElements targetTableMetaMap) {
         //进一步生成SQL来进行比较
@@ -109,6 +109,24 @@ class CompareTwoTables extends AnAction("表格比对") {
         ClipBoardUtil.copyToClipBoard(sstr + System.lineSeparator + tstr)
       } else {
         Messages.showInfoMessage("两个表格不一致", "两个表格不一致")
+        val inconsistentKeyValuePairs1 = sourceTableMetaMap.filter {
+          case (k, v) => targetTableMetaMap.get(k) match {
+            case Some(value) => value != v
+            case None => true
+          }
+        }
+
+        val inconsistentKeyValuePairs2 = targetTableMetaMap.filter {
+          case (k, v) => sourceTableMetaMap.get(k) match {
+            case Some(value) => value != v
+            case None => true
+          }
+        }
+        val inconsistentKeyValuePairs = inconsistentKeyValuePairs1 ++ inconsistentKeyValuePairs2
+        val inconsistentKeyValuePairsStr = inconsistentKeyValuePairs.map {
+          case (k, v) => s"$k: $v"
+        }.mkString(System.lineSeparator)
+        Messages.showInfoMessage(inconsistentKeyValuePairsStr, "不一致的键值对")
       }
     } catch {
       case e: Throwable =>
