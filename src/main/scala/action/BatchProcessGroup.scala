@@ -135,12 +135,12 @@ class CompareTwoTables extends AnAction("表格比对") {
         .map(item => {
           s"MIN(${item.name}) AS MIN_${item.name}, MAX(${item.name}) AS MAX_${item.name}, COUNT(DISTINCT(${item.name})) AS COUNT_${item.name} "
         })
-        .mkString("SELECT ", ",\n", s" FROM ${sourceTable}")
+        .mkString("SELECT \n COUNT(*) AS total_cnt, \n", ",\n", s" FROM ${sourceTable}")
       val tstr = targetTableMeta.get.data.properties
         .map(item =>
           s"MIN(${item.name}) AS MIN_${item.name}, MAX(${item.name}) AS MAX_${item.name}, COUNT(DISTINCT(${item.name})) AS COUNT_${item.name} "
         )
-        .mkString("SELECT \n COUNT(*) AS total_cnt \n", ",\n", s" FROM ${targetTable}")
+        .mkString("SELECT \n COUNT(*) AS total_cnt, \n", ",\n", s" FROM ${targetTable}")
       ClipBoardUtil.copyToClipBoard(
         sstr + System.lineSeparator + "UNION ALL" + System
           .lineSeparator() + tstr
