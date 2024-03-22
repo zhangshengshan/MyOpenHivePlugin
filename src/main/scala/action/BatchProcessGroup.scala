@@ -101,7 +101,16 @@ class CompareTwoTables extends AnAction("表格比对") {
           sourceTableMetaMap.keys.toSeq union targetTableMetaMap.keys.toSeq
         val diff = all diff inter
         Messages.showInfoMessage(s"不一致的字段有${diff.mkString(",")}", "不一致的字段")
-        return
+
+        // 是否要对inter部分进行接下来的比较处理， 如果否则不返回
+        val result =
+          Messages.showYesNoDialog("是否继续?", "确认", Messages.getWarningIcon)
+        if (result == Messages.YES) {
+          // 用户点击了 "Yes"
+        } else if (result == Messages.NO) {
+          // 用户点击了 "No"
+          return
+        }
       }
 
       if (!sourceTableMetaMap.sameElements(targetTableMetaMap)) {
@@ -130,17 +139,30 @@ class CompareTwoTables extends AnAction("表格比对") {
         }
       }
       // here we can compare the two maps
+      val bothSids =
+        sourceTableMetaMap.keys.toSeq intersect targetTableMetaMap.keys.toSeq
+
       //进一步生成SQL来进行比较
       val sstr = sourceTableMeta.get.data.properties
+        .filter(x => bothSids.contains(x.name))
         .map(item => {
           s"MIN(${item.name}) AS MIN_${item.name}, MAX(${item.name}) AS MAX_${item.name}, COUNT(DISTINCT(${item.name})) AS COUNT_${item.name} "
         })
-        .mkString("SELECT \n COUNT(*) AS total_cnt, \n", ",\n", s" FROM ${sourceTable}")
+        .mkString(
+          "SELECT \n COUNT(*) AS total_cnt, \n",
+          ",\n",
+          s" FROM ${sourceTable}"
+        )
       val tstr = targetTableMeta.get.data.properties
+        .filter(x => bothSids.contains(x.name))
         .map(item =>
           s"MIN(${item.name}) AS MIN_${item.name}, MAX(${item.name}) AS MAX_${item.name}, COUNT(DISTINCT(${item.name})) AS COUNT_${item.name} "
         )
-        .mkString("SELECT \n COUNT(*) AS total_cnt, \n", ",\n", s" FROM ${targetTable}")
+        .mkString(
+          "SELECT \n COUNT(*) AS total_cnt, \n",
+          ",\n",
+          s" FROM ${targetTable}"
+        )
       ClipBoardUtil.copyToClipBoard(
         sstr + System.lineSeparator + "UNION ALL" + System
           .lineSeparator() + tstr
