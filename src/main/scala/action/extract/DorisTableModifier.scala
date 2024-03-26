@@ -25,14 +25,14 @@ class DorisTableModifier(tokenStream: TokenStreamRewriter)
         tokenStream.replace(
           ctx.getStart,
           ctx.getStop,
-          DorisParser.VOCABULARY.getLiteralName(DorisParser.STRING)
+          DorisParser.VOCABULARY.getSymbolicName(DorisParser.STRING)
         )
       }
       case DorisParser.VARCHAR => {
           tokenStream.replace(
             ctx.getStart,
             ctx.getStop,
-            DorisParser.VOCABULARY.getLiteralName(DorisParser.STRING)
+            DorisParser.VOCABULARY.getSymbolicName(DorisParser.STRING)
           )
         }
       case _ => // do nothing
