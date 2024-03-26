@@ -117,6 +117,7 @@
             <action id="savedorismetatoxlsx" class="action.SaveDorisMetaToXlsx" text="SaveDorisMetaToXlsx" />
             <action id="commentProcess" class="action.CommentProcess" text="commentProcess" description="commentProcess"> </action>
             <action id="comparetwotables" class="action.CompareTwoTables" text="CompareTwoTables" />
+            <action id="ddlHelper" class="action.DDLHelper" text="DDLHelper" />
         </group>
     </actions>
 </idea-plugin>

@@ -1,5 +1,6 @@
 package action
 
+import action.extract.DorisTableModifier
 import another.ClusDbTbNode
 import com.intellij.openapi.actionSystem.{
   AnAction,
@@ -19,8 +20,11 @@ import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.vfs.VirtualFile
 import com.zss.graph.{Graph, Node}
 import config.os.OsConfig
+import doris.{DorisLexer, DorisParser}
 import hierachyconfig.MyConfigurable
 import misc.ClipBoardUtil
+import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
+import zss.mysqlparser.CaseChangingCharStream
 
 import java.io.{File, FileOutputStream}
 
@@ -33,7 +37,8 @@ class BatchProcessGroup extends DefaultActionGroup {
       new DoubleQuoteWrapper,
       new CommentProcess,
       new SaveDorisMetaToXlsx,
-      new CompareTwoTables
+      new CompareTwoTables,
+      new DDLHelper
     )
   }
 }
@@ -329,4 +334,32 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
     }
   }
 
+}
+class DDLHelper extends AnAction("DDL修正") {
+
+  override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
+
+    // obtain the content of current file
+    val editor: Editor = anActionEvent.getData(CommonDataKeys.EDITOR)
+    val text: String = editor.getDocument.getText
+
+    // process the text with Doris
+
+    val lexer = new DorisLexer(
+      new CaseChangingCharStream(CharStreams.fromString(text), true)
+    )
+
+    val commonTokenStream: CommonTokenStream = new CommonTokenStream(lexer)
+    val parser: DorisParser = new DorisParser(commonTokenStream)
+
+    val context = parser.multiStatements()
+
+    val tokenStreamRewriter =
+      new org.antlr.v4.runtime.TokenStreamRewriter(commonTokenStream)
+    val visitor = new DorisTableModifier(tokenStreamRewriter )
+    visitor.visit(context)
+    val newText = tokenStreamRewriter.getText()
+    Messages.showInfoMessage(newText, "修正后的DDL")
+    ClipBoardUtil.copyToClipBoard(newText)
+  }
 }
