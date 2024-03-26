@@ -21,12 +21,20 @@ class DorisTableModifier(tokenStream: TokenStreamRewriter)
 
     ctx.primitiveColType().`type`.getType match {
       // if match VARCHAR
-      case DorisParser.VARCHAR =>
+      case DorisParser.TEXT => {
         tokenStream.replace(
           ctx.getStart,
           ctx.getStop,
-          DorisParser.STRING.toString
+          DorisParser.VOCABULARY.getLiteralName(DorisParser.STRING)
         )
+      }
+      case DorisParser.VARCHAR => {
+          tokenStream.replace(
+            ctx.getStart,
+            ctx.getStop,
+            DorisParser.VOCABULARY.getLiteralName(DorisParser.STRING)
+          )
+        }
       case _ => // do nothing
     }
     super.visitPrimitiveDataType(ctx)
