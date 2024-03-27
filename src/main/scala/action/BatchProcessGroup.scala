@@ -2,18 +2,10 @@ package action
 
 import action.extract.DorisTableModifier
 import another.ClusDbTbNode
-import com.intellij.openapi.actionSystem.{
-  AnAction,
-  AnActionEvent,
-  CommonDataKeys,
-  DefaultActionGroup
-}
+import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys, DefaultActionGroup}
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.fileChooser.{
-  FileChooserDescriptor,
-  FileChooserDialog,
-  FileChooserFactory
-}
+import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
@@ -356,10 +348,26 @@ class DDLHelper extends AnAction("DDL修正") {
 
     val tokenStreamRewriter =
       new org.antlr.v4.runtime.TokenStreamRewriter(commonTokenStream)
-    val visitor = new DorisTableModifier(tokenStreamRewriter )
+    val visitor = new DorisTableModifier(tokenStreamRewriter)
     visitor.visit(context)
     val newText = tokenStreamRewriter.getText()
     Messages.showInfoMessage(newText, "修正后的DDL")
     ClipBoardUtil.copyToClipBoard(newText)
+    // 是否要用newText去覆盖文件
+    val result =
+      Messages.showYesNoDialog("是否覆盖当前文件?", "确认", Messages.getWarningIcon)
+
+    if (result == Messages.YES) {
+      // 用户点击了 "Yes"
+      ApplicationManager.getApplication.runWriteAction(new Runnable {
+        override def run(): Unit = {
+          editor.getDocument.setText(newText)
+        }
+      })
+    } else if (result == Messages.NO) {
+      // 用户点击了 "No"
+      return
+    }
+
   }
 }
