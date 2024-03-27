@@ -14,3 +14,4 @@ LEFT_BRACKET: '[';
 RIGHT_BRACKET: ']';
 LEFT_BRACE: '{';
 RIGHT_BRACE: '}';
+SPACE              : [ \t\r\n]+     -> channel(HIDDEN);
