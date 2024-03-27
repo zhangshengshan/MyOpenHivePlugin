@@ -1,7 +1,5 @@
 lexer grammar MyDSLLexer;
 
-
-
 DB_TB : [a-zA-Z0-9_]+ '.' [a-zA-Z0-9_]+;
 JOIN: '-';
 LEFT_JOIN: '->';
