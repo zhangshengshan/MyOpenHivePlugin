@@ -11,9 +11,3 @@ relation: TB (join TB)*
         | LP relation RP ;
 
 join: JOIN | LEFT_JOIN | RIGHT_JOIN | FULL_JOIN  ;
-
-
-
-
-
-
