@@ -1,7 +1,7 @@
 lexer grammar MyDSLLexer;
 
-//TB : [a-zA-Z0-9_]+ '.' [a-zA-Z0-9_]+;
-TB : [a-zA-Z0-9_]+;
+TB : [a-zA-Z0-9_]+ '.' [a-zA-Z0-9_]+;
+//TB : [a-zA-Z0-9_]+;
 JOIN: '-';
 LEFT_JOIN: '->';
 RIGHT_JOIN: '<-';
