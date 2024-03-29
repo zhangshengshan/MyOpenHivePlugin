@@ -48,6 +48,18 @@ public class MyDSLParserBaseListener implements MyDSLParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitRelation(MyDSLParser.RelationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJoin(MyDSLParser.JoinContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJoin(MyDSLParser.JoinContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
