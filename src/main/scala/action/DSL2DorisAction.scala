@@ -1,12 +1,9 @@
 package action
 
 import antlr4.dsl.MyDSLLexer
-import com.intellij.openapi.actionSystem.{
-  AnAction,
-  AnActionEvent,
-  CommonDataKeys
-}
+import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.ui.Messages
 import com.intellij.psi.PsiFile
 import misc.TableExtractUtil.{processDorisTables, processHiveTables}
 import org.antlr.v4.runtime.CharStreams
@@ -33,6 +30,11 @@ class DSL2DorisAction extends AnAction {
     val visitor = new Dsl2SQLGerater()
 
     visitor.visit(context)
+    Messages.showMessageDialog(
+      visitor.ret,
+      "Information",
+      Messages.getInformationIcon
+    )
 
   }
 }

@@ -92,6 +92,12 @@
                 description="extractTablesAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+
+        <action id="dsl2sqlgenerator" class="action.DSL2DorisAction" text="dsl2sql"
+                description="dsl2sql">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
         <action id="processChineseAction" class="action.ProcessChineseAction" text="processChineseAction"
                 description="processChineseAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
