@@ -47,7 +47,7 @@ class Dsl2SQLGerater extends MyDSLParserBaseVisitor[String] {
         .zipAll(join, "", "")
         .flatMap(pair => List(pair._1, pair._2))
         .mkString(" ")
-      str
+      return str
 
     }
     // LP relation RP
@@ -58,7 +58,6 @@ class Dsl2SQLGerater extends MyDSLParserBaseVisitor[String] {
       return ""
     }
 
-    return "hello world!"
   }
 
   override def visitJoin(ctx: MyDSLParser.JoinContext): String = {
