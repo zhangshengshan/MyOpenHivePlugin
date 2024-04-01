@@ -11,8 +11,8 @@ class Dsl2SQLGerater extends MyDSLParserBaseVisitor[String] {
   var ret = ""
 
   override def visitRoot(ctx: MyDSLParser.RootContext): String = {
-    ret = ctx.toString()
-    visit(ctx.relation())
+    val primary_relation: String = visit(ctx.relation())
+    ret += primary_relation
     null
   }
 
@@ -31,7 +31,6 @@ class Dsl2SQLGerater extends MyDSLParserBaseVisitor[String] {
         .flatMap(pair => List(pair._1, pair._2))
         .mkString(" ")
 
-      ret = ret + combined
       return combined
     }
     // relation join relation
@@ -42,18 +41,18 @@ class Dsl2SQLGerater extends MyDSLParserBaseVisitor[String] {
         .zipAll(join, "", "")
         .flatMap(pair => List(pair._1, pair._2))
         .mkString(" ")
-      ret = ret + str
       str
 
     }
     // LP relation RP
     else if (ctx.LP() != null && ctx.RP() != null) {
       val relation = visit(ctx.relation(0))
-      ret = ret + s"($relation)"
       return s"($relation)"
     } else {
       return ""
     }
+
+    return "hello world!"
   }
 
   override def visitJoin(ctx: MyDSLParser.JoinContext): String = {
