@@ -21,10 +21,11 @@ public class MyDSLParser extends Parser {
 		RP=8, COMMA=9, DOT=10, LEFT_BRACKET=11, RIGHT_BRACKET=12, LEFT_BRACE=13, 
 		RIGHT_BRACE=14, SPACE=15;
 	public static final int
-		RULE_mutilroots = 0, RULE_root = 1, RULE_relation = 2, RULE_join = 3;
+		RULE_mutilroots = 0, RULE_root = 1, RULE_join_rel = 2, RULE_relation = 3, 
+		RULE_join = 4;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"mutilroots", "root", "relation", "join"
+			"mutilroots", "root", "join_rel", "relation", "join"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -133,32 +134,32 @@ public class MyDSLParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(8);
+			setState(10);
 			root();
-			setState(13);
+			setState(15);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,0,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(9);
+					setState(11);
 					match(SEMICOLON);
-					setState(10);
+					setState(12);
 					root();
 					}
 					} 
 				}
-				setState(15);
+				setState(17);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,0,_ctx);
 			}
-			setState(17);
+			setState(19);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==SEMICOLON) {
 				{
-				setState(16);
+				setState(18);
 				match(SEMICOLON);
 				}
 			}
@@ -178,17 +179,14 @@ public class MyDSLParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class RootContext extends ParserRuleContext {
-		public List<RelationContext> relation() {
-			return getRuleContexts(RelationContext.class);
+		public RelationContext relation() {
+			return getRuleContext(RelationContext.class,0);
 		}
-		public RelationContext relation(int i) {
-			return getRuleContext(RelationContext.class,i);
+		public List<Join_relContext> join_rel() {
+			return getRuleContexts(Join_relContext.class);
 		}
-		public List<JoinContext> join() {
-			return getRuleContexts(JoinContext.class);
-		}
-		public JoinContext join(int i) {
-			return getRuleContext(JoinContext.class,i);
+		public Join_relContext join_rel(int i) {
+			return getRuleContext(Join_relContext.class,i);
 		}
 		public RootContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -216,7 +214,7 @@ public class MyDSLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(19);
+			setState(21);
 			relation(0);
 			setState(25);
 			_errHandler.sync(this);
@@ -224,16 +222,64 @@ public class MyDSLParser extends Parser {
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 60L) != 0)) {
 				{
 				{
-				setState(20);
-				join();
-				setState(21);
-				relation(0);
+				setState(22);
+				join_rel();
 				}
 				}
 				setState(27);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class Join_relContext extends ParserRuleContext {
+		public JoinContext join() {
+			return getRuleContext(JoinContext.class,0);
+		}
+		public RelationContext relation() {
+			return getRuleContext(RelationContext.class,0);
+		}
+		public Join_relContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_join_rel; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MyDSLParserListener ) ((MyDSLParserListener)listener).enterJoin_rel(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MyDSLParserListener ) ((MyDSLParserListener)listener).exitJoin_rel(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MyDSLParserVisitor ) return ((MyDSLParserVisitor<? extends T>)visitor).visitJoin_rel(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Join_relContext join_rel() throws RecognitionException {
+		Join_relContext _localctx = new Join_relContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_join_rel);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(28);
+			join();
+			setState(29);
+			relation(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -295,34 +341,34 @@ public class MyDSLParser extends Parser {
 		int _parentState = getState();
 		RelationContext _localctx = new RelationContext(_ctx, _parentState);
 		RelationContext _prevctx = _localctx;
-		int _startState = 4;
-		enterRecursionRule(_localctx, 4, RULE_relation, _p);
+		int _startState = 6;
+		enterRecursionRule(_localctx, 6, RULE_relation, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(42);
+			setState(45);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case TB:
 				{
-				setState(29);
+				setState(32);
 				match(TB);
-				setState(35);
+				setState(38);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
 				while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						setState(30);
+						setState(33);
 						join();
-						setState(31);
+						setState(34);
 						match(TB);
 						}
 						} 
 					}
-					setState(37);
+					setState(40);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
 				}
@@ -330,11 +376,11 @@ public class MyDSLParser extends Parser {
 				break;
 			case LP:
 				{
-				setState(38);
+				setState(41);
 				match(LP);
-				setState(39);
+				setState(42);
 				relation(0);
-				setState(40);
+				setState(43);
 				match(RP);
 				}
 				break;
@@ -342,7 +388,7 @@ public class MyDSLParser extends Parser {
 				throw new NoViableAltException(this);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(50);
+			setState(53);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -353,16 +399,16 @@ public class MyDSLParser extends Parser {
 					{
 					_localctx = new RelationContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_relation);
-					setState(44);
+					setState(47);
 					if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-					setState(45);
+					setState(48);
 					join();
-					setState(46);
+					setState(49);
 					relation(3);
 					}
 					} 
 				}
-				setState(52);
+				setState(55);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
 			}
@@ -406,12 +452,12 @@ public class MyDSLParser extends Parser {
 
 	public final JoinContext join() throws RecognitionException {
 		JoinContext _localctx = new JoinContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_join);
+		enterRule(_localctx, 8, RULE_join);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(53);
+			setState(56);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 60L) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -436,7 +482,7 @@ public class MyDSLParser extends Parser {
 
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
-		case 2:
+		case 3:
 			return relation_sempred((RelationContext)_localctx, predIndex);
 		}
 		return true;
@@ -450,42 +496,43 @@ public class MyDSLParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u000f8\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
-		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0001\u0000\u0001\u0000\u0001"+
-		"\u0000\u0005\u0000\f\b\u0000\n\u0000\f\u0000\u000f\t\u0000\u0001\u0000"+
-		"\u0003\u0000\u0012\b\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
-		"\u0005\u0001\u0018\b\u0001\n\u0001\f\u0001\u001b\t\u0001\u0001\u0002\u0001"+
-		"\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0005\u0002\"\b\u0002\n\u0002"+
-		"\f\u0002%\t\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0003"+
-		"\u0002+\b\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0005"+
-		"\u00021\b\u0002\n\u0002\f\u00024\t\u0002\u0001\u0003\u0001\u0003\u0001"+
-		"\u0003\u0000\u0001\u0004\u0004\u0000\u0002\u0004\u0006\u0000\u0001\u0001"+
-		"\u0000\u0002\u00059\u0000\b\u0001\u0000\u0000\u0000\u0002\u0013\u0001"+
-		"\u0000\u0000\u0000\u0004*\u0001\u0000\u0000\u0000\u00065\u0001\u0000\u0000"+
-		"\u0000\b\r\u0003\u0002\u0001\u0000\t\n\u0005\u0006\u0000\u0000\n\f\u0003"+
-		"\u0002\u0001\u0000\u000b\t\u0001\u0000\u0000\u0000\f\u000f\u0001\u0000"+
-		"\u0000\u0000\r\u000b\u0001\u0000\u0000\u0000\r\u000e\u0001\u0000\u0000"+
-		"\u0000\u000e\u0011\u0001\u0000\u0000\u0000\u000f\r\u0001\u0000\u0000\u0000"+
-		"\u0010\u0012\u0005\u0006\u0000\u0000\u0011\u0010\u0001\u0000\u0000\u0000"+
-		"\u0011\u0012\u0001\u0000\u0000\u0000\u0012\u0001\u0001\u0000\u0000\u0000"+
-		"\u0013\u0019\u0003\u0004\u0002\u0000\u0014\u0015\u0003\u0006\u0003\u0000"+
-		"\u0015\u0016\u0003\u0004\u0002\u0000\u0016\u0018\u0001\u0000\u0000\u0000"+
-		"\u0017\u0014\u0001\u0000\u0000\u0000\u0018\u001b\u0001\u0000\u0000\u0000"+
-		"\u0019\u0017\u0001\u0000\u0000\u0000\u0019\u001a\u0001\u0000\u0000\u0000"+
-		"\u001a\u0003\u0001\u0000\u0000\u0000\u001b\u0019\u0001\u0000\u0000\u0000"+
-		"\u001c\u001d\u0006\u0002\uffff\uffff\u0000\u001d#\u0005\u0001\u0000\u0000"+
-		"\u001e\u001f\u0003\u0006\u0003\u0000\u001f \u0005\u0001\u0000\u0000 \""+
-		"\u0001\u0000\u0000\u0000!\u001e\u0001\u0000\u0000\u0000\"%\u0001\u0000"+
-		"\u0000\u0000#!\u0001\u0000\u0000\u0000#$\u0001\u0000\u0000\u0000$+\u0001"+
-		"\u0000\u0000\u0000%#\u0001\u0000\u0000\u0000&\'\u0005\u0007\u0000\u0000"+
-		"\'(\u0003\u0004\u0002\u0000()\u0005\b\u0000\u0000)+\u0001\u0000\u0000"+
-		"\u0000*\u001c\u0001\u0000\u0000\u0000*&\u0001\u0000\u0000\u0000+2\u0001"+
-		"\u0000\u0000\u0000,-\n\u0002\u0000\u0000-.\u0003\u0006\u0003\u0000./\u0003"+
-		"\u0004\u0002\u0003/1\u0001\u0000\u0000\u00000,\u0001\u0000\u0000\u0000"+
-		"14\u0001\u0000\u0000\u000020\u0001\u0000\u0000\u000023\u0001\u0000\u0000"+
-		"\u00003\u0005\u0001\u0000\u0000\u000042\u0001\u0000\u0000\u000056\u0007"+
-		"\u0000\u0000\u00006\u0007\u0001\u0000\u0000\u0000\u0006\r\u0011\u0019"+
-		"#*2";
+		"\u0004\u0001\u000f;\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0001"+
+		"\u0000\u0001\u0000\u0001\u0000\u0005\u0000\u000e\b\u0000\n\u0000\f\u0000"+
+		"\u0011\t\u0000\u0001\u0000\u0003\u0000\u0014\b\u0000\u0001\u0001\u0001"+
+		"\u0001\u0005\u0001\u0018\b\u0001\n\u0001\f\u0001\u001b\t\u0001\u0001\u0002"+
+		"\u0001\u0002\u0001\u0002\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003"+
+		"\u0001\u0003\u0005\u0003%\b\u0003\n\u0003\f\u0003(\t\u0003\u0001\u0003"+
+		"\u0001\u0003\u0001\u0003\u0001\u0003\u0003\u0003.\b\u0003\u0001\u0003"+
+		"\u0001\u0003\u0001\u0003\u0001\u0003\u0005\u00034\b\u0003\n\u0003\f\u0003"+
+		"7\t\u0003\u0001\u0004\u0001\u0004\u0001\u0004\u0000\u0001\u0006\u0005"+
+		"\u0000\u0002\u0004\u0006\b\u0000\u0001\u0001\u0000\u0002\u0005;\u0000"+
+		"\n\u0001\u0000\u0000\u0000\u0002\u0015\u0001\u0000\u0000\u0000\u0004\u001c"+
+		"\u0001\u0000\u0000\u0000\u0006-\u0001\u0000\u0000\u0000\b8\u0001\u0000"+
+		"\u0000\u0000\n\u000f\u0003\u0002\u0001\u0000\u000b\f\u0005\u0006\u0000"+
+		"\u0000\f\u000e\u0003\u0002\u0001\u0000\r\u000b\u0001\u0000\u0000\u0000"+
+		"\u000e\u0011\u0001\u0000\u0000\u0000\u000f\r\u0001\u0000\u0000\u0000\u000f"+
+		"\u0010\u0001\u0000\u0000\u0000\u0010\u0013\u0001\u0000\u0000\u0000\u0011"+
+		"\u000f\u0001\u0000\u0000\u0000\u0012\u0014\u0005\u0006\u0000\u0000\u0013"+
+		"\u0012\u0001\u0000\u0000\u0000\u0013\u0014\u0001\u0000\u0000\u0000\u0014"+
+		"\u0001\u0001\u0000\u0000\u0000\u0015\u0019\u0003\u0006\u0003\u0000\u0016"+
+		"\u0018\u0003\u0004\u0002\u0000\u0017\u0016\u0001\u0000\u0000\u0000\u0018"+
+		"\u001b\u0001\u0000\u0000\u0000\u0019\u0017\u0001\u0000\u0000\u0000\u0019"+
+		"\u001a\u0001\u0000\u0000\u0000\u001a\u0003\u0001\u0000\u0000\u0000\u001b"+
+		"\u0019\u0001\u0000\u0000\u0000\u001c\u001d\u0003\b\u0004\u0000\u001d\u001e"+
+		"\u0003\u0006\u0003\u0000\u001e\u0005\u0001\u0000\u0000\u0000\u001f \u0006"+
+		"\u0003\uffff\uffff\u0000 &\u0005\u0001\u0000\u0000!\"\u0003\b\u0004\u0000"+
+		"\"#\u0005\u0001\u0000\u0000#%\u0001\u0000\u0000\u0000$!\u0001\u0000\u0000"+
+		"\u0000%(\u0001\u0000\u0000\u0000&$\u0001\u0000\u0000\u0000&\'\u0001\u0000"+
+		"\u0000\u0000\'.\u0001\u0000\u0000\u0000(&\u0001\u0000\u0000\u0000)*\u0005"+
+		"\u0007\u0000\u0000*+\u0003\u0006\u0003\u0000+,\u0005\b\u0000\u0000,.\u0001"+
+		"\u0000\u0000\u0000-\u001f\u0001\u0000\u0000\u0000-)\u0001\u0000\u0000"+
+		"\u0000.5\u0001\u0000\u0000\u0000/0\n\u0002\u0000\u000001\u0003\b\u0004"+
+		"\u000012\u0003\u0006\u0003\u000324\u0001\u0000\u0000\u00003/\u0001\u0000"+
+		"\u0000\u000047\u0001\u0000\u0000\u000053\u0001\u0000\u0000\u000056\u0001"+
+		"\u0000\u0000\u00006\u0007\u0001\u0000\u0000\u000075\u0001\u0000\u0000"+
+		"\u000089\u0007\u0000\u0000\u00009\t\u0001\u0000\u0000\u0000\u0006\u000f"+
+		"\u0013\u0019&-5";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

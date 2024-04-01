@@ -5,7 +5,9 @@ options {
 }
 
 mutilroots: root (SEMICOLON root)* SEMICOLON? ;
-root: relation (join relation)* ;
+root: relation (join_rel)* ;
+
+join_rel: join relation ;
 relation: TB (join TB)*
         | relation join relation
         | LP relation RP ;

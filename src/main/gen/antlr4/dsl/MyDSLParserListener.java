@@ -28,6 +28,16 @@ public interface MyDSLParserListener extends ParseTreeListener {
 	 */
 	void exitRoot(MyDSLParser.RootContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MyDSLParser#join_rel}.
+	 * @param ctx the parse tree
+	 */
+	void enterJoin_rel(MyDSLParser.Join_relContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyDSLParser#join_rel}.
+	 * @param ctx the parse tree
+	 */
+	void exitJoin_rel(MyDSLParser.Join_relContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MyDSLParser#relation}.
 	 * @param ctx the parse tree
 	 */
