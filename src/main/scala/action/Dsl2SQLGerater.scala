@@ -13,12 +13,18 @@ class Dsl2SQLGerater extends MyDSLParserBaseVisitor[String] {
   override def visitRoot(ctx: MyDSLParser.RootContext): String = {
     val primary_relation: String = visit(ctx.relation())
     ret += primary_relation
+    val contexts: util.List[MyDSLParser.Join_relContext] = ctx.join_rel()
+    contexts.foreach(x => {
+      val str = visit(x)
+      str
+      ret + str
+    })
+
     null
   }
 
   override def visitJoin_rel(ctx: MyDSLParser.Join_relContext): String = {
-    println(ctx.toString())
-    ctx.join().toString() + ctx.relation().toString()
+    return ctx.join().toString() + ctx.relation().toString()
   }
 
   override def visitRelation(ctx: MyDSLParser.RelationContext): String = {
