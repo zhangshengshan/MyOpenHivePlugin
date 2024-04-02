@@ -35,7 +35,7 @@ class Dsl2SQLGerater extends MyDSLParserBaseVisitor[String] {
     val result = new StringBuilder(tb)
     // 遍历所有的 join TB
     for (i <- 1 until ctx.TB().size()) {
-      val join = ctx.join(i - 1).getText // 访问 join
+      val join = visit(ctx.join(i - 1))
       val tb = ctx.TB(i).getText // 访问 TB
       result.append(s" $join $tb") // 添加到结果字符串中
     }
@@ -58,7 +58,24 @@ class Dsl2SQLGerater extends MyDSLParserBaseVisitor[String] {
     return "(" + relationStr + ")"
   }
 
+//  join: JOIN | LEFT_JOIN | RIGHT_JOIN | FULL_JOIN  ;
   override def visitJoin(ctx: MyDSLParser.JoinContext): String = {
-    return "JOIN"
+    // 判断 join 类型，返回对应的字符串
+    val joinStr = Option(ctx.LEFT_JOIN())
+      .map(_ => "LEFT JOIN")
+      .getOrElse(
+        Option(ctx.RIGHT_JOIN())
+          .map(_ => "RIGHT JOIN")
+          .getOrElse(
+            Option(ctx.FULL_JOIN())
+              .map(_ => "FULL JOIN")
+              .getOrElse(
+                Option(ctx.JOIN())
+                  .map(_ => "JOIN")
+                  .getOrElse("")
+              )
+          )
+      )
+    joinStr
   }
 }
