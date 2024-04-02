@@ -38,15 +38,41 @@ public interface MyDSLParserListener extends ParseTreeListener {
 	 */
 	void exitJoin_rel(MyDSLParser.Join_relContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MyDSLParser#relation}.
+	 * Enter a parse tree produced by the {@code RelationJoinRelation}
+	 * labeled alternative in {@link MyDSLParser#relation}.
 	 * @param ctx the parse tree
 	 */
-	void enterRelation(MyDSLParser.RelationContext ctx);
+	void enterRelationJoinRelation(MyDSLParser.RelationJoinRelationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MyDSLParser#relation}.
+	 * Exit a parse tree produced by the {@code RelationJoinRelation}
+	 * labeled alternative in {@link MyDSLParser#relation}.
 	 * @param ctx the parse tree
 	 */
-	void exitRelation(MyDSLParser.RelationContext ctx);
+	void exitRelationJoinRelation(MyDSLParser.RelationJoinRelationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ParenRelation}
+	 * labeled alternative in {@link MyDSLParser#relation}.
+	 * @param ctx the parse tree
+	 */
+	void enterParenRelation(MyDSLParser.ParenRelationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ParenRelation}
+	 * labeled alternative in {@link MyDSLParser#relation}.
+	 * @param ctx the parse tree
+	 */
+	void exitParenRelation(MyDSLParser.ParenRelationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code TbJoinTb}
+	 * labeled alternative in {@link MyDSLParser#relation}.
+	 * @param ctx the parse tree
+	 */
+	void enterTbJoinTb(MyDSLParser.TbJoinTbContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code TbJoinTb}
+	 * labeled alternative in {@link MyDSLParser#relation}.
+	 * @param ctx the parse tree
+	 */
+	void exitTbJoinTb(MyDSLParser.TbJoinTbContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MyDSLParser#join}.
 	 * @param ctx the parse tree

@@ -295,6 +295,66 @@ public class MyDSLParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class RelationContext extends ParserRuleContext {
+		public RelationContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_relation; }
+	 
+		public RelationContext() { }
+		public void copyFrom(RelationContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class RelationJoinRelationContext extends RelationContext {
+		public List<RelationContext> relation() {
+			return getRuleContexts(RelationContext.class);
+		}
+		public RelationContext relation(int i) {
+			return getRuleContext(RelationContext.class,i);
+		}
+		public JoinContext join() {
+			return getRuleContext(JoinContext.class,0);
+		}
+		public RelationJoinRelationContext(RelationContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MyDSLParserListener ) ((MyDSLParserListener)listener).enterRelationJoinRelation(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MyDSLParserListener ) ((MyDSLParserListener)listener).exitRelationJoinRelation(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MyDSLParserVisitor ) return ((MyDSLParserVisitor<? extends T>)visitor).visitRelationJoinRelation(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ParenRelationContext extends RelationContext {
+		public TerminalNode LP() { return getToken(MyDSLParser.LP, 0); }
+		public RelationContext relation() {
+			return getRuleContext(RelationContext.class,0);
+		}
+		public TerminalNode RP() { return getToken(MyDSLParser.RP, 0); }
+		public ParenRelationContext(RelationContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MyDSLParserListener ) ((MyDSLParserListener)listener).enterParenRelation(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MyDSLParserListener ) ((MyDSLParserListener)listener).exitParenRelation(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MyDSLParserVisitor ) return ((MyDSLParserVisitor<? extends T>)visitor).visitParenRelation(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class TbJoinTbContext extends RelationContext {
 		public List<TerminalNode> TB() { return getTokens(MyDSLParser.TB); }
 		public TerminalNode TB(int i) {
 			return getToken(MyDSLParser.TB, i);
@@ -305,29 +365,18 @@ public class MyDSLParser extends Parser {
 		public JoinContext join(int i) {
 			return getRuleContext(JoinContext.class,i);
 		}
-		public TerminalNode LP() { return getToken(MyDSLParser.LP, 0); }
-		public List<RelationContext> relation() {
-			return getRuleContexts(RelationContext.class);
-		}
-		public RelationContext relation(int i) {
-			return getRuleContext(RelationContext.class,i);
-		}
-		public TerminalNode RP() { return getToken(MyDSLParser.RP, 0); }
-		public RelationContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_relation; }
+		public TbJoinTbContext(RelationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyDSLParserListener ) ((MyDSLParserListener)listener).enterRelation(this);
+			if ( listener instanceof MyDSLParserListener ) ((MyDSLParserListener)listener).enterTbJoinTb(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyDSLParserListener ) ((MyDSLParserListener)listener).exitRelation(this);
+			if ( listener instanceof MyDSLParserListener ) ((MyDSLParserListener)listener).exitTbJoinTb(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MyDSLParserVisitor ) return ((MyDSLParserVisitor<? extends T>)visitor).visitRelation(this);
+			if ( visitor instanceof MyDSLParserVisitor ) return ((MyDSLParserVisitor<? extends T>)visitor).visitTbJoinTb(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -352,6 +401,10 @@ public class MyDSLParser extends Parser {
 			switch (_input.LA(1)) {
 			case TB:
 				{
+				_localctx = new TbJoinTbContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+
 				setState(32);
 				match(TB);
 				setState(38);
@@ -376,6 +429,9 @@ public class MyDSLParser extends Parser {
 				break;
 			case LP:
 				{
+				_localctx = new ParenRelationContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(41);
 				match(LP);
 				setState(42);
@@ -397,7 +453,7 @@ public class MyDSLParser extends Parser {
 					_prevctx = _localctx;
 					{
 					{
-					_localctx = new RelationContext(_parentctx, _parentState);
+					_localctx = new RelationJoinRelationContext(new RelationContext(_parentctx, _parentState));
 					pushNewRecursionContext(_localctx, _startState, RULE_relation);
 					setState(47);
 					if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");

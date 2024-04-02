@@ -29,11 +29,26 @@ public interface MyDSLParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitJoin_rel(MyDSLParser.Join_relContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MyDSLParser#relation}.
+	 * Visit a parse tree produced by the {@code RelationJoinRelation}
+	 * labeled alternative in {@link MyDSLParser#relation}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRelation(MyDSLParser.RelationContext ctx);
+	T visitRelationJoinRelation(MyDSLParser.RelationJoinRelationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParenRelation}
+	 * labeled alternative in {@link MyDSLParser#relation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParenRelation(MyDSLParser.ParenRelationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code TbJoinTb}
+	 * labeled alternative in {@link MyDSLParser#relation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTbJoinTb(MyDSLParser.TbJoinTbContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MyDSLParser#join}.
 	 * @param ctx the parse tree

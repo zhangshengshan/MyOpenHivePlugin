@@ -53,13 +53,37 @@ public class MyDSLParserBaseListener implements MyDSLParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRelation(MyDSLParser.RelationContext ctx) { }
+	@Override public void enterRelationJoinRelation(MyDSLParser.RelationJoinRelationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRelation(MyDSLParser.RelationContext ctx) { }
+	@Override public void exitRelationJoinRelation(MyDSLParser.RelationJoinRelationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParenRelation(MyDSLParser.ParenRelationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParenRelation(MyDSLParser.ParenRelationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTbJoinTb(MyDSLParser.TbJoinTbContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTbJoinTb(MyDSLParser.TbJoinTbContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

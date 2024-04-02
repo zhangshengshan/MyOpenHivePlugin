@@ -32,37 +32,24 @@ class Dsl2SQLGerater extends MyDSLParserBaseVisitor[String] {
     return joinStr + " " + relationStr
   }
 
-  override def visitRelation(ctx: MyDSLParser.RelationContext): String = {
-    // TB (join TB)*
-    if (ctx.TB().size() > 0) {
-      val tbList = ctx.TB().asScala.map(_.getText).toList
-      val joinList = ctx.join().asScala.map(visit).toList
-      val combined = tbList
-        .zipAll(joinList, "", "")
-        .flatMap(pair => List(pair._1, pair._2))
-        .mkString(" ")
+  override def visitTbJoinTb(ctx: MyDSLParser.TbJoinTbContext): String = {
 
-      return combined
-    }
-    // relation join relation
-    else if (ctx.relation().size() > 0) {
-      val relations = ctx.relation().asScala.map(visit).toList
-      val join = ctx.join().asScala.map(visit).toList // change this line
-      val str = relations
-        .zipAll(join, "", "")
-        .flatMap(pair => List(pair._1, pair._2))
-        .mkString(" ")
-      return str
 
-    }
-    // LP relation RP
-    else if (ctx.LP() != null && ctx.RP() != null) {
-      val relation = visit(ctx.relation(0))
-      return s"($relation)"
-    } else {
-      return ""
-    }
 
+    null
+  }
+
+  override def visitRelationJoinRelation(
+      ctx: MyDSLParser.RelationJoinRelationContext
+  ): String = {
+    null
+  }
+
+  override def visitParenRelation(
+      ctx: MyDSLParser.ParenRelationContext
+  ): String = {
+    val relationStr = visit(ctx.relation())
+    return "(" + relationStr + ")"
   }
 
   override def visitJoin(ctx: MyDSLParser.JoinContext): String = {
