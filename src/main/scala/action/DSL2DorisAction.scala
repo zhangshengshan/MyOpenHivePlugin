@@ -27,7 +27,7 @@ class DSL2DorisAction extends AnAction {
     val commonTokenStream = new org.antlr.v4.runtime.CommonTokenStream(lexer)
     val parser = new antlr4.dsl.MyDSLParser(commonTokenStream)
     val context = parser.root()
-    val visitor = new Dsl2SQLGerater()
+    val visitor = new Dsl2SQLGenerateVisitor()
 
     visitor.visit(context)
     Messages.showMessageDialog(
