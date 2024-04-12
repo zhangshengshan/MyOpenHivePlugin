@@ -1,4 +1,3 @@
-// Generated from E:/¹¤×÷´æµµ/MyOpenHivePlugin/src/main/scala/antlr4/dsl/MyDSLParser.g4 by ANTLR 4.13.1
 package antlr4.dsl;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
