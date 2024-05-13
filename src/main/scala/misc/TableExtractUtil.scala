@@ -53,13 +53,22 @@ object TableExtractUtil {
     val visitor = new DorisTablesExtractor()
     visitor.visit(context)
     val plot: List[(String, Int)] = visitor.plot()
-
     if (MyConfigurable.getInstance().isDownloadAfterExtract) {}
     Messages.showInfoMessage(
       plot.map(x => x._1 + ":" + x._2).mkString("\r"),
       "Extracted Tables"
     )
-    ClipBoardUtil.copyToClipBoard(plot.mkString("\r"))
+    Messages.showYesNoDialog(
+      "Tables And Frequency Or Only Tables?",
+      "Copy to Clipboard",
+      Messages.getQuestionIcon
+    ) match {
+      case Messages.YES =>
+        ClipBoardUtil.copyToClipBoard(plot.map(x => x._1 + ":" + x._2).mkString("\r"))
+      case Messages.NO =>
+        ClipBoardUtil.copyToClipBoard(plot.map(x => x._1).mkString("\r"))
+    }
+
   }
 
   def processMySQLTables(text: String) = {

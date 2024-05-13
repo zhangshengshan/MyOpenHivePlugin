@@ -6,7 +6,7 @@ import java.util
 import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.collection.convert.ImplicitConversions.`collection AsScalaIterable`
 
-class Dsl2SQLGerater extends MyDSLParserBaseVisitor[String] {
+class Dsl2SQLGenerateVisitor extends MyDSLParserBaseVisitor[String] {
 
   var ret = ""
   override def visitRoot(ctx: MyDSLParser.RootContext): String = {
