@@ -61,7 +61,9 @@ class CommentSelectLinesToggle extends AnAction {
                     )
                   )
                   // if the line contains varchar(*) 这种模式，替换为string
-                  if (lineText.contains("varchar") || lineText.contains("text")) {
+                  if (
+                    lineText.contains("varchar") || lineText.contains("text")
+                  ) {
                     val newLineText =
                       lineText.replaceAll("varchar\\(.*\\)|text", "string")
 
@@ -73,14 +75,42 @@ class CommentSelectLinesToggle extends AnAction {
                   }
 
                 } else {
+
+                  val pattern = "^\\s*--.*".r
+
+                  /** 如果一行是以 -- 开头的，则去掉 --，否则在行首添加 --
+                    * 或者-- 前面有若干空格或者若干tab ，则去掉，否则添加 --
+                    */
                   if (
-                    document
-                      .getText(new TextRange(insertPos, insertPos + 3)) == "-- "
+                    pattern
+                      .findFirstIn(
+                        document.getText(
+                          new TextRange(
+                            document.getLineStartOffset(curLine),
+                            document.getLineEndOffset(curLine)
+                          )
+                        )
+                      )
+                      .isDefined
                   ) {
-                    document.deleteString(insertPos, insertPos + 3)
+                    val str = document.getText(
+                      new TextRange(
+                        document.getLineStartOffset(curLine),
+                        document.getLineEndOffset(curLine)
+                      )
+                    )
+                    val newStr = str.replaceAll("^\\s*--", "")
+
+                    document.replaceString(
+                      document.getLineStartOffset(curLine),
+                      document.getLineEndOffset(curLine),
+                      newStr
+                    )
+
                   } else {
                     document.insertString(insertPos, "-- ")
                   }
+
                 }
 
               }
