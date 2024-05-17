@@ -38,13 +38,12 @@ class SingleQuoteWrapper extends AnAction("单引号") {
     val str: Array[String] = clipboard
       .split("\n")
 
-    val ret = str.length match {
-      case x > 1 =>
+    val ret =
+      if (str.length >= 1)
         str
           .map(x => "'" + x.strip() + "'")
           .mkString("(", ",", ")")
-      case _ => "'" + str(0) + "'"
-    }
+      else "'" + str(0) + "'"
     Messages.showInfoMessage(ret, "剪切板内容")
     ClipBoardUtil.copyToClipBoard(ret)
   }
