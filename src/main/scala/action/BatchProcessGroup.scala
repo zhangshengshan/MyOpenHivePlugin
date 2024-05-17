@@ -39,7 +39,7 @@ class SingleQuoteWrapper extends AnAction("单引号") {
       .split("\n")
 
     val ret =
-      if (str.length >= 1)
+      if (str.length > 1)
         str
           .map(x => "'" + x.strip() + "'")
           .mkString("(", ",", ")")
