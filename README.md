@@ -85,3 +85,7 @@
 
 https://github.com/sqlparser/python_data_lineage
 https://www.gudusoft.com/automatic-lineage-analysis-for-postgres-sql-queries/?utm_source=instantSQLFormatter&utm_medium=banner&utm_campaign=sqlflow_introduce3&utm_content=IntroducePostgres
+
+
+gradle 插件在intelij中不能正常的处理Gui Designer的问题，需要进行进一步的处理。
+处理方式是将.form文件拷贝到另外一个新建工程中，然后进行生成JAVA代码，再拷贝回来，如此可以解决。
