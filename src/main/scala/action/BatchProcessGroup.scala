@@ -1,7 +1,6 @@
 package action
 
 import action.extract.DorisTableModifier
-import com.intellij.icons.AllIcons.Icons
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys, DefaultActionGroup}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
@@ -19,7 +18,6 @@ import zss.mysqlparser.CaseChangingCharStream
 
 import java.io.{File, FileOutputStream}
 import java.util
-import scala.collection.convert.ImplicitConversions.`collection AsScalaIterable`
 
 class BatchProcessGroup extends DefaultActionGroup {
 
@@ -56,7 +54,7 @@ class SingleQuoteWrapper extends AnAction("单引号") {
 class DoubleQuoteWrapper extends AnAction("双引号") {
   override def actionPerformed(e: AnActionEvent): Unit = {
     val clipboard = ClipBoardUtil.getFromClipboard
-    var params :util.List[String] = new util.ArrayList[String]()
+    var params: util.List[String] = new util.ArrayList[String]()
     try {
 
       val myDataStudio = MyDataStudio.getInstance()
@@ -75,21 +73,37 @@ class DoubleQuoteWrapper extends AnAction("双引号") {
         params = new util.ArrayList[String]()
     }
 
-
-
     import scala.collection.JavaConverters._
 
-
-    val a = Messages.showEditableChooseDialog("选择Filter字段", "字段选择（不选择表示仅生成列表）", null, params.asScala.toArray, null, null)
+    val a =
+      if (params.size == 1)
+        Messages.showEditableChooseDialog(
+          "选择Filter字段",
+          "字段选择（不选择表示仅生成列表）",
+          null,
+          params.asScala.toArray,
+          params.get(0),
+          null
+        )
+      else {
+        Messages.showEditableChooseDialog(
+          "选择Filter字段",
+          "字段选择（不选择表示仅生成列表）",
+          null,
+          params.asScala.toArray,
+          null,
+          null
+        )
+      }
 
     val str = clipboard
       .split("\n")
       .map(x => "\"" + x.strip() + "\"")
       .mkString("(", ",", ")")
 
-    val clipBoardStr = if(a != null){
+    val clipBoardStr = if (a != null) {
       a + " IN " + str
-    }else {
+    } else {
       str
     }
 
