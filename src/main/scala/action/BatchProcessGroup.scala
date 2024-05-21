@@ -1,7 +1,6 @@
 package action
 
 import action.extract.DorisTableModifier
-import another.ClusDbTbNode
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys, DefaultActionGroup}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
@@ -10,10 +9,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.vfs.VirtualFile
-import com.zss.graph.{Graph, Node}
 import config.os.OsConfig
 import doris.{DorisLexer, DorisParser}
-import hierachyconfig.MyConfigurable
 import misc.ClipBoardUtil
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 import zss.mysqlparser.CaseChangingCharStream
@@ -38,12 +35,17 @@ class BatchProcessGroup extends DefaultActionGroup {
 class SingleQuoteWrapper extends AnAction("单引号") {
   override def actionPerformed(e: AnActionEvent): Unit = {
     val clipboard = ClipBoardUtil.getFromClipboard
-    val str = clipboard
+    val str: Array[String] = clipboard
       .split("\n")
-      .map(x => "'" + x.strip() + "'")
-      .mkString("(", ",", ")")
-    Messages.showInfoMessage(str, "剪切板内容")
-    ClipBoardUtil.copyToClipBoard(str)
+
+    val ret =
+      if (str.length > 1)
+        str
+          .map(x => "'" + x.strip() + "'")
+          .mkString("(", ",", ")")
+      else "'" + str(0) + "'"
+    Messages.showInfoMessage(ret, "剪切板内容")
+    ClipBoardUtil.copyToClipBoard(ret)
   }
 }
 
@@ -180,8 +182,8 @@ class CompareTwoTables extends AnAction("表格比对") {
 }
 class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
 
-  import org.apache.poi.xssf.usermodel.XSSFWorkbook
   import org.apache.poi.ss.usermodel.{Cell, Row, Sheet, Workbook}
+  import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
   var listRowIdx = 2
 
