@@ -1,6 +1,7 @@
 package action
 
 import action.extract.DorisTableModifier
+import com.intellij.icons.AllIcons.Icons
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys, DefaultActionGroup}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
@@ -12,10 +13,13 @@ import com.intellij.openapi.vfs.VirtualFile
 import config.os.OsConfig
 import doris.{DorisLexer, DorisParser}
 import misc.ClipBoardUtil
+import mydata.studio.{DataStudioCommonParam, MyDataStudio}
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 import zss.mysqlparser.CaseChangingCharStream
 
 import java.io.{File, FileOutputStream}
+import java.util
+import scala.collection.convert.ImplicitConversions.`collection AsScalaIterable`
 
 class BatchProcessGroup extends DefaultActionGroup {
 
@@ -52,12 +56,45 @@ class SingleQuoteWrapper extends AnAction("单引号") {
 class DoubleQuoteWrapper extends AnAction("双引号") {
   override def actionPerformed(e: AnActionEvent): Unit = {
     val clipboard = ClipBoardUtil.getFromClipboard
+    var params :util.List[String] = new util.ArrayList[String]()
+    try {
+
+      val myDataStudio = MyDataStudio.getInstance()
+      // 这里我希望能够获取MyDataStudio实例中的成员该如何写 ？
+      val inputParamObj = new DataStudioCommonParam(myDataStudio)
+      params = inputParamObj.getParams
+
+    } catch {
+      case e: Throwable =>
+        e.printStackTrace()
+        Messages.showMessageDialog(
+          e.getMessage,
+          "Error",
+          Messages.getErrorIcon
+        )
+        params = new util.ArrayList[String]()
+    }
+
+
+
+    import scala.collection.JavaConverters._
+
+
+    val a = Messages.showEditableChooseDialog("选择Filter字段", "字段选择（不选择表示仅生成列表）", null, params.asScala.toArray, null, null)
+
     val str = clipboard
       .split("\n")
       .map(x => "\"" + x.strip() + "\"")
       .mkString("(", ",", ")")
-    Messages.showInfoMessage(str, "剪切板内容")
-    ClipBoardUtil.copyToClipBoard(str)
+
+    val clipBoardStr = if(a != null){
+      a + " IN " + str
+    }else {
+      str
+    }
+
+    Messages.showInfoMessage(clipBoardStr, "剪切板内容")
+    ClipBoardUtil.copyToClipBoard(clipBoardStr)
   }
 
 }

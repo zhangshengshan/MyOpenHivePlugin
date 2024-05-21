@@ -33,6 +33,9 @@ public class MyDataStudio {
     private JRadioButton tennonButton;
     private JRadioButton hierachyFieldRadioButton;
 
+
+    private static MyDataStudio instance;
+
     private String inputFile;
 
     {
@@ -140,6 +143,7 @@ public class MyDataStudio {
      * @param toolWindow
      */
     public MyDataStudio(ToolWindow toolWindow) {
+        instance = this;
         workTable.setRowSelectionAllowed(true);
         workTable.setColumnSelectionAllowed(true);
         final ExecuteButtonListener executeButtonListener = new ExecuteButtonListener(this);
@@ -150,6 +154,11 @@ public class MyDataStudio {
 
         openFileButton.addActionListener(new OpenButtonListener(this));
         clearButton.addActionListener(new ClearActionListener(this));
+    }
+
+
+    public static MyDataStudio getInstance() {
+        return instance;
     }
 
     /*
