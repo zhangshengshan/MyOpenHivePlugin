@@ -118,21 +118,20 @@ class DoubleQuoteWrapper extends AnAction("双引号") {
 
     val sqlSelectParts = ClipBoardUtil.getClipboardHistory
 
-    val sql =
-      if (sqlSelectParts.size >= 2) {
-        Messages.showEditableChooseDialog(
-          "选择需要前置的查询SELECT部分",
-          "字段选择（不选择表示仅生成列表）",
-          null,
-          sqlSelectParts.tail.toArray.map(_.split("\n").mkString("\r")),
-          null,
+    try {
+      val sql =
+        if (sqlSelectParts.size >= 2) {
+          Messages.showEditableChooseDialog(
+            "选择需要前置的查询SELECT部分",
+            "字段选择（不选择表示仅生成列表）",
+            null,
+            sqlSelectParts.tail.toArray.map(_.split("\n").mkString("\r")),
+            null,
+            null
+          )
+        } else {
           null
-        )
-      } else {
-        null
-      }
-
-    if (sql != null) {
+        }
       Messages.showInfoMessage(
         sql
           .split(System.lineSeparator())
@@ -140,12 +139,10 @@ class DoubleQuoteWrapper extends AnAction("双引号") {
           .lineSeparator() + clipBoardStr,
         "剪切板内容"
       )
-      ClipBoardUtil.copyToClipBoard(
-        System.lineSeparator() + sql + " WHERE" + System.lineSeparator() + clipBoardStr
-      )
-    } else {
-      Messages.showInfoMessage(clipBoardStr, "剪切板内容")
-      ClipBoardUtil.copyToClipBoard(clipBoardStr)
+    } catch {
+      case _ =>
+        Messages.showInfoMessage(clipBoardStr, "剪切板内容")
+        ClipBoardUtil.copyToClipBoard(clipBoardStr)
     }
 
   }
