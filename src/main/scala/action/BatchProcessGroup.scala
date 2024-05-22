@@ -135,7 +135,7 @@ class DoubleQuoteWrapper extends AnAction("双引号") {
       Messages.showInfoMessage(
         sql
           .split(System.lineSeparator())
-          .mkString(System.lineSeparator()) + " WHERE" + System
+          .mkString(System.lineSeparator()) + "WHERE" + System
           .lineSeparator() + clipBoardStr,
         "剪切板内容"
       )
