@@ -118,14 +118,19 @@ class DoubleQuoteWrapper extends AnAction("双引号") {
 
     val sqlSelectParts = ClipBoardUtil.getClipboardHistory
 
-    val sql = Messages.showEditableChooseDialog(
-      "选择需要前置的查询SELECT部分",
-      "字段选择（不选择表示仅生成列表）",
-      null,
-      sqlSelectParts.toArray.map(_.split("\n").mkString("\r")),
-      null,
-      null
-    )
+    val sql =
+      if (sqlSelectParts.size >= 2) {
+        Messages.showEditableChooseDialog(
+          "选择需要前置的查询SELECT部分",
+          "字段选择（不选择表示仅生成列表）",
+          null,
+          sqlSelectParts.tail.toArray.map(_.split("\n").mkString("\r")),
+          null,
+          null
+        )
+      } else {
+        null
+      }
 
     if (sql != null) {
       Messages.showInfoMessage(

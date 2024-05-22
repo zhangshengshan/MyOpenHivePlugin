@@ -1,5 +1,8 @@
 package misc
 
+import com.intellij.openapi.editor.EditorFactory
+import com.intellij.openapi.editor.event.{EditorFactoryEvent, EditorFactoryListener, EditorMouseAdapter, EditorMouseEvent}
+import com.intellij.openapi.ide.CopyPasteManager
 import com.intellij.openapi.ui.MessageDialogBuilder.Message
 import com.intellij.openapi.ui.Messages
 
@@ -11,18 +14,17 @@ object ClipBoardUtil {
   private val clipboardHistory: Queue[String] = Queue.empty[String]
   private val clipboard: Clipboard = Toolkit.getDefaultToolkit.getSystemClipboard
 
-  clipboard.addFlavorListener(new FlavorListener {
-    override def flavorsChanged(e: FlavorEvent): Unit = {
-      val contents: Transferable = clipboard.getContents(null)
-      Messages.showInfoMessage(contents.toString, "Flavors changed")
-      if (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-        val data = contents.getTransferData(DataFlavor.stringFlavor).asInstanceOf[String]
-        Messages.showInfoMessage(data, "Data")
-        clipboardHistory.enqueue(data)
+  private val copyPasteManager = CopyPasteManager.getInstance()
+
+  copyPasteManager.addContentChangedListener(new CopyPasteManager.ContentChangedListener {
+    override def contentChanged(oldTransferable: Transferable, newTransferable: Transferable): Unit = {
+      if (newTransferable != null && newTransferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+        val data = newTransferable.getTransferData(DataFlavor.stringFlavor).asInstanceOf[String]
+        clipboardHistory.prepend(data)
 
         // Limit the history size to 100
         if (clipboardHistory.size > 100) {
-          clipboardHistory.dequeue()
+          clipboardHistory.remove(100)
         }
       }
     }
@@ -41,6 +43,5 @@ object ClipBoardUtil {
       null
     }
   }
-
   def getClipboardHistory: List[String] = clipboardHistory.toList
 }
