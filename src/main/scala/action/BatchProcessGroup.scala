@@ -141,7 +141,7 @@ class DoubleQuoteWrapper extends AnAction("双引号") {
         "剪切板内容"
       )
       ClipBoardUtil.copyToClipBoard(
-        sql + " WHERE" + System.lineSeparator() + clipBoardStr
+        System.lineSeparator() + sql + " WHERE" + System.lineSeparator() + clipBoardStr
       )
     } else {
       Messages.showInfoMessage(clipBoardStr, "剪切板内容")
