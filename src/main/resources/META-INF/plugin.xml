@@ -4,7 +4,7 @@
     <vendor email="alphabetago@163.com" url="https://io.github.zhangshengshan">MyDataStudio</vendor>
 
     <description>
-        欢迎使用DataStudio工具， 该工具可以帮助您快速的生成hive sql语句，并进行数据分析。
+        欢迎使用DataStudio工具, Welcome to use DataStudio tool!
     </description>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
