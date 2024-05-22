@@ -1,10 +1,19 @@
 package action
 
 import action.extract.DorisTableModifier
-import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys, DefaultActionGroup}
+import com.intellij.openapi.actionSystem.{
+  AnAction,
+  AnActionEvent,
+  CommonDataKeys,
+  DefaultActionGroup
+}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
+import com.intellij.openapi.fileChooser.{
+  FileChooserDescriptor,
+  FileChooserDialog,
+  FileChooserFactory
+}
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
@@ -107,8 +116,25 @@ class DoubleQuoteWrapper extends AnAction("双引号") {
       str
     }
 
-    Messages.showInfoMessage(clipBoardStr, "剪切板内容")
-    ClipBoardUtil.copyToClipBoard(clipBoardStr)
+    val sqlSelectParts = ClipBoardUtil.getClipboardHistory
+
+    val sql = Messages.showEditableChooseDialog(
+      "选择需要前置的查询SELECT部分",
+      "字段选择（不选择表示仅生成列表）",
+      null,
+      sqlSelectParts.toArray.map(_.split("\n").mkString("\r")),
+      null,
+      null
+    )
+
+    if (sql != null) {
+      Messages.showInfoMessage(sql.split("\n").mkString("\r") + " WHERE \r" + clipBoardStr, "剪切板内容")
+      ClipBoardUtil.copyToClipBoard(sql + " WHERE \r" + clipBoardStr)
+    } else {
+      Messages.showInfoMessage(clipBoardStr, "剪切板内容")
+      ClipBoardUtil.copyToClipBoard(clipBoardStr)
+    }
+
   }
 
 }

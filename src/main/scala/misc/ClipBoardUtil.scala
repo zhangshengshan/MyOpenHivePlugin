@@ -1,25 +1,41 @@
 package misc
 
-import com.intellij.openapi.ide.CopyPasteManager
-
-import java.awt.datatransfer.{DataFlavor, Transferable}
+import java.awt.Toolkit
+import java.awt.datatransfer._
+import scala.collection.mutable.Queue
 
 object ClipBoardUtil {
+  private val clipboardHistory: Queue[String] = Queue.empty[String]
+  private val clipboard: Clipboard = Toolkit.getDefaultToolkit.getSystemClipboard
+
+  clipboard.addFlavorListener(new FlavorListener {
+    override def flavorsChanged(e: FlavorEvent): Unit = {
+      val contents = clipboard.getContents(null)
+      if (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+        val data = contents.getTransferData(DataFlavor.stringFlavor).asInstanceOf[String]
+        clipboardHistory.enqueue(data)
+
+        // Limit the history size to 100
+        if (clipboardHistory.size > 100) {
+          clipboardHistory.dequeue()
+        }
+      }
+    }
+  })
+
   def copyToClipBoard(str: String): Unit = {
-    import java.awt.Toolkit
-    import java.awt.datatransfer.{Clipboard, StringSelection}
     val selection = new StringSelection(str)
-    val clipboard: Clipboard = Toolkit.getDefaultToolkit.getSystemClipboard
     clipboard.setContents(selection, null)
   }
 
   def getFromClipboard: String = {
-    val contents = CopyPasteManager.getInstance.getContents
-    if (contents != null) try if (contents.isDataFlavorSupported(DataFlavor.stringFlavor)) return contents.getTransferData(DataFlavor.stringFlavor).asInstanceOf[String]
-    catch {
-      case e: Exception =>
-        e.printStackTrace()
+    val contents = clipboard.getContents(null)
+    if (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+      contents.getTransferData(DataFlavor.stringFlavor).asInstanceOf[String]
+    } else {
+      null
     }
-    null
   }
+
+  def getClipboardHistory: List[String] = clipboardHistory.toList
 }
