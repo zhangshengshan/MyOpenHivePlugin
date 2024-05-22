@@ -128,8 +128,16 @@ class DoubleQuoteWrapper extends AnAction("双引号") {
     )
 
     if (sql != null) {
-      Messages.showInfoMessage(sql.split("\n").mkString("\r") + " WHERE \r" + clipBoardStr, "剪切板内容")
-      ClipBoardUtil.copyToClipBoard(sql + " WHERE \r" + clipBoardStr)
+      Messages.showInfoMessage(
+        sql
+          .split(System.lineSeparator())
+          .mkString(System.lineSeparator()) + " WHERE" + System
+          .lineSeparator() + clipBoardStr,
+        "剪切板内容"
+      )
+      ClipBoardUtil.copyToClipBoard(
+        sql + " WHERE" + System.lineSeparator() + clipBoardStr
+      )
     } else {
       Messages.showInfoMessage(clipBoardStr, "剪切板内容")
       ClipBoardUtil.copyToClipBoard(clipBoardStr)

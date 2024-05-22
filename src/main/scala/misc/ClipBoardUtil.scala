@@ -1,5 +1,8 @@
 package misc
 
+import com.intellij.openapi.ui.MessageDialogBuilder.Message
+import com.intellij.openapi.ui.Messages
+
 import java.awt.Toolkit
 import java.awt.datatransfer._
 import scala.collection.mutable.Queue
@@ -10,9 +13,11 @@ object ClipBoardUtil {
 
   clipboard.addFlavorListener(new FlavorListener {
     override def flavorsChanged(e: FlavorEvent): Unit = {
-      val contents = clipboard.getContents(null)
+      val contents: Transferable = clipboard.getContents(null)
+      Messages.showInfoMessage(contents.toString, "Flavors changed")
       if (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
         val data = contents.getTransferData(DataFlavor.stringFlavor).asInstanceOf[String]
+        Messages.showInfoMessage(data, "Data")
         clipboardHistory.enqueue(data)
 
         // Limit the history size to 100
