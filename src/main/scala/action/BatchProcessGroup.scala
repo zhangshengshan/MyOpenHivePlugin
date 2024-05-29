@@ -14,7 +14,7 @@ import config.os.OsConfig
 import doris.{DorisLexer, DorisParser}
 import misc.ClipBoardUtil
 import mydata.studio.{DataStudioCommonParam, MyDataStudio}
-import myui.MyMultiChooseDIalog
+import myui.{MyMultiChoiceDialog, MyMultiChooseDIalog}
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 import zss.mysqlparser.CaseChangingCharStream
 
@@ -266,7 +266,7 @@ class CompareTwoTables extends AnAction("表格比对") {
       val scalaList: List[String] = bothSids.toList
       val javaList: java.util.List[String] = scalaList.asJava
 
-      val dialog = new MyMultiChooseDIalog(javaList)
+      val dialog = new MyMultiChoiceDialog(javaList)
       dialog.show()
 
       if (dialog.isOK) {
