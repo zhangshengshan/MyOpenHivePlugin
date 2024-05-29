@@ -53,7 +53,6 @@ public class MyMultiChoiceDialog extends DialogWrapper {
             // Filter the list based on the search field's content
             private void filter() {
                 selectedOptions.addAll(list.getSelectedValuesList());
-
                 String filterText = searchField.getText();
                 if (filterText.isEmpty()) {
                     list.setModel(new DefaultListModel<>());
@@ -76,10 +75,22 @@ public class MyMultiChoiceDialog extends DialogWrapper {
         list = new JBList<>(model);
         list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
+//        list.setCellRenderer(new DefaultListCellRenderer() {
+//            @Override
+//            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+//                Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+//                if (selectedOptions.contains(value)) {
+//                    c.setForeground(Color.RED);
+//                } else {
+//                    c.setForeground(Color.BLACK);
+//                }
+//                return c;
+//            }
+//        });
+
         // Add the search field and the list to the panel
         panel.add(searchField, BorderLayout.NORTH);
         panel.add(new JScrollPane(list), BorderLayout.CENTER);
-
         return panel;
     }
 
