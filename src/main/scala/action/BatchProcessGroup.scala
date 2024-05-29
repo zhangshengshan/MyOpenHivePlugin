@@ -284,13 +284,13 @@ class CompareTwoTables extends AnAction("表格比对") {
           .map(x => {
             s"a.${x} = b.${x}"
           })
-          .mkString("ON\n", " \nOR\n ", "")
+          .mkString("ON\n", " \nAND\n ", "")
 
         val wherePart = bothSids
           .map(x => {
             s"a.${x} != b.${x}"
           })
-          .mkString("\nWHERE\n", " \nAND\n ", "")
+          .mkString("\nWHERE\n", " \nOR\n ", "")
 
         val sstr = sourceTableMeta.get.data.properties
           .filter(x => bothSids.contains(x.name))
