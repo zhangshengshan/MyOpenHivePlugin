@@ -2,19 +2,10 @@ package action
 
 import action.customui.MultiChoiceDialog
 import action.extract.DorisTableModifier
-import com.intellij.openapi.actionSystem.{
-  AnAction,
-  AnActionEvent,
-  CommonDataKeys,
-  DefaultActionGroup
-}
+import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys, DefaultActionGroup}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.fileChooser.{
-  FileChooserDescriptor,
-  FileChooserDialog,
-  FileChooserFactory
-}
+import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
@@ -23,6 +14,7 @@ import config.os.OsConfig
 import doris.{DorisLexer, DorisParser}
 import misc.ClipBoardUtil
 import mydata.studio.{DataStudioCommonParam, MyDataStudio}
+import myui.MyMultiChooseDIalog
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 import zss.mysqlparser.CaseChangingCharStream
 
@@ -274,7 +266,7 @@ class CompareTwoTables extends AnAction("表格比对") {
       val scalaList: List[String] = bothSids.toList
       val javaList: java.util.List[String] = scalaList.asJava
 
-      val dialog = new MultiChoiceDialog(javaList)
+      val dialog = new MyMultiChooseDIalog(javaList)
       dialog.show()
 
       if (dialog.isOK) {
