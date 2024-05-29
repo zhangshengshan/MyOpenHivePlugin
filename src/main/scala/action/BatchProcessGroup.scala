@@ -260,6 +260,15 @@ class CompareTwoTables extends AnAction("表格比对") {
       // 此处想要生成两个表格不一样的行，但是不知道怎么做
       // 先选择唯一键，然后再进行比较
 
+      // 此处弹出一个对话框提示用户是否要继续
+      val ret = Messages.showYesNoDialog("是否继续?", "确认", Messages.getWarningIcon)
+      if (ret == Messages.YES) {
+        // 用户点击了 "Yes"
+      } else if (ret == Messages.NO) {
+        // 用户点击了 "No"
+        return
+      }
+
       import scala.jdk.CollectionConverters._
 
       val scalaList: List[String] = bothSids.toList
