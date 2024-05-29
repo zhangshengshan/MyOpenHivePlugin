@@ -85,6 +85,7 @@ public class MyMultiChoiceDialog extends DialogWrapper {
 
     public List<String> getSelectedOptions() {
         // Convert the Set to a List before returning
+        selectedOptions.addAll(list.getSelectedValuesList());
         return new ArrayList<>(selectedOptions);
     }
 }

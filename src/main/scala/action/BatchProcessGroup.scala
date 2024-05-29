@@ -279,7 +279,9 @@ class CompareTwoTables extends AnAction("表格比对") {
       dialog.show()
 
       if (dialog.isOK) {
-        val values: List[String] = dialog.getSelectedOptions.asScala.toList
+        val values: List[String] = dialog.getSelectedOptions.asScala.toList.distinct
+
+        Messages.showInfoMessage(values.mkString(","), "选择的字段")
 
         val OnPart: String = values
           .map(x => {
