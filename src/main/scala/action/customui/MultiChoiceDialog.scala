@@ -8,6 +8,7 @@ import java.util
 
 
 class MultiChoiceDialog(options: util.List[String]) extends DialogWrapper(true) {
+  // 在这个组件的上面添加一个Search栏，快速把相关选项筛选出来
   private var list: JBList[String] = new JBList[String](options)
   list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION)
 
