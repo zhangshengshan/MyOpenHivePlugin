@@ -1,5 +1,6 @@
 package action
 
+import action.customui.MultiChoiceDialog
 import action.extract.DorisTableModifier
 import com.intellij.openapi.actionSystem.{
   AnAction,
@@ -27,6 +28,7 @@ import zss.mysqlparser.CaseChangingCharStream
 
 import java.io.{File, FileOutputStream}
 import java.util
+import scala.collection.mutable
 
 class BatchProcessGroup extends DefaultActionGroup {
 
@@ -254,6 +256,60 @@ class CompareTwoTables extends AnAction("表格比对") {
           .lineSeparator() + tstr
       )
       Messages.showInfoMessage("已复制到剪切板", "提示")
+
+      // 此处想要生成两个表格不一样的行，但是不知道怎么做
+      // 先选择唯一键，然后再进行比较
+
+      import scala.jdk.CollectionConverters._
+
+      val scalaList: List[String] = bothSids.toList
+      val javaList: java.util.List[String] = scalaList.asJava
+
+      val dialog = new MultiChoiceDialog(javaList)
+      dialog.show()
+
+      if (dialog.isOK) {
+        val values: List[String] = dialog.getSelectedOptions.asScala.toList
+
+        val OnPart: String = values
+          .map(x => {
+            s"a.${x} = b.${x}"
+          })
+          .mkString("ON\n", " \nOR\n ", "")
+
+        val wherePart = bothSids
+          .map(x => {
+            s"a.${x} != b.${x}"
+          })
+          .mkString("\nWHERE\n", " \nAND\n ", "")
+
+        val sstr = sourceTableMeta.get.data.properties
+          .filter(x => bothSids.contains(x.name))
+          .map(item => {
+            s"${item.name} AS ${item.name}"
+          })
+          .mkString(
+            "SELECT\n",
+            ",\n",
+            s" FROM ${sourceTable}"
+          )
+        val tstr = targetTableMeta.get.data.properties
+          .filter(x => bothSids.contains(x.name))
+          .map(item => s"${item.name} AS ${item.name}")
+          .mkString(
+            "SELECT\n",
+            ",\n",
+            s" FROM ${targetTable}"
+          )
+
+        val finalStr = " SELECT * \n" +
+          s" FROM (${sstr}) AS a \n" +
+          s" JOIN (${tstr}) AS b \n" + OnPart + wherePart
+
+        Messages.showInfoMessage(finalStr, "最终得到的SQL")
+        ClipBoardUtil.copyToClipBoard(finalStr)
+
+      }
 
     } catch {
       case e: Throwable =>
