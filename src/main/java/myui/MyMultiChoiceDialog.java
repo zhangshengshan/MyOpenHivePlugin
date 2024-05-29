@@ -7,9 +7,15 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MyMultiChoiceDialog extends DialogWrapper {
+
+
+    private Set<String> selectedOptions = new HashSet<>();
     private final List<String> options;
     private JBList<String> list;
     private JTextField searchField;
@@ -46,6 +52,8 @@ public class MyMultiChoiceDialog extends DialogWrapper {
 
             // Filter the list based on the search field's content
             private void filter() {
+                selectedOptions.addAll(list.getSelectedValuesList());
+
                 String filterText = searchField.getText();
                 if (filterText.isEmpty()) {
                     list.setModel(new DefaultListModel<>());
@@ -76,6 +84,7 @@ public class MyMultiChoiceDialog extends DialogWrapper {
     }
 
     public List<String> getSelectedOptions() {
-        return list.getSelectedValuesList();
+        // Convert the Set to a List before returning
+        return new ArrayList<>(selectedOptions);
     }
 }

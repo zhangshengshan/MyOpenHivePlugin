@@ -88,4 +88,5 @@ https://www.gudusoft.com/automatic-lineage-analysis-for-postgres-sql-queries/?ut
 
 
 gradle 插件在intelij中不能正常的处理Gui Designer的问题，需要进行进一步的处理。
-处理方式是将.form文件拷贝到另外一个新建工程中，然后进行生成JAVA代码，再拷贝回来，如此可以解决。
+处理方式是将.form文件拷贝到另外一个新建工程中，然后进行生成JAVA代码，再拷贝回来，如此可以解决。 创建一个MAVEN空工程，把form 文件和对应的JAVA文件拷贝过去，
+编译， 代码虽然会报错但是setUPUI会自动生成。
