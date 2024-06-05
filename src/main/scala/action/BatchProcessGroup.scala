@@ -279,7 +279,8 @@ class CompareTwoTables extends AnAction("表格比对") {
       dialog.show()
 
       if (dialog.isOK) {
-        val values: List[String] = dialog.getSelectedOptions.asScala.toList.distinct
+        val values: List[String] =
+          dialog.getSelectedOptions.asScala.toList.distinct
 
         Messages.showInfoMessage(values.mkString(","), "选择的字段")
 
@@ -289,11 +290,15 @@ class CompareTwoTables extends AnAction("表格比对") {
           })
           .mkString("ON\n", " \nAND\n ", "")
 
-        val wherePart = bothSids
+        val wherePart = "\nWHERE\n" + bothSids
           .map(x => {
             s"a.${x} != b.${x}"
           })
-          .mkString("\nWHERE\n", " \nOR\n ", "")
+          .mkString("\n(\n", " \nOR\n ", ")") + "\n OR \n" + values
+          .map(x => {
+            s"\n a.${x} is null \nOR\n b.${x} is null"
+          })
+          .mkString("(", " OR ", ")")
 
         val sstr = sourceTableMeta.get.data.properties
           .filter(x => bothSids.contains(x.name))
