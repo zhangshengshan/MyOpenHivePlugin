@@ -50,8 +50,21 @@ object TenonStructureOp {
       initialFileName,
       null
     )
+
+    val filterName =Messages.showInputDialog(
+      project,
+      "请输入过滤字段名",
+      "过滤字段名",
+      Messages.getQuestionIcon,
+      null,
+      null
+    )
+
+    val fieldNameFilter = if( filterName == null) None else Some(filterName)
+
+
     val graph: Graph =
-      GraphBuilder.make(param, Some(genUrl), Some(config), Some(fileName))
+      GraphBuilder.make(param, Some(genUrl), Some(config), Some(fileName), fieldNameFilter)
 
     val dialog: FileChooserDialog = FileChooserFactory
       .getInstance()
