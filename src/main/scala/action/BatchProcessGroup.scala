@@ -300,6 +300,15 @@ class CompareTwoTables extends AnAction("表格比对") {
           })
           .mkString("(", " OR ", ")")
 
+        val outer = sourceTableMeta.get.data.properties
+          .filter(x => bothSids.contains(x.name))
+          .map(item => {
+            s"a.${item.name} <> b.${item.name} AS is_diff_${item.name}"
+          })
+          .mkString(
+            ",\n"
+          )
+
         val sstr = sourceTableMeta.get.data.properties
           .filter(x => bothSids.contains(x.name))
           .map(item => {
@@ -319,7 +328,7 @@ class CompareTwoTables extends AnAction("表格比对") {
             s" FROM ${targetTable}"
           )
 
-        val finalStr = " SELECT * \n" +
+        val finalStr = " SELECT \n " + outer + " \n" +
           s" FROM (${sstr}) AS a \n" +
           s" JOIN (${tstr}) AS b \n" + OnPart + wherePart
 
