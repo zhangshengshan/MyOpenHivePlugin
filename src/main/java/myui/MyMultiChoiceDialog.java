@@ -75,18 +75,18 @@ public class MyMultiChoiceDialog extends DialogWrapper {
         list = new JBList<>(model);
         list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-//        list.setCellRenderer(new DefaultListCellRenderer() {
-//            @Override
-//            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-//                Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-//                if (selectedOptions.contains(value)) {
-//                    c.setForeground(Color.RED);
-//                } else {
+        list.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (selectedOptions.contains(value)) {
+                    c.setForeground(Color.RED);
+                } else {
 //                    c.setForeground(Color.BLACK);
-//                }
-//                return c;
-//            }
-//        });
+                }
+                return c;
+            }
+        });
 
         // Add the search field and the list to the panel
         panel.add(searchField, BorderLayout.NORTH);
