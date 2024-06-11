@@ -114,7 +114,7 @@ class TransformMysqlToDorisAction extends AnAction {
             val tables = Await.result(showTablesFuture, Duration.Inf)
             tables.foreach((table: String) => {
               CacheUtil.cache.put(s"$database.$table", s"$database.$table")
-              if (table.contains(searchTableName)) {
+              if (table.contains(searchTableName) && table.contains("ods")){ // only choose the table with ods
                 dorisTableList.append(s"$database.$table")
               }
             })
