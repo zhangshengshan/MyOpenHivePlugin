@@ -1,7 +1,11 @@
 package action
 
 import cache.CacheUtil
-import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
+import com.intellij.openapi.actionSystem.{
+  AnAction,
+  AnActionEvent,
+  CommonDataKeys
+}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
@@ -85,11 +89,29 @@ class TransformMysqlToDorisAction extends AnAction {
       def chooseTargetTable(sourceTable: String): String = {
         val init = if (dorisTableList.isEmpty) return null
 
-        val msg = if (dorisTableList.size == 1) s" ONLY ONE TABLE FOUND FOR $sourceTable"
-        else s" CHOOSE THE TABLE FOR $sourceTable"
+        val msg =
+          if (dorisTableList.size == 1)
+            s" ONLY ONE TABLE FOUND FOR $sourceTable"
+          else s" CHOOSE THE TABLE FOR $sourceTable"
 
-        val icon = if (dorisTableList.size == 1) Messages.getErrorIcon
-        else Messages.getQuestionIcon
+        val icon =
+          if (dorisTableList.size == 1) Messages.getErrorIcon
+          else Messages.getQuestionIcon
+
+        // 此处需要对dorisTableList 进行排序， 如果包含ODS排在最前面，其他按照字母顺序
+        val tableToBeChooseList = dorisTableList.toArray.sortWith((x, y) => {
+          if (
+            x.toLowerCase().contains("ods") && !y.toLowerCase().contains("ods")
+          ) {
+            true
+          } else if (
+            !x.toLowerCase().contains("ods") && y.toLowerCase().contains("ods")
+          ) {
+            false
+          } else {
+            x < y
+          }
+        })
 
         val tableName = Messages.showEditableChooseDialog(
           msg,
@@ -114,7 +136,7 @@ class TransformMysqlToDorisAction extends AnAction {
             val tables = Await.result(showTablesFuture, Duration.Inf)
             tables.foreach((table: String) => {
               CacheUtil.cache.put(s"$database.$table", s"$database.$table")
-              if (table.contains(searchTableName) && table.contains("ods")){ // only choose the table with ods
+              if (table.contains(searchTableName)) { // only choose the table with ods
                 dorisTableList.append(s"$database.$table")
               }
             })
@@ -216,8 +238,8 @@ class TransformMysqlToDorisAction extends AnAction {
       "TransformMysqlToDorisAction Completed"
     )
 
-
-
-    ClipBoardUtil.copyToClipBoard(successSubstitude.mkString(System.lineSeparator()))
+    ClipBoardUtil.copyToClipBoard(
+      successSubstitude.mkString(System.lineSeparator())
+    )
   }
 }
