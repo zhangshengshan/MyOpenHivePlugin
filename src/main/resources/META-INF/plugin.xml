@@ -111,7 +111,14 @@
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt T"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+
+        <action id="CompareTwoTablesBasedOnExcel" class="action.CompareTwoTablesBasedOnExcel" text="CompareTwoTablesBasedOnExcel"
+                description="CompareTwoTablesBasedOnExcel">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
         <action id="ShowCustomDialogAction" class="action.ShowCustomDialogAction" text="customui"
+
                 description="show">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
