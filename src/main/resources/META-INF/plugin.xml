@@ -131,6 +131,7 @@
             <action id="commentProcess" class="action.CommentProcess" text="commentProcess" description="commentProcess"> </action>
             <action id="comparetwotables" class="action.CompareTwoTables" text="CompareTwoTables" />
             <action id="ddlHelper" class="action.DDLHelper" text="DDLHelper" />
+            <action id="SearchTable" class="action.SearchTable" text="SearchTable" />
         </group>
     </actions>
 </idea-plugin>

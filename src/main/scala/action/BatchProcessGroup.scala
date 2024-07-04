@@ -41,7 +41,8 @@ class BatchProcessGroup extends DefaultActionGroup {
       new CommentProcess,
       new SaveDorisMetaToXlsx,
       new CompareTwoTables,
-      new DDLHelper
+      new DDLHelper,
+      new SearchTable
     )
   }
 }
@@ -539,6 +540,39 @@ class DDLHelper extends AnAction("DDL修正") {
       // 用户点击了 "No"
       return
     }
+
+  }
+}
+class SearchTable extends AnAction("搜索表格") {
+
+  override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
+    val (clipboard, host, port, user, password, project) =
+      misc.GetConfig.getConfig(anActionEvent)
+
+    Messages.showInfoMessage(clipboard, "剪切板内容")
+    val sourceTable = clipboard.strip()
+    val sourceTableMeta = misc.DorisHttpUtil.getTableMeta(
+      user,
+      password,
+      host,
+      port,
+      sourceTable.split("\\.")(0),
+      sourceTable.split("\\.")(1)
+    )
+    val sourceTableMetaMap =
+      sourceTableMeta.get.data.properties.map(x => (x.name, x.`type`)).toMap
+
+    val searchCotent =
+      Messages.showInputDialog("请输入搜索内容", "搜索内容", Messages.getQuestionIcon)
+
+    val result =
+      "select * from \n" + sourceTable + "\nwhere\n" + sourceTableMetaMap.keys
+        .map(x => {
+          s"COALESCE(CAST(${x} AS STRING), '') like '%${searchCotent}%'"
+        })
+        .mkString("\nOR\n")
+    Messages.showInfoMessage(result, "搜索结果")
+    ClipBoardUtil.copyToClipBoard(result)
 
   }
 }
