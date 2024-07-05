@@ -33,7 +33,7 @@ import scala.collection.mutable
 
 class BatchProcessGroup extends DefaultActionGroup {
 
-  override def isPopup: Boolean = true
+//  override def isPopup: Boolean = true
   override def getChildren(e: AnActionEvent): Array[AnAction] = {
     Array(
       new SingleQuoteWrapper,
