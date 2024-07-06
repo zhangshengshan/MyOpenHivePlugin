@@ -1,20 +1,10 @@
 package action
 
-import action.customui.MultiChoiceDialog
 import action.extract.DorisTableModifier
-import com.intellij.openapi.actionSystem.{
-  AnAction,
-  AnActionEvent,
-  CommonDataKeys,
-  DefaultActionGroup
-}
+import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys, DefaultActionGroup}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.fileChooser.{
-  FileChooserDescriptor,
-  FileChooserDialog,
-  FileChooserFactory
-}
+import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
@@ -23,28 +13,33 @@ import config.os.OsConfig
 import doris.{DorisLexer, DorisParser}
 import misc.ClipBoardUtil
 import mydata.studio.{DataStudioCommonParam, MyDataStudio}
-import myui.{MyMultiChoiceDialog}
+import myui.MyMultiChoiceDialog
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 import zss.mysqlparser.CaseChangingCharStream
 
 import java.io.{File, FileOutputStream}
 import java.util
-import scala.collection.mutable
 
 class BatchProcessGroup extends DefaultActionGroup {
-
-//  override def isPopup: Boolean = true
   override def getChildren(e: AnActionEvent): Array[AnAction] = {
+    val quoteWrapperMenu =
+      new DefaultActionGroup("添加引号", true) // 第二个参数表示这是一个可以展开的菜单
+    quoteWrapperMenu.add(new SingleQuoteWrapper)
+    quoteWrapperMenu.add(new DoubleQuoteWrapper)
+    // 可以继续添加更多的子菜单项
+    val tableMetaMenu = new DefaultActionGroup("表格元数据", true)
+    tableMetaMenu.add(new SaveDorisMetaToXlsx)
+    tableMetaMenu.add(new CompareTwoTables)
+
     Array(
-      new SingleQuoteWrapper,
-      new DoubleQuoteWrapper,
+      quoteWrapperMenu, // 将子菜单添加到主菜单中
+      tableMetaMenu,
       new CommentProcess,
-      new SaveDorisMetaToXlsx,
-      new CompareTwoTables,
-      new DDLHelper,
+      new DDLFixer,
       new SearchTable
     )
   }
+
 }
 
 class SingleQuoteWrapper extends AnAction("单引号") {
@@ -499,7 +494,7 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
   }
 
 }
-class DDLHelper extends AnAction("DDL修正") {
+class DDLFixer extends AnAction("DDL修正") {
 
   override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
 
@@ -543,7 +538,7 @@ class DDLHelper extends AnAction("DDL修正") {
 
   }
 }
-class SearchTable extends AnAction("搜索表格") {
+class SearchTable extends AnAction("模糊搜索表格") {
 
   override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
     val (clipboard, host, port, user, password, project) =
