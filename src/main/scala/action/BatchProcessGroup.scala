@@ -48,12 +48,20 @@ class SingleQuoteWrapper extends AnAction("单引号") {
     val str: Array[String] = clipboard
       .split("\n")
 
+
+    val result = Messages.showYesNoDialog("是否继续?", "确认表示单引号否则是双引号", Messages.getWarningIcon)
+    val split_char = if(result == Messages.YES) {
+      "'"
+    } else {
+      "\""
+    }
+
     val ret =
       if (str.length > 1)
         str
-          .map(x => "'" + x.strip() + "'")
+          .map(x => split_char + x.strip() + split_char)
           .mkString("(", ",", ")")
-      else "'" + str(0) + "'"
+      else split_char + str(0) + split_char
     Messages.showInfoMessage(ret, "剪切板内容")
     ClipBoardUtil.copyToClipBoard(ret)
   }
