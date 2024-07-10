@@ -56,12 +56,20 @@ class SingleQuoteWrapper extends AnAction("单引号") {
       "\""
     }
 
+    val wrapper = Messages.showInputDialog("请输入包装符号", "确认是()还是[]", Messages.getQuestionIcon)
+
+    val wrapper_char = if(wrapper == Messages.YES) {
+      ("(",")")
+    } else {
+      ("[","]")
+    }
+
     val ret =
       if (str.length > 1)
         str
           .map(x => x.strip()).filter(x => x != "")
           .map(x => split_char + x.strip() + split_char)
-          .mkString("(", ",", ")")
+          .mkString( wrapper_char._1, ",", wrapper_char._2 )
       else split_char + str(0) + split_char
     Messages.showInfoMessage(ret, "剪切板内容")
     ClipBoardUtil.copyToClipBoard(ret)
