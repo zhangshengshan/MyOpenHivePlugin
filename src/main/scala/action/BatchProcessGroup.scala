@@ -59,6 +59,7 @@ class SingleQuoteWrapper extends AnAction("单引号") {
     val ret =
       if (str.length > 1)
         str
+          .map(x => x.strip()).filter(x => x != "")
           .map(x => split_char + x.strip() + split_char)
           .mkString("(", ",", ")")
       else split_char + str(0) + split_char
