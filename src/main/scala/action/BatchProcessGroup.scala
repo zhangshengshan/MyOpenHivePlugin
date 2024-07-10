@@ -599,6 +599,5 @@ class SearchTable extends AnAction("模糊搜索表格") {
         .mkString("\nOR\n")
     Messages.showInfoMessage(result, "搜索结果")
     ClipBoardUtil.copyToClipBoard(result)
-
   }
 }

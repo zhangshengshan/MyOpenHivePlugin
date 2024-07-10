@@ -56,12 +56,12 @@ object TableExtractUtil {
 
     val plot: List[(String, Int)] = visitor.plot()
 
-    val targetTables = visitor.getTargetTables().mkString("tables are:","\r", "!")
+    val targetTables =
+      visitor.getTargetTables().mkString("tables are:", "\r", "!")
     Messages.showInfoMessage(
-        targetTables,
-        "Extracted Tables"
+      targetTables,
+      "Extracted Tables"
     )
-
     if (MyConfigurable.getInstance().isDownloadAfterExtract) {}
 
     Messages.showInfoMessage(
@@ -74,26 +74,22 @@ object TableExtractUtil {
       Messages.getQuestionIcon
     ) match {
       case Messages.YES =>
-        ClipBoardUtil.copyToClipBoard(plot.map(x => x._1 + ":" + x._2).mkString("\r"))
+        ClipBoardUtil.copyToClipBoard(
+          plot.map(x => x._1 + ":" + x._2).mkString("\r")
+        )
       case Messages.NO =>
         ClipBoardUtil.copyToClipBoard(plot.map(x => x._1).mkString("\r"))
     }
-
-
 //    Save target table and dependecies into excel file
 //    val excel = new ExcelUtil()
 //    excel.saveToExcel(plot, targetTables)
 
 
-
-
-
-
-
-
-
-
-
+    val tuples = visitor.getTargetTables.flatMap(target => visitor.plot().map(x => (target, x._1)))
+    Messages.showInfoMessage(
+      tuples.map(x => x._1 + ":" + x._2).mkString("\r"),
+      "Extracted Tables"
+    )
   }
 
   def processMySQLTables(text: String) = {
