@@ -1,10 +1,19 @@
 package action
 
 import action.extract.DorisTableModifier
-import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys, DefaultActionGroup}
+import com.intellij.openapi.actionSystem.{
+  AnAction,
+  AnActionEvent,
+  CommonDataKeys,
+  DefaultActionGroup
+}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
+import com.intellij.openapi.fileChooser.{
+  FileChooserDescriptor,
+  FileChooserDialog,
+  FileChooserFactory
+}
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
@@ -48,28 +57,33 @@ class SingleQuoteWrapper extends AnAction("单引号") {
     val str: Array[String] = clipboard
       .split("\n")
 
-
-    val result = Messages.showYesNoDialog("是否继续?", "确认表示单引号否则是双引号", Messages.getWarningIcon)
-    val split_char = if(result == Messages.YES) {
+    val result = Messages.showYesNoDialog(
+      "是否继续?",
+      "确认表示单引号否则是双引号",
+      Messages.getWarningIcon
+    )
+    val split_char = if (result == Messages.YES) {
       "'"
     } else {
       "\""
     }
 
-    val wrapper = Messages.showYesNoDialog("请输入包装符号", "确认是()还是[]", Messages.getQuestionIcon)
+    val wrapper =
+      Messages.showYesNoDialog("请输入包装符号", "确认是()还是[]", Messages.getQuestionIcon)
 
-    val wrapper_char = if(wrapper == Messages.YES) {
-      ("(",")")
+    val wrapper_char = if (wrapper == Messages.YES) {
+      ("(", ")")
     } else {
-      ("[","]")
+      ("[", "]")
     }
 
     val ret =
       if (str.length > 1)
         str
-          .map(x => x.strip()).filter(x => x != "")
+          .map(x => x.strip())
+          .filter(x => x != "")
           .map(x => split_char + x.strip() + split_char)
-          .mkString( wrapper_char._1, ",", wrapper_char._2 )
+          .mkString(wrapper_char._1, ",", wrapper_char._2)
       else split_char + str(0) + split_char
     Messages.showInfoMessage(ret, "剪切板内容")
     ClipBoardUtil.copyToClipBoard(ret)
@@ -454,7 +468,7 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
 
       Messages.showInfoMessage(
         s"正在处理 $yourdb.$yourtb",
-        "正在处理 $yourdb.$yourtb"
+        s"正在处理 $yourdb.$yourtb"
       )
 
       val responseObj: Response = misc.DorisHttpUtil
