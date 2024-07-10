@@ -51,9 +51,19 @@ object TableExtractUtil {
     val parser = new DorisParser(commonTokenStream)
     val context: DorisParser.MultiStatementsContext = parser.multiStatements()
     val visitor = new DorisTablesExtractor()
+
     visitor.visit(context)
+
     val plot: List[(String, Int)] = visitor.plot()
+
+    val targetTables = visitor.getTargetTables().mkString("tables are:","\r", "!")
+    Messages.showInfoMessage(
+        targetTables,
+        "Extracted Tables"
+    )
+
     if (MyConfigurable.getInstance().isDownloadAfterExtract) {}
+
     Messages.showInfoMessage(
       plot.map(x => x._1 + ":" + x._2).mkString("\r"),
       "Extracted Tables"
@@ -68,6 +78,21 @@ object TableExtractUtil {
       case Messages.NO =>
         ClipBoardUtil.copyToClipBoard(plot.map(x => x._1).mkString("\r"))
     }
+
+
+//    Save target table and dependecies into excel file
+//    val excel = new ExcelUtil()
+//    excel.saveToExcel(plot, targetTables)
+
+
+
+
+
+
+
+
+
+
 
   }
 
