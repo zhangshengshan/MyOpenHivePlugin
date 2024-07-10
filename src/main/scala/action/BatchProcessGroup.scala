@@ -56,7 +56,7 @@ class SingleQuoteWrapper extends AnAction("单引号") {
       "\""
     }
 
-    val wrapper = Messages.showInputDialog("请输入包装符号", "确认是()还是[]", Messages.getQuestionIcon)
+    val wrapper = Messages.showYesNoDialog("请输入包装符号", "确认是()还是[]", Messages.getQuestionIcon)
 
     val wrapper_char = if(wrapper == Messages.YES) {
       ("(",")")
