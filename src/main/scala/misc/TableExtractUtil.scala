@@ -43,7 +43,10 @@ object TableExtractUtil {
     )
     ClipBoardUtil.copyToClipBoard(plot.mkString("\r"))
   }
-  def processDorisTables(text: String): Unit = {
+  def processDorisTables(
+      text: String,
+      newStyle: Option[Boolean] = None
+  ): List[(String, String)] = {
     println("SQL")
 
     // delete the line that contains "truncate"
@@ -63,46 +66,46 @@ object TableExtractUtil {
 
     visitor.visit(context)
 
-    val plot: List[(String, Int)] = visitor.plot()
-
-    val targetTables =
-      visitor.getTargetTables().mkString("tables are:", "\r", "!")
-    Messages.showInfoMessage(
-      targetTables,
-      "Extracted Tables"
-    )
-    if (MyConfigurable.getInstance().isDownloadAfterExtract) {}
-
-    Messages.showInfoMessage(
-      plot.map(x => x._1 + ":" + x._2).mkString("\r"),
-      "Extracted Tables"
-    )
-    Messages.showYesNoDialog(
-      "Tables And Frequency Or Only Tables?",
-      "Copy to Clipboard",
-      Messages.getQuestionIcon
-    ) match {
-      case Messages.YES =>
-        ClipBoardUtil.copyToClipBoard(
-          plot.map(x => x._1 + ":" + x._2).mkString("\r")
-        )
-      case Messages.NO =>
-        ClipBoardUtil.copyToClipBoard(plot.map(x => x._1).mkString("\r"))
-    }
-
-    val tuples: Set[(String, String)] =
-      visitor.getTargetTables.flatMap(target =>
-        visitor.plot().map(x => (target, x._1))
+    if (newStyle.isDefined) {
+      visitor.getDepedence
+    } else {
+      val plot: List[(String, Int)] = visitor.plot()
+      val targetTables =
+        visitor.getTargetTables().mkString("tables are:", "\r", "!")
+      Messages.showInfoMessage(
+        targetTables,
+        "Extracted Tables"
       )
-    Messages.showInfoMessage(
-      tuples.map(x => x._1 + ":" + x._2).mkString("\r"),
-      "Extracted Tables"
-    )
+      if (MyConfigurable.getInstance().isDownloadAfterExtract) {}
+      Messages.showInfoMessage(
+        plot.map(x => x._1 + ":" + x._2).mkString("\r"),
+        "Extracted Tables"
+      )
+      Messages.showYesNoDialog(
+        "Tables And Frequency Or Only Tables?",
+        "Copy to Clipboard",
+        Messages.getQuestionIcon
+      ) match {
+        case Messages.YES =>
+          ClipBoardUtil.copyToClipBoard(
+            plot.map(x => x._1 + ":" + x._2).mkString("\r")
+          )
+        case Messages.NO =>
+          ClipBoardUtil.copyToClipBoard(plot.map(x => x._1).mkString("\r"))
+      }
+      val tuples: Set[(String, String)] = visitor.getDepedence.toSet
+      Messages.showInfoMessage(
+        tuples.map(x => x._1 + ":" + x._2).mkString("\r"),
+        "Extracted Tables"
+      )
+      // TODO : 弹出对话框询问输入文件
+      saveDataToExcel(tuples)
+      null
+    }
+  }
 
-    // TODO : 弹出对话框询问输入文件
-
+  def saveDataToExcel(tuples: Set[(String, String)]): Any = {
     import javax.swing.{JFileChooser, JOptionPane}
-
     val fileChooser = new JFileChooser()
     fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY)
     val result = fileChooser.showOpenDialog(null)

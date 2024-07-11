@@ -80,11 +80,13 @@
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt P"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-        <action id="getDorisTableAction" class="action.GetDorisSchemaAction" text="getDorisTableAction" description="getDorisTableAction">
+        <action id="getDorisTableAction" class="action.GetDorisSchemaAction" text="getDorisTableAction"
+                description="getDorisTableAction">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt G"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-        <action id="transformMysqlToDoris" class="action.TransformMysqlToDorisAction" text="TranformMysqlToDoris" description="MYSQL2DORIS">
+        <action id="transformMysqlToDoris" class="action.TransformMysqlToDorisAction" text="TranformMysqlToDoris"
+                description="MYSQL2DORIS">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt h"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
@@ -112,7 +114,8 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
 
-        <action id="CompareTwoTablesBasedOnExcel" class="action.CompareTwoTablesBasedOnExcel" text="CompareTwoTablesBasedOnExcel"
+        <action id="CompareTwoTablesBasedOnExcel" class="action.CompareTwoTablesBasedOnExcel"
+                text="CompareTwoTablesBasedOnExcel"
                 description="CompareTwoTablesBasedOnExcel">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
@@ -123,15 +126,21 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
 
+        <action id="batchLinageConstrunct" class="action.BatchLinageConstrunct" text="linage"
+                description="show">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
         <group id="MyActionGroup" class="action.BatchProcessGroup" text="批量操作组" description="MyActionGroup">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <action id="singleQuoteWrapper" class="action.SingleQuoteWrapper" text="SingleQuoteWrapper" />
-            <action id="doubleQuoteWrapper" class="action.DoubleQuoteWrapper" text="DoubleQuoteWrapper" />
-            <action id="savedorismetatoxlsx" class="action.SaveDorisMetaToXlsx" text="SaveDorisMetaToXlsx" />
-            <action id="commentProcess" class="action.CommentProcess" text="commentProcess" description="commentProcess"> </action>
-            <action id="comparetwotables" class="action.CompareTwoTables" text="CompareTwoTables" />
-            <action id="ddlFixer" class="action.DDLFixer" text="DDLFixer" />
-            <action id="SearchTable" class="action.SearchTable" text="SearchTable" />
+            <action id="singleQuoteWrapper" class="action.SingleQuoteWrapper" text="SingleQuoteWrapper"/>
+            <action id="doubleQuoteWrapper" class="action.DoubleQuoteWrapper" text="DoubleQuoteWrapper"/>
+            <action id="savedorismetatoxlsx" class="action.SaveDorisMetaToXlsx" text="SaveDorisMetaToXlsx"/>
+            <action id="commentProcess" class="action.CommentProcess" text="commentProcess"
+                    description="commentProcess"></action>
+            <action id="comparetwotables" class="action.CompareTwoTables" text="CompareTwoTables"/>
+            <action id="ddlFixer" class="action.DDLFixer" text="DDLFixer"/>
+            <action id="SearchTable" class="action.SearchTable" text="SearchTable"/>
         </group>
     </actions>
 </idea-plugin>

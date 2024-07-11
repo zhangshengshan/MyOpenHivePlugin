@@ -1,6 +1,7 @@
 package misc
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import java.io.FileOutputStream
+
+import java.io.{FileInputStream, FileOutputStream}
 
 class ExcelObject {
 
@@ -31,5 +32,21 @@ class ExcelObject {
     workbook.write(outputStream)
     workbook.close()
     outputStream.close()
+  }
+
+  def readExcel(filePath: String): List[List[String]] = {
+    val inputStream = new FileInputStream(filePath)
+    val workbook = new XSSFWorkbook(inputStream)
+    val sheet = workbook.getSheetAt(0)
+    val data = for (rowIndex <- 0 until sheet.getLastRowNum) yield {
+      val row = sheet.getRow(rowIndex)
+      for (cellIndex <- 0 until row.getLastCellNum) yield {
+        val cell = row.getCell(cellIndex)
+        cell.toString
+      }
+    }
+    workbook.close()
+    inputStream.close()
+    data.map(_.toList).toList
   }
 }

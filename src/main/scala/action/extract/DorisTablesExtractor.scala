@@ -41,4 +41,8 @@ class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
   def getTargetTables(): Set[String] = {
     targetTables.toSet
   }
+
+  def getDepedence: List[(String, String)] = {
+    getTargetTables().flatMap(target => plot().map(x => (target, x._1))).toList
+  }
 }
