@@ -119,9 +119,16 @@ object TableExtractUtil {
       val list: List[List[String]] =
         tuples.toList.map(x => List(x._1, x._2)).toList
       excel.saveToExcel(list, List("target", "source"), filePath)
-      // 你可以在这里调用你的saveToExcel方法，将filePath作为文件路径参数
-    }
 
+      // 打开excel 文件
+      if (SystemInfo.isWindows) {
+        Runtime.getRuntime.exec("cmd /c start " + filePath)
+      } else if (SystemInfo.isMac) {
+        Runtime.getRuntime.exec("open " + filePath)
+      } else if (SystemInfo.isLinux) {
+        Runtime.getRuntime.exec("xdg-open " + filePath)
+      }
+    }
   }
 
   def processMySQLTables(text: String) = {
