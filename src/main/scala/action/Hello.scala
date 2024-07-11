@@ -1,6 +1,6 @@
 package action
 
-import another.{ClusDbTbNode, KVNode}
+import another.KVNode
 import com.zss.graph.{Graph, Node}
 
 object Hello {
@@ -67,8 +67,10 @@ object Hello {
     val l23 = TargetSourcePair("l3", "l2")
     val l34 = TargetSourcePair("l4", "l3")
     val l4a = TargetSourcePair("a", "l4")
+    val lgf = TargetSourcePair("g", "f")
+    val l4g = TargetSourcePair("g", "l4")
 
-    val paris = List(a, b, c, d, e, f, h, g, l1, l12, l23, l34, l4a)
+    val paris = List(a, b, c, d, e, f, h, g, l1, l12, l23, l34, l4a, lgf, l4g)
 
     val graph = new Graph("aaaaaa")
 
