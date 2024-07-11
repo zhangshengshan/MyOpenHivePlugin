@@ -10,6 +10,8 @@ class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
 
   private val targetTables: mutable.Set[String] = mutable.Set[String]()
 
+  private val aliasTables = mutable.Set[String]()
+
   override def visitInsertTable(ctx: DorisParser.InsertTableContext): String = {
     val targetTableName = ctx.multipartIdentifier().getText
     targetTables += targetTableName
@@ -25,8 +27,15 @@ class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
     }
     null
   }
+
+  override def visitAliasQuery(ctx: DorisParser.AliasQueryContext): String = {
+    val aliasTableName = ctx.identifier().getText
+    aliasTables add aliasTableName
+    super.visitAliasQuery(ctx)
+  }
+
   def plot(): List[(String, Int)] = {
-    tablesMap.toList
+    tablesMap.filter(x => !aliasTables.contains(x._1)).toList
   }
 
   def getTargetTables(): Set[String] = {
