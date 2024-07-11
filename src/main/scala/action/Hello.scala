@@ -68,7 +68,7 @@ object Hello {
     val l34 = TargetSourcePair("l4", "l3")
     val l4a = TargetSourcePair("a", "l4")
 
-    val paris = List(a, b, c, d, e, f, h, g)
+    val paris = List(a, b, c, d, e, f, h, g, l1, l12, l23, l34, l4a)
 
     val graph = new Graph("aaaaaa")
 
