@@ -62,7 +62,14 @@ class BatchLinageConstrunct extends AnAction {
       list.tail.foreach(item => {
         //  这里希望能够传递一个统一的路径和一个文件名
         val tuples: List[(String, String)] =
-          processDorisTables(item(number), Some(true))
+          try {
+            processDorisTables(item(number), Some(true))
+          } catch {
+            case e: Exception => {
+              println(e)
+              List[(String, String)]()
+            }
+          }
         mutableList ++= tuples
       })
       saveDataToExcel(mutableList.toSet)
