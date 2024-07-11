@@ -1,6 +1,6 @@
 package action
 
-import another.ClusDbTbNode
+import another.{ClusDbTbNode, KVNode}
 import com.zss.graph.{Graph, Node}
 
 object Hello {
@@ -13,7 +13,7 @@ object Hello {
       source: String,
       stack: collection.mutable.Stack[String],
       graph: Graph,
-      preNode: Option[Node[ClusDbTbNode]]
+      preNode: Option[Node[KVNode]]
   ): List[String] = {
     val listBuffer = new ListBuffer[String]
     if (stack.contains(source)) {
@@ -26,15 +26,10 @@ object Hello {
     // 将当前节点压入栈中
     stack.push(source)
 
-    val curNode: Node[ClusDbTbNode] = Node(
-      ClusDbTbNode(
-        source,
-        "",
-        "",
-        Some("https://www.baidu.com"),
-        Some(false),
-        None,
-        None
+    val curNode: Node[KVNode] = Node(
+      KVNode(
+        "table",
+        source
       )
     )
     graph.add(
