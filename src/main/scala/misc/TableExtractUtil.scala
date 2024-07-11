@@ -109,7 +109,7 @@ object TableExtractUtil {
 
     if (result == JFileChooser.APPROVE_OPTION) {
       val directory = fileChooser.getSelectedFile
-      val defaultFileName = "default.xlsx"
+      val defaultFileName = "default"
       val fileName =
         JOptionPane.showInputDialog(null, "请输入文件名", defaultFileName)
 
