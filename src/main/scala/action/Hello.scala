@@ -1,5 +1,8 @@
 package action
 
+import another.ClusDbTbNode
+import com.zss.graph.{Graph, Node}
+
 object Hello {
 
   import scala.collection.mutable.ListBuffer
@@ -8,7 +11,9 @@ object Hello {
   def findDependency(
       list: List[TargetSourcePair],
       source: String,
-      stack: collection.mutable.Stack[String]
+      stack: collection.mutable.Stack[String],
+      graph: Graph,
+      preNode: Option[Node[ClusDbTbNode]]
   ): List[String] = {
     val listBuffer = new ListBuffer[String]
     if (stack.contains(source)) {
@@ -20,10 +25,28 @@ object Hello {
 
     // 将当前节点压入栈中
     stack.push(source)
+
+    val curNode: Node[ClusDbTbNode] = Node(
+      ClusDbTbNode(
+        source,
+        "",
+        "",
+        Some("https://www.baidu.com"),
+        Some(false),
+        None,
+        None
+      )
+    )
+    graph.add(
+      curNode
+    )
+    if (preNode.isDefined) {
+      preNode.get.connectTo(curNode)
+    }
     val targets: List[String] = list.filter(_.source == source).map(_.target)
     listBuffer ++= targets
     targets.foreach(target => {
-      listBuffer ++= findDependency(list, target, stack)
+      listBuffer ++= findDependency(list, target, stack, graph, Some(curNode))
     })
 
     // 将当前节点从栈中弹出
@@ -51,7 +74,18 @@ object Hello {
     val l4a = TargetSourcePair("a", "l4")
 
     val paris = List(a, b, c, d, e, f, h, g)
-    findDependency(paris, "a", stack).toSet.foreach(println)
+
+    val graph = new Graph("aaaaaa")
+
+    findDependency(paris, "a", stack, graph, None).toSet.foreach(println)
+
+    graph.render(
+      "aaaaaa",
+      Some("/Users/zhangshengshan/Desktop/MyOpenHivePlugin"),
+      Some(true),
+      Some("/usr/local/bin/dot"),
+      None
+    )
   }
 
 }
