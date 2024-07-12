@@ -68,7 +68,7 @@ object MultiLayerLinageAnalysisUtil {
       outputDir,
       Some(true),
       Some(OsConfig.winDotPath),
-      None
+      Some(true)
     )
   }
 }
