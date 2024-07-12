@@ -6,8 +6,17 @@ import com.intellij.openapi.actionSystem.{
   CommonDataKeys
 }
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.fileChooser.{
+  FileChooserDescriptor,
+  FileChooserDialog,
+  FileChooserFactory
+}
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
+import com.intellij.openapi.util.SystemInfo
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiFile
+import config.os.OsConfig
 import misc.ExcelObject
 import misc.TableExtractUtil.{
   processDorisTables,
@@ -73,6 +82,61 @@ class BatchLinageConstrunct extends AnAction {
         mutableList ++= tuples
       })
       saveDataToExcel(mutableList.toSet)
+
+      // 在这里提示是否要进行可视化操作
+      val visualizeOrNot = Messages.showYesNoDialog(
+        "是否要进行可视化操作",
+        "可视化操作",
+        Messages.getInformationIcon
+      )
+      visualizeOrNot match {
+        case Messages.YES => {
+
+          val project: Project = editor.getProject
+          val descriptor: FileChooserDescriptor =
+            new FileChooserDescriptor(false, true, false, false, false, false)
+
+          val dialog: FileChooserDialog = FileChooserFactory
+            .getInstance()
+            .createFileChooser(descriptor, project, null)
+
+          val option: Option[VirtualFile] = dialog.choose(project).headOption
+          val outPutDir: String = {
+            if (option.isDefined) option.get.getPath
+            else if (SystemInfo.isMac) OsConfig.macOutputPath
+            else OsConfig.winOutputPath
+          }
+
+          val sourceList = mutableList.toList.map(_._2).distinct.toList
+
+          // sourceLisgt 作为筛选框选择选项
+          val source = Messages.showEditableChooseDialog(
+            "请选择一个表作为起始表",
+            "选择表",
+            Messages.getInformationIcon,
+            sourceList.toArray,
+            sourceList.head,
+            null
+          )
+
+          val fileName: String = Messages.showInputDialog(
+            project,
+            "请输入文件名",
+            "文件名",
+            Messages.getQuestionIcon,
+            source,
+            null
+          )
+
+          MultiLayerLinageAnalysisUtil.plotDependency(
+            mutableList.toList,
+            Some(outPutDir),
+            fileName,
+            source
+          )
+        }
+        case _ => {}
+      }
     }
   }
 }
