@@ -47,15 +47,17 @@ object PlotUtil {
       null
     )
 
+    // source 如果是 db.tb 这种形式取 tb
+    val tableName = source.split("\\.") match {
+      case Array(_, tb) => tb
+      case _            => source
+    }
     val fileName: String = Messages.showInputDialog(
       project,
       "请输入保存的文件名",
       "文件名",
       Messages.getQuestionIcon,
-      source.split(".") match {
-        case Array(a, b) => b
-        case _           => source
-      },
+      tableName,
       null
     )
 
