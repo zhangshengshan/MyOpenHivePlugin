@@ -12,6 +12,9 @@ class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
       : mutable.Map[String, mutable.ListBuffer[String]] =
     scala.collection.mutable.HashMap[String, mutable.ListBuffer[String]]()
 
+  private val targetTableAliasTablesFilter
+      : mutable.Map[String, mutable.ListBuffer[String]] =
+    scala.collection.mutable.HashMap[String, mutable.ListBuffer[String]]()
   private val targetTables: mutable.Set[String] = mutable.Set[String]()
 
   private val aliasTables = mutable.Set[String]()
@@ -35,8 +38,11 @@ class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
     if (curInsertTable.isDefined) {
       if (targetTableSourceTablesMap.contains(curInsertTable.get)) {
         targetTableSourceTablesMap(curInsertTable.get) += dbtb
+        targetTableAliasTablesFilter(curInsertTable.get) += dbtb
       } else {
         targetTableSourceTablesMap(curInsertTable.get) =
+          mutable.ListBuffer(dbtb)
+        targetTableAliasTablesFilter(curInsertTable.get) =
           mutable.ListBuffer(dbtb)
       }
     } else {
@@ -68,6 +74,22 @@ class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
 //  }
 
   def getDepedence: List[(String, String)] = {
-    targetTableSourceTablesMap.flatMap(x => x._2.map(y => (x._1, y))).toList
+    targetTableSourceTablesMap
+      .flatMap(x =>
+        x._2
+          .filter(item => {
+
+            if (
+              targetTableAliasTablesFilter.contains(
+                x._1
+              ) && targetTableAliasTablesFilter(x._1).contains(item)
+            )
+              true
+            else false
+
+          })
+          .map(y => (x._1, y))
+      )
+      .toList
   }
 }
