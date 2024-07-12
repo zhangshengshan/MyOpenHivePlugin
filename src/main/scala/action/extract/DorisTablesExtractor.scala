@@ -39,11 +39,8 @@ class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
     if (curInsertTable.isDefined) {
       if (targetTableSourceTablesMap.contains(curInsertTable.get)) {
         targetTableSourceTablesMap(curInsertTable.get) += dbtb
-        targetTableAliasTablesFilter(curInsertTable.get) += dbtb
       } else {
         targetTableSourceTablesMap(curInsertTable.get) =
-          mutable.ListBuffer(dbtb)
-        targetTableAliasTablesFilter(curInsertTable.get) =
           mutable.ListBuffer(dbtb)
       }
     } else {
@@ -59,6 +56,14 @@ class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
   override def visitAliasQuery(ctx: DorisParser.AliasQueryContext): String = {
     val aliasTableName = ctx.identifier().getText
     aliasTables add aliasTableName
+    if (curInsertTable.isDefined) {
+      if (targetTableAliasTablesFilter.contains(curInsertTable.get)) {
+        targetTableAliasTablesFilter(curInsertTable.get) += aliasTableName
+      } else {
+        targetTableAliasTablesFilter(curInsertTable.get) =
+          mutable.ListBuffer(aliasTableName)
+      }
+    }
     super.visitAliasQuery(ctx)
   }
 
@@ -70,12 +75,7 @@ class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
     targetTables.toSet
   }
 
-//  def getDepedence: List[(String, String)] = {
-//    getTargetTables().flatMap(target => plot().map(x => (target, x._1))).toList
-//  }
-
   def getDepedence: List[(String, String)] = {
-
     val iterable = targetTableSourceTablesMap
       .map(x => {
         val target = x._1
