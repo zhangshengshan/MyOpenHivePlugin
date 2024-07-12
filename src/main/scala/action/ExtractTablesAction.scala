@@ -1,7 +1,12 @@
 package action
 
+import action.linage.PlotUtil
 import antlr.g4.{SqlBaseLexer, SqlBaseParser}
-import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
+import com.intellij.openapi.actionSystem.{
+  AnAction,
+  AnActionEvent,
+  CommonDataKeys
+}
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.ui.Messages
 import com.intellij.psi.PsiFile
@@ -26,7 +31,8 @@ class ExtractTablesAction extends AnAction {
         processHiveTables(text)
       }
       case "SQL" => {
-        processDorisTables(text)
+        val tuples: List[(String, String)] = processDorisTables(text)
+        PlotUtil.plotAction(editor, tuples)
       }
     }
   }
