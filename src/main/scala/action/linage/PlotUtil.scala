@@ -52,7 +52,10 @@ object PlotUtil {
       "请输入保存的文件名",
       "文件名",
       Messages.getQuestionIcon,
-      source,
+      source.split(".") match {
+        case Array(a, b) => b
+        case _           => source
+      },
       null
     )
 

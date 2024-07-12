@@ -100,7 +100,7 @@ object TableExtractUtil {
       )
       // TODO : 弹出对话框询问输入文件
       saveDataToExcel(tuples)
-      tuples.toList
+      tuples.map(item => (item._2, item._1)).toList
     }
   }
 
