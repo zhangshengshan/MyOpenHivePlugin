@@ -3,6 +3,7 @@ package action.extract
 import doris.{DorisParser, DorisParserBaseVisitor}
 
 import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 
 class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
   private val tablesMap: mutable.Map[String, Int] =
@@ -74,22 +75,25 @@ class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
 //  }
 
   def getDepedence: List[(String, String)] = {
-    targetTableSourceTablesMap
-      .flatMap(x =>
-        x._2
+
+    val iterable = targetTableSourceTablesMap
+      .map(x => {
+
+        val target = x._1
+        val source = x._2.toList
+        source
           .filter(item => {
-
-            if (
-              targetTableAliasTablesFilter.contains(
-                x._1
-              ) && targetTableAliasTablesFilter(x._1).contains(item)
-            )
+            if (targetTableAliasTablesFilter(target).contains(item)) {
+              false
+            } else {
               true
-            else false
-
+            }
           })
-          .map(y => (x._1, y))
-      )
-      .toList
+          .map(i => {
+            (target, i)
+          })
+      })
+      .flatten
+    iterable.toList
   }
 }
