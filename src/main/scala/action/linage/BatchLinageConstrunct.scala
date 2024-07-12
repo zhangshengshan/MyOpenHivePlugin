@@ -1,5 +1,6 @@
-package action
+package action.linage
 
+import action.linage.PlotUtil.plotAction
 import com.intellij.openapi.actionSystem.{
   AnAction,
   AnActionEvent,
@@ -15,14 +16,12 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiFile
 import config.os.OsConfig
 import misc.ExcelObject
-import misc.TableExtractUtil.{
-  processDorisTables,
-  processHiveTables,
-  saveDataToExcel
-}
+import misc.TableExtractUtil.{processDorisTables, saveDataToExcel}
+import mydata.studio.MyDataStudio
+
+import scala.collection.mutable.ListBuffer
 
 class BatchLinageConstrunct extends AnAction {
   override def actionPerformed(event: AnActionEvent): Unit = {
@@ -91,49 +90,7 @@ class BatchLinageConstrunct extends AnAction {
       )
       visualizeOrNot match {
         case Messages.YES => {
-
-          val project: Project = editor.getProject
-          val descriptor: FileChooserDescriptor =
-            new FileChooserDescriptor(false, true, false, false, false, false)
-
-          val dialog: FileChooserDialog = FileChooserFactory
-            .getInstance()
-            .createFileChooser(descriptor, project, null)
-
-          val option: Option[VirtualFile] = dialog.choose(project).headOption
-          val outPutDir: String = {
-            if (option.isDefined) option.get.getPath
-            else if (SystemInfo.isMac) OsConfig.macOutputPath
-            else OsConfig.winOutputPath
-          }
-
-          val sourceList = mutableList.toList.map(_._2).distinct.toList
-
-          // sourceLisgt 作为筛选框选择选项
-          val source = Messages.showEditableChooseDialog(
-            "请选择一个表作为起始表",
-            "选择表",
-            Messages.getInformationIcon,
-            sourceList.toArray,
-            sourceList.head,
-            null
-          )
-
-          val fileName: String = Messages.showInputDialog(
-            project,
-            "请输入文件名",
-            "文件名",
-            Messages.getQuestionIcon,
-            source,
-            null
-          )
-
-          MultiLayerLinageAnalysisUtil.plotDependency(
-            mutableList.toList,
-            Some(outPutDir),
-            fileName,
-            source
-          )
+          plotAction(editor, mutableList.toList)
         }
         case _ => {}
       }

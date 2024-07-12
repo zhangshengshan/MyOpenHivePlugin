@@ -1,9 +1,6 @@
-package action
+package action.linage
 
 import another.KVNode
-import com.intellij.openapi.fileChooser.{FileChooserDialog, FileChooserFactory}
-import com.intellij.openapi.util.SystemInfo
-import com.intellij.openapi.vfs.VirtualFile
 import com.zss.graph.{Graph, Node}
 import config.os.OsConfig
 

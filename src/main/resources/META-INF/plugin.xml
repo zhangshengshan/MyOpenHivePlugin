@@ -126,7 +126,12 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
 
-        <action id="batchLinageConstrunct" class="action.BatchLinageConstrunct" text="linage"
+        <action id="batchLinageConstrunct" class="action.linage.BatchLinageConstrunct" text="linage"
+                description="show">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
+        <action id="plotLiangeByTableName" class="action.linage.PlotLiangeByTableName" text="PlotLiangeByTableName"
                 description="show">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
