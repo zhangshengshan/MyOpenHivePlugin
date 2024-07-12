@@ -100,7 +100,7 @@ object TableExtractUtil {
       )
       // TODO : 弹出对话框询问输入文件
       saveDataToExcel(tuples)
-      null
+      tuples.toList
     }
   }
 
