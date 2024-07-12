@@ -39,7 +39,7 @@ object PlotUtil {
 
     // sourceLisgt 作为筛选框选择选项
     val source = Messages.showEditableChooseDialog(
-      "请选择一个表作为起始表",
+      "请选择一个表格作为分析对象",
       "选择表",
       Messages.getInformationIcon,
       sourceList.toArray,
@@ -49,7 +49,7 @@ object PlotUtil {
 
     val fileName: String = Messages.showInputDialog(
       project,
-      "请输入文件名",
+      "请输入保存的文件名",
       "文件名",
       Messages.getQuestionIcon,
       source,
