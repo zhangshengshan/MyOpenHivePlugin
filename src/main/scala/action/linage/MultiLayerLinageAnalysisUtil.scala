@@ -57,9 +57,16 @@ object MultiLayerLinageAnalysisUtil {
       source: String
   ): Unit = {
     val stack = new collection.mutable.Stack[String]
-    val paris = input.map(x => TargetSourcePair(x._1, x._2))
+    val paris: List[TargetSourcePair] =
+      input.map(x => TargetSourcePair(x._1, x._2))
+    val paris_another = input.map(x => TargetSourcePair(x._2, x._1))
+
     val graph = new Graph(fileName)
+    val graph_anaother = new Graph(fileName + "_another")
     findDependency(paris, source, stack, graph, None).toSet.foreach(println)
+
+    stack.clear()
+    findDependency(paris_another, source, stack, graph, None).toSet
     graph.render(
       fileName,
       outputDir,
@@ -67,5 +74,14 @@ object MultiLayerLinageAnalysisUtil {
       Some(OsConfig.winDotPath),
       Some(true)
     )
+//    findDependency(paris_another, source, stack, graph_anaother, None).toSet
+//      .foreach(println)
+//    graph_anaother.render(
+//      fileName + "_another",
+//      outputDir,
+//      Some(true),
+//      Some(OsConfig.winDotPath),
+//      Some(true)
+//    )
   }
 }

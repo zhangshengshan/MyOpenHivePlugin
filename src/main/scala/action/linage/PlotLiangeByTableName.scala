@@ -31,6 +31,15 @@ class PlotLiangeByTableName extends AnAction {
   override def actionPerformed(event: AnActionEvent): Unit = {
     val editor = event.getData(CommonDataKeys.EDITOR)
 
+    val upLinageOrDownLinage = Messages.showYesNoDialog(
+      "向上还是向下?",
+      "Plot Linage By Table Name",
+      Messages.getQuestionIcon
+    ) match {
+      case Messages.YES => true
+      case _            => false
+    }
+
     // 在这里选择一个Excel文件
     Messages.showYesNoDialog(
       "使用上次的缓存吗?",
@@ -68,7 +77,9 @@ class PlotLiangeByTableName extends AnAction {
             metaData.clear()
             metaData.appendAll(meta)
           }
-          plotAction(editor, meta)
+
+          plotAction(editor, metaData.toList)
+
         }
     }
   }
