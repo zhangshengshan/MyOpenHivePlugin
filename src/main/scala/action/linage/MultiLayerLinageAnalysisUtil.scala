@@ -29,7 +29,7 @@ object MultiLayerLinageAnalysisUtil {
 
     val curNode: Node[KVNode] = Node(
       KVNode(
-        "table",
+        "库表名",
         source
       )
     )
