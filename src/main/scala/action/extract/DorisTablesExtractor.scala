@@ -82,7 +82,9 @@ class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
         val source = x._2.toList
         source
           .filter(item => {
-            !targetTableAliasTablesFilter(target).contains(item)
+            !targetTableAliasTablesFilter.contains(
+              target
+            ) || !targetTableAliasTablesFilter(target).contains(item)
           })
           .map(i => {
             (target, i)

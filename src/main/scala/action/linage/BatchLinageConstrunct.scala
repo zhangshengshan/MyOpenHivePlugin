@@ -71,10 +71,13 @@ class BatchLinageConstrunct extends AnAction {
         //  这里希望能够传递一个统一的路径和一个文件名
         val tuples: List[(String, String)] =
           try {
-            processDorisTables(item(number), Some(true))
+            processDorisTables(
+              item(number).replaceAll("#\\{.*?\\}", "\"\""),
+              Some(true)
+            )
           } catch {
             case e: Exception => {
-              println(e)
+              println(e, item(number))
               List[(String, String)]()
             }
           }
