@@ -98,14 +98,5 @@ object MultiLayerLinageAnalysisUtil {
       Some(OsConfig.winDotPath),
       Some(true)
     )
-//    findDependency(paris_another, source, stack, graph_anaother, None).toSet
-//      .foreach(println)
-//    graph_anaother.render(
-//      fileName + "_another",
-//      outputDir,
-//      Some(true),
-//      Some(OsConfig.winDotPath),
-//      Some(true)
-//    )
   }
 }
