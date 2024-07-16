@@ -18,7 +18,9 @@ class PlotLiangeByTableName extends AnAction {
     // 在这里选择一个Excel文件
     Messages.showYesNoDialog(
       "使用上次的缓存吗?",
-      "Plot Linage By Table Name",
+      "绘画单表血缘",
+      "使用上次的缓存",
+      "重新读入元数据文件",
       Messages.getQuestionIcon
     ) match {
       case Messages.YES =>
