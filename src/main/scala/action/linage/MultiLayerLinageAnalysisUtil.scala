@@ -3,6 +3,9 @@ package action.linage
 import com.zss.graph.const.{Color, NodeStyle}
 import com.zss.graph.{Graph, Node, NodeElem}
 import config.os.OsConfig
+import hierachyconfig.MyConfigurable
+import openbrowser.HierachyConfigStrategy
+import pureconfig.configurable
 
 object MultiLayerLinageAnalysisUtil {
 
@@ -28,13 +31,16 @@ object MultiLayerLinageAnalysisUtil {
     // 将当前节点压入栈中
     stack.push(source)
 
+    val config = HierachyConfigStrategy.getColorConfig
+
+
     val node = if (arrowDir.isDefined && arrowDir.get && preNode.nonEmpty) {
       new MyKVNode(
         "库表名",
         source
       ).asInstanceOf[NodeElem]
         .setStyle(NodeStyle.FILLED)
-        .setColor(Color("lightblue"))
+        .setColor(Color(config.getOrElse("bgcolor1", "lightyellow")))
         .asInstanceOf[MyKVNode] // TODO: 需要根据source的type来设置颜色
     } else if (arrowDir.isDefined && !arrowDir.get && preNode.nonEmpty) {
       new MyKVNode(
@@ -42,7 +48,7 @@ object MultiLayerLinageAnalysisUtil {
         source
       ).asInstanceOf[NodeElem]
         .setStyle(NodeStyle.FILLED)
-        .setColor(Color("lightyellow"))
+        .setColor(Color(config.getOrElse("bgcolor2", "lightgreen")))
         .asInstanceOf[MyKVNode] // TODO: 需要根据source的type来设置颜色
     } else {
       new MyKVNode(
