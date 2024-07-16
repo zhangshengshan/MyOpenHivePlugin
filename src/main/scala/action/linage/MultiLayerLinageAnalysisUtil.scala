@@ -14,7 +14,8 @@ object MultiLayerLinageAnalysisUtil {
       source: String,
       stack: collection.mutable.Stack[String],
       graph: Graph,
-      preNode: Option[Node[KVNode]]
+      preNode: Option[Node[KVNode]],
+      arrowDir: Option[Boolean] = Some(true)
   ): List[String] = {
     val listBuffer = new ListBuffer[String]
     if (stack.contains(source)) {
@@ -37,12 +38,34 @@ object MultiLayerLinageAnalysisUtil {
       curNode
     )
     if (preNode.isDefined) {
-      preNode.get.connectTo(curNode)
+      if (arrowDir.isDefined && arrowDir.get)
+        preNode.get.connectTo(curNode)
+      else
+        curNode.connectTo(preNode.get)
     }
     val targets: List[String] = list.filter(_.source == source).map(_.target)
     listBuffer ++= targets
     targets.foreach(target => {
-      listBuffer ++= findDependency(list, target, stack, graph, Some(curNode))
+      arrowDir match {
+        case Some(true) =>
+          listBuffer ++= findDependency(
+            list,
+            target,
+            stack,
+            graph,
+            Some(curNode),
+            Some(true)
+          )
+        case _ =>
+          listBuffer ++= findDependency(
+            list,
+            target,
+            stack,
+            graph,
+            Some(curNode),
+            Some(false)
+          )
+      }
     })
 
     // 将当前节点从栈中弹出
@@ -63,10 +86,11 @@ object MultiLayerLinageAnalysisUtil {
 
     val graph = new Graph(fileName)
     val graph_anaother = new Graph(fileName + "_another")
-    findDependency(paris, source, stack, graph, None).toSet.foreach(println)
+    findDependency(paris, source, stack, graph, None, Some(true)).toSet
+      .foreach(println)
 
     stack.clear()
-    findDependency(paris_another, source, stack, graph, None).toSet
+    findDependency(paris_another, source, stack, graph, None, Some(false)).toSet
     graph.render(
       fileName,
       outputDir,
