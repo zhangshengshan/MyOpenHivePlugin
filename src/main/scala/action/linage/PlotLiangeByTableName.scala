@@ -1,25 +1,9 @@
 package action.linage
 
 import action.linage.PlotUtil.plotAction
-import com.intellij.openapi.actionSystem.{
-  AnAction,
-  AnActionEvent,
-  CommonDataKeys
-}
-import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.fileChooser.{
-  FileChooserDescriptor,
-  FileChooserDialog,
-  FileChooserFactory
-}
-import com.intellij.openapi.project.Project
+import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.ui.Messages
-import com.intellij.openapi.util.SystemInfo
-import com.intellij.openapi.vfs.VirtualFile
-import config.os.OsConfig
 import misc.ExcelObject
-import misc.TableExtractUtil.{processDorisTables, saveDataToExcel}
-import mydata.studio.MyDataStudio
 
 import scala.collection.mutable.ListBuffer
 
@@ -30,15 +14,6 @@ class PlotLiangeByTableName extends AnAction {
 
   override def actionPerformed(event: AnActionEvent): Unit = {
     val editor = event.getData(CommonDataKeys.EDITOR)
-
-    val upLinageOrDownLinage = Messages.showYesNoDialog(
-      "向上还是向下?",
-      "Plot Linage By Table Name",
-      Messages.getQuestionIcon
-    ) match {
-      case Messages.YES => true
-      case _            => false
-    }
 
     // 在这里选择一个Excel文件
     Messages.showYesNoDialog(
