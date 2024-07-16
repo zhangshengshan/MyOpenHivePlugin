@@ -16,48 +16,58 @@ class PlotLiangeByTableName extends AnAction {
     val editor = event.getData(CommonDataKeys.EDITOR)
 
     // 在这里选择一个Excel文件
-    Messages.showYesNoDialog(
-      "使用上次的缓存吗?",
-      "绘画单表血缘",
-      "使用上次的缓存",
-      "重新读入元数据文件",
-      Messages.getQuestionIcon
-    ) match {
-      case Messages.YES =>
-        if (metaData.isEmpty) {
+
+    def reinputMetaAndPlot(): Unit = {
+      import javax.swing.JFileChooser
+      import javax.swing.filechooser.FileNameExtensionFilter
+
+      val fileChooser = new JFileChooser()
+      fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY)
+      fileChooser.setFileFilter(
+        new FileNameExtensionFilter("Excel Files", "xls", "xlsx")
+      )
+
+      val result = fileChooser.showOpenDialog(null)
+      if (result == JFileChooser.APPROVE_OPTION) {
+        val file = fileChooser.getSelectedFile
+        val filePath = file.getAbsolutePath
+        // filePath是用户选择的Excel文件的完整路径
+        // 你可以在这里处理这个文件
+        val excel = new ExcelObject
+        val list: List[List[String]] = excel.readExcel(filePath)
+        val meta = list.tail.map(item => (item(0), item(1)))
+        if (meta.isEmpty) {
           Messages.showInfoMessage("No Data Found!", "Information")
         } else {
-          plotAction(editor, metaData.toList)
+          metaData.clear()
+          metaData.appendAll(meta)
         }
-      case _ =>
-        import javax.swing.JFileChooser
-        import javax.swing.filechooser.FileNameExtensionFilter
+        plotAction(editor, metaData.toList)
+      }
+    }
 
-        val fileChooser = new JFileChooser()
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY)
-        fileChooser.setFileFilter(
-          new FileNameExtensionFilter("Excel Files", "xls", "xlsx")
+    val choice =
+      (
+        metaData.isEmpty,
+        Messages.showYesNoDialog(
+          "使用上次的缓存吗?",
+          "绘画单表血缘",
+          "YES使用上次的缓存",
+          "NO重新读入元数据文件",
+          Messages.getQuestionIcon
         )
+      )
 
-        val result = fileChooser.showOpenDialog(null)
-        if (result == JFileChooser.APPROVE_OPTION) {
-          val file = fileChooser.getSelectedFile
-          val filePath = file.getAbsolutePath
-          // filePath是用户选择的Excel文件的完整路径
-          // 你可以在这里处理这个文件
-          val excel = new ExcelObject
-          val list: List[List[String]] = excel.readExcel(filePath)
-          val meta = list.tail.map(item => (item(0), item(1)))
-          if (meta.isEmpty) {
-            Messages.showInfoMessage("No Data Found!", "Information")
-          } else {
-            metaData.clear()
-            metaData.appendAll(meta)
-          }
-
-          plotAction(editor, metaData.toList)
-
-        }
+    choice match {
+      case (false, Messages.YES) =>
+        plotAction(editor, metaData.toList)
+      case (false, Messages.NO) =>
+        Messages.showInfoMessage("元数据已经存在，仍需要需要重新输入元数据", "Information")
+        reinputMetaAndPlot()
+      case (true, _) =>
+        Messages.showInfoMessage("元数据没有发现，需要重新输入元数据", "Information")
+        reinputMetaAndPlot()
+      case _ => Messages.showInfoMessage("未知错误", "Information")
     }
   }
 }

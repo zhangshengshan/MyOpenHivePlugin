@@ -1,19 +1,12 @@
 package action.linage
 
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.fileChooser.{
-  FileChooserDescriptor,
-  FileChooserDialog,
-  FileChooserFactory
-}
+import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.vfs.VirtualFile
 import config.os.OsConfig
-import mydata.studio.MyDataStudio
-
-import scala.collection.mutable.ListBuffer
 
 object PlotUtil {
   def plotAction(
@@ -37,15 +30,17 @@ object PlotUtil {
       else OsConfig.winOutputPath
     }
 
-    // sourceLisgt 作为筛选框选择选项
-    val source = Messages.showEditableChooseDialog(
-      "请选择一个表格作为分析对象",
-      "选择表",
-      Messages.getInformationIcon,
-      sourceList.toArray,
-      sourceList.head,
-      null
-    )
+    // sourceList 作为筛选框选择选项
+    val source = Messages
+      .showEditableChooseDialog(
+        "请选择一个表格作为分析对象",
+        "选择表",
+        Messages.getInformationIcon,
+        sourceList.toArray,
+        sourceList.head,
+        null
+      )
+      .strip()
 
     // source 如果是 db.tb 这种形式取 tb
     val tableName = source.split("\\.") match {
@@ -62,7 +57,7 @@ object PlotUtil {
     )
 
     MultiLayerLinageAnalysisUtil.plotDependency(
-      mutableList.toList,
+      mutableList,
       Some(outPutDir),
       fileName,
       source
