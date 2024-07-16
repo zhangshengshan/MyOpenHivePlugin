@@ -85,10 +85,8 @@ object MultiLayerLinageAnalysisUtil {
     val paris_another = input.map(x => TargetSourcePair(x._2, x._1))
 
     val graph = new Graph(fileName)
-    val graph_anaother = new Graph(fileName + "_another")
     findDependency(paris, source, stack, graph, None, Some(true)).toSet
       .foreach(println)
-
     stack.clear()
     findDependency(paris_another, source, stack, graph, None, Some(false)).toSet
     graph.render(
