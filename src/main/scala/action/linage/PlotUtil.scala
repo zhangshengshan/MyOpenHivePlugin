@@ -31,18 +31,6 @@ object PlotUtil {
       else OsConfig.winOutputPath
     }
 
-    // sourceList 作为筛选框选择选项
-//    val source = Messages
-//      .showEditableChooseDialog(
-//        "请选择一个表格作为分析对象",
-//        "选择表",
-//        Messages.getInformationIcon,
-//        sourceList.toArray,
-//        sourceList.head,
-//        null
-//      )
-//      .strip()
-
     import scala.jdk.CollectionConverters._
 
     val scalaList: List[String] = sourceList

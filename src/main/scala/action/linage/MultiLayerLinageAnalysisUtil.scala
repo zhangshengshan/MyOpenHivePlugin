@@ -1,7 +1,7 @@
 package action.linage
 
-import another.KVNode
-import com.zss.graph.{Graph, Node}
+import com.zss.graph.const.{Color, NodeStyle}
+import com.zss.graph.{Graph, Node, NodeElem}
 import config.os.OsConfig
 
 object MultiLayerLinageAnalysisUtil {
@@ -14,7 +14,7 @@ object MultiLayerLinageAnalysisUtil {
       source: String,
       stack: collection.mutable.Stack[String],
       graph: Graph,
-      preNode: Option[Node[KVNode]],
+      preNode: Option[Node[MyKVNode]],
       arrowDir: Option[Boolean] = Some(true)
   ): List[String] = {
     val listBuffer = new ListBuffer[String]
@@ -28,12 +28,33 @@ object MultiLayerLinageAnalysisUtil {
     // 将当前节点压入栈中
     stack.push(source)
 
-    val curNode: Node[KVNode] = Node(
-      KVNode(
+    val node = if (arrowDir.isDefined && arrowDir.get && preNode.nonEmpty) {
+      new MyKVNode(
+        "库表名",
+        source
+      ).asInstanceOf[NodeElem]
+        .setStyle(NodeStyle.FILLED)
+        .setColor(Color("lightblue"))
+        .asInstanceOf[MyKVNode] // TODO: 需要根据source的type来设置颜色
+    } else if (arrowDir.isDefined && !arrowDir.get && preNode.nonEmpty) {
+      new MyKVNode(
+        "库表名",
+        source
+      ).asInstanceOf[NodeElem]
+        .setStyle(NodeStyle.FILLED)
+        .setColor(Color("lightyellow"))
+        .asInstanceOf[MyKVNode] // TODO: 需要根据source的type来设置颜色
+    } else {
+      new MyKVNode(
         "库表名",
         source
       )
+    }
+
+    val curNode: Node[MyKVNode] = Node(
+      node
     )
+
     graph.add(
       curNode
     )
