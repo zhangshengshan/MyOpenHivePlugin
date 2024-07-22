@@ -1,11 +1,13 @@
 package action.linage
 
+import com.intellij.openapi.util.SystemInfo
 import com.zss.graph.const.{Color, NodeStyle}
 import com.zss.graph.{Graph, Node, NodeElem}
 import config.os.OsConfig
-import hierachyconfig.MyConfigurable
+import misc.ExcelObject
 import openbrowser.HierachyConfigStrategy
-import pureconfig.configurable
+
+import scala.collection.mutable
 
 object MultiLayerLinageAnalysisUtil {
 
@@ -32,7 +34,6 @@ object MultiLayerLinageAnalysisUtil {
     stack.push(source)
 
     val config = HierachyConfigStrategy.getColorConfig
-
 
     val node = if (arrowDir.isDefined && arrowDir.get && preNode.nonEmpty) {
       new MyKVNode(
@@ -106,16 +107,34 @@ object MultiLayerLinageAnalysisUtil {
       fileName: String,
       source: String
   ): Unit = {
-    val stack = new collection.mutable.Stack[String]
+    val stack = new mutable.Stack[String]
     val paris: List[TargetSourcePair] =
       input.map(x => TargetSourcePair(x._1, x._2))
     val paris_another = input.map(x => TargetSourcePair(x._2, x._1))
 
     val graph = new Graph(fileName)
     findDependency(paris, source, stack, graph, None, Some(true)).toSet
-      .foreach(println)
+
     stack.clear()
-    findDependency(paris_another, source, stack, graph, None, Some(false)).toSet
+    val set = findDependency(
+      paris_another,
+      source,
+      stack,
+      graph,
+      None,
+      Some(false)
+    ).toSet
+
+    val excel = new ExcelObject
+    val excelFilePath = outputDir.get + "\\" + fileName + ".xlsx"
+    excel.saveToExcel(
+      set.toList.map(x => List(x)),
+      List("依赖关系"),
+      excelFilePath
+    )
+
+    openFileDispatchOsSystem(excelFilePath)
+
     graph.render(
       fileName,
       outputDir,
@@ -123,5 +142,15 @@ object MultiLayerLinageAnalysisUtil {
       Some(OsConfig.winDotPath),
       Some(true)
     )
+  }
+
+  private def openFileDispatchOsSystem(excelFilePath: String) = {
+    if (SystemInfo.isWindows) {
+      Runtime.getRuntime.exec("cmd /c start " + excelFilePath)
+    } else if (SystemInfo.isMac) {
+      Runtime.getRuntime.exec("open " + excelFilePath)
+    } else if (SystemInfo.isLinux) {
+      Runtime.getRuntime.exec("xdg-open " + excelFilePath)
+    }
   }
 }
