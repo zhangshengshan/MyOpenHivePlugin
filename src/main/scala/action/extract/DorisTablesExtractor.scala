@@ -3,7 +3,6 @@ package action.extract
 import doris.{DorisParser, DorisParserBaseVisitor}
 
 import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
 
 class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
   private val tablesMap: mutable.Map[String, Int] =
@@ -23,14 +22,14 @@ class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
   private var curInsertTable: Option[String] = None
 
   override def visitInsertTable(ctx: DorisParser.InsertTableContext): String = {
-    val targetTableName = ctx.multipartIdentifier().getText
+    val targetTableName = ctx.multipartIdentifier().getText.replaceAll("`", "")
     targetTables += targetTableName
     curInsertTable = Some(targetTableName)
     visitChildren(ctx)
   }
 
   override def visitTableName(ctx: DorisParser.TableNameContext): String = {
-    val dbtb: String = ctx.multipartIdentifier().getText
+    val dbtb: String = ctx.multipartIdentifier().getText.replaceAll("`", "")
     if (tablesMap.contains(dbtb)) {
       tablesMap(dbtb) += 1
     } else {
