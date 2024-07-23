@@ -51,7 +51,7 @@ class BatchLinageConstrunct extends AnAction {
 
       Messages.showInfoMessage(
         strings.mkString("--"),
-        "Extracted Tables"
+        "字段"
       )
 
       // 在这里输入一个数值，表示你要处理的表的索引

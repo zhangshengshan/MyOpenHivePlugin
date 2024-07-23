@@ -38,9 +38,9 @@ class ExcelObject {
     val inputStream = new FileInputStream(filePath)
     val workbook = new XSSFWorkbook(inputStream)
     val sheet = workbook.getSheetAt(0)
-    val data = for (rowIndex <- 0 until sheet.getLastRowNum) yield {
+    val data = for (rowIndex <- 0 to sheet.getLastRowNum) yield {
       val row = sheet.getRow(rowIndex)
-      for (cellIndex <- 0 to row.getLastCellNum) yield {
+      for (cellIndex <- 0 until row.getLastCellNum) yield {
         val cell = row.getCell(cellIndex)
         cell.toString
       }
