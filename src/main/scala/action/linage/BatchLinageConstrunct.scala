@@ -77,7 +77,10 @@ class BatchLinageConstrunct extends AnAction {
             )
           } catch {
             case e: Exception => {
-              println(e, item(number))
+              Messages.showErrorDialog(
+                "无法解析" + item(number),
+                "错误" + e.getMessage
+              )
               List[(String, String)]()
             }
           }
@@ -93,6 +96,7 @@ class BatchLinageConstrunct extends AnAction {
       )
       visualizeOrNot match {
         case Messages.YES => {
+
           plotAction(editor, mutableList.toList)
         }
         case _ => {}
