@@ -1,19 +1,11 @@
 package action
 
+import _root_.util.OpenFileUtil
 import action.extract.DorisTableModifier
-import com.intellij.openapi.actionSystem.{
-  AnAction,
-  AnActionEvent,
-  CommonDataKeys,
-  DefaultActionGroup
-}
+import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys, DefaultActionGroup}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.fileChooser.{
-  FileChooserDescriptor,
-  FileChooserDialog,
-  FileChooserFactory
-}
+import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
@@ -484,13 +476,20 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
       getXlsxFileFromDoris(responseObj, workbook, yourdb, yourtb, listsheet)
     })
 
+    val filePathName = outPutDir + File.separator + fileName + ".xlsx"
     val fileOut = new FileOutputStream(
-      outPutDir + File.separator + fileName + ".xlsx"
+      filePathName
     )
     workbook.write(fileOut)
     fileOut.close()
     // Closing the workbook
     workbook.close()
+
+    // 在此处打开刚刚保存的文件
+
+    OpenFileUtil.openFileDispatchOsSystem(
+      filePathName
+    )
   }
 
   override def actionPerformed(e: AnActionEvent): Unit = {

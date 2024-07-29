@@ -144,7 +144,7 @@ object MultiLayerLinageAnalysisUtil {
     )
   }
 
-  private def openFileDispatchOsSystem(excelFilePath: String) = {
+  def openFileDispatchOsSystem(excelFilePath: String) = {
     if (SystemInfo.isWindows) {
       Runtime.getRuntime.exec("cmd /c start " + excelFilePath)
     } else if (SystemInfo.isMac) {
