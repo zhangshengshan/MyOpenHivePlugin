@@ -51,14 +51,18 @@ class JoinConditionExtractor extends AnAction("关联条件") {
     Messages.showInfoMessage(clipboard, "剪切板内容")
 //    ON a .agentid = c.id AND a.aaa = c.ccc 把这个字符串改写为 agentid = id AND aaa = ccc
 
-    val str = clipboard
-      .split("\n|AND|OR|ON")
-      .filter(x => x != "")
-      .map( x => {
-        val pair = x.strip().split("=")
-        pair(0).split("\\.").last + " = " + pair(1).split("\\.").last
-      })
-      .mkString(" AND ")
+//    val str = clipboard
+//      .split("\n|AND|and|OR|or|ON|on")
+//      .filter(x => x != "")
+//      .map(x => {
+//        val pair = x.strip().split("=")
+//        pair(0).split("\\.").last + " = " + pair(1).split("\\.").last
+//      })
+//      .mkString(" AND ")
+
+    val pattern = """\b(\w+)\.(\w+)\b""".r
+    val s = "a.id = b.id"
+    val str= pattern.replaceAllIn(clipboard, m => m.group(2))
 
     Messages.showInfoMessage(str, "剪切板内容")
     ClipBoardUtil.copyToClipBoard(str)
