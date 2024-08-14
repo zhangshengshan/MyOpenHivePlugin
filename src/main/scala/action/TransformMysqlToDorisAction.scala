@@ -1,11 +1,7 @@
 package action
 
 import cache.CacheUtil
-import com.intellij.openapi.actionSystem.{
-  AnAction,
-  AnActionEvent,
-  CommonDataKeys
-}
+import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
@@ -25,6 +21,7 @@ class TransformMysqlToDorisAction extends AnAction {
   override def actionPerformed(e: AnActionEvent): Unit = {
 
     val successSubstitude = new scala.collection.mutable.ListBuffer[String]()
+    val failSubstitude = new scala.collection.mutable.ListBuffer[String]()
 
     val value: MyConfigurable = MyConfigurable.getInstance()
     val host = value.getHost
@@ -129,7 +126,8 @@ class TransformMysqlToDorisAction extends AnAction {
         val databases = Await.result(showDatabasesFuture, Duration.Inf)
         databases.foreach { database =>
           if (
-            database != "information_schema" && database != "mysql" && database != "performance_schema" && database != "sys"
+            database != "information_schema" && database != "mysql" && database != "performance_schema" && database != "sys" && database
+              .contains("ods")
           ) {
             val showTablesAction = sql"SHOW TABLES IN #$database".as[String]
             val showTablesFuture = dbConfig.run(showTablesAction)
@@ -160,6 +158,7 @@ class TransformMysqlToDorisAction extends AnAction {
             databases.foreach { database =>
               if (
                 database != "information_schema" && database != "mysql" && database != "performance_schema" && database != "sys"
+                && database.contains("ods")
               ) {
                 // if cache is empty then get all the tables
                 val showTablesAction =
@@ -182,6 +181,7 @@ class TransformMysqlToDorisAction extends AnAction {
           databases.foreach { database =>
             if (
               database != "information_schema" && database != "mysql" && database != "performance_schema" && database != "sys"
+                && database.contains("ods")
             ) {
               val showTablesAction = sql"SHOW TABLES IN #$database".as[String]
               val showTablesFuture = dbConfig.run(showTablesAction)
@@ -227,6 +227,7 @@ class TransformMysqlToDorisAction extends AnAction {
           s"Doris Table ${searchTableName} Not Found!",
           "Information"
         )
+        failSubstitude.append(s"-- $searchTableName -> 没有找到")
       }
     }
     sourceTables.foreach(table => {
@@ -239,7 +240,9 @@ class TransformMysqlToDorisAction extends AnAction {
     )
 
     ClipBoardUtil.copyToClipBoard(
-      successSubstitude.mkString(System.lineSeparator())
+      successSubstitude.mkString(System.lineSeparator()) + System
+        .lineSeparator() + failSubstitude
+        .mkString(System.lineSeparator())
     )
   }
 }

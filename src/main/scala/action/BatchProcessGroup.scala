@@ -37,12 +37,33 @@ class BatchProcessGroup extends DefaultActionGroup {
       tableMetaMenu,
       new CommentProcess,
       new DDLFixer,
-      new SearchTable
+      new SearchTable,
+      new CreateTableActioin,
+      new JoinConditionExtractor
     )
   }
 
 }
 
+class JoinConditionExtractor extends AnAction("关联条件") {
+  override def actionPerformed(e: AnActionEvent): Unit = {
+    val clipboard = ClipBoardUtil.getFromClipboard
+    Messages.showInfoMessage(clipboard, "剪切板内容")
+//    ON a .agentid = c.id AND a.aaa = c.ccc 把这个字符串改写为 agentid = id AND aaa = ccc
+
+    val str = clipboard
+      .split("\n|AND|OR|ON")
+      .filter(x => x != "")
+      .map( x => {
+        val pair = x.strip().split("=")
+        pair(0).split("\\.").last + " = " + pair(1).split("\\.").last
+      })
+      .mkString(" AND ")
+
+    Messages.showInfoMessage(str, "剪切板内容")
+    ClipBoardUtil.copyToClipBoard(str)
+  }
+}
 class SingleQuoteWrapper extends AnAction("单引号") {
   override def actionPerformed(e: AnActionEvent): Unit = {
     val clipboard = ClipBoardUtil.getFromClipboard
@@ -524,6 +545,47 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
   }
 
 }
+
+class CreateTableActioin extends AnAction("建表语句") {
+  override def actionPerformed(e: AnActionEvent): Unit = {
+    val editor: Editor = e.getData(CommonDataKeys.EDITOR)
+    val text: String = editor.getDocument.getText
+    // process the text with Doris
+    val lexer = new DorisLexer(
+      new CaseChangingCharStream(CharStreams.fromString(text), true)
+    )
+
+    val commonTokenStream: CommonTokenStream = new CommonTokenStream(lexer)
+    val parser: DorisParser = new DorisParser(commonTokenStream)
+
+    val context = parser.multiStatements()
+
+    val tokenStreamRewriter =
+      new org.antlr.v4.runtime.TokenStreamRewriter(commonTokenStream)
+    val visitor = new DorisTableModifier(tokenStreamRewriter)
+    visitor.visit(context)
+    val newText = tokenStreamRewriter.getText()
+    Messages.showInfoMessage(newText, "修正后的DDL")
+    ClipBoardUtil.copyToClipBoard(newText)
+    // 是否要用newText去覆盖文件
+    val result =
+      Messages.showYesNoDialog("是否覆盖当前文件?", "确认", Messages.getWarningIcon)
+
+    if (result == Messages.YES) {
+      // 用户点击了 "Yes"
+      ApplicationManager.getApplication.runWriteAction(new Runnable {
+        override def run(): Unit = {
+          editor.getDocument.setText(newText)
+        }
+      })
+    } else if (result == Messages.NO) {
+      // 用户点击了 "No"
+      return
+    }
+
+  }
+}
+
 class DDLFixer extends AnAction("DDL修正") {
 
   override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
@@ -568,6 +630,7 @@ class DDLFixer extends AnAction("DDL修正") {
 
   }
 }
+
 class SearchTable extends AnAction("模糊搜索表格") {
 
   override def actionPerformed(anActionEvent: AnActionEvent): Unit = {

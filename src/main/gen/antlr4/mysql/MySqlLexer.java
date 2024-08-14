@@ -1,3 +1,4 @@
+// Generated from E:/¹¤×÷´æµµ/MyOpenHivePlugin/src/main/scala/antlr4/mysql/MySqlLexer.g4 by ANTLR 4.13.1
 package antlr4.mysql;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
