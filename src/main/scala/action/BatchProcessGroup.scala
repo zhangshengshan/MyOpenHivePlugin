@@ -62,9 +62,10 @@ class JoinConditionExtractor extends AnAction("关联条件") {
 
     val pattern = """\b(\w+)\.(\w+)\b""".r
     val s = "a.id = b.id"
-    val str= pattern.replaceAllIn(clipboard, m => m.group(2))
+    val str = pattern.replaceAllIn(clipboard, m => m.group(2))
+    val result = str.replaceAll("ON|on|\n", " ").strip()
 
-    Messages.showInfoMessage(str, "剪切板内容")
+    Messages.showInfoMessage(result, "剪切板内容")
     ClipBoardUtil.copyToClipBoard(str)
   }
 }
