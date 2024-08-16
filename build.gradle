@@ -5,7 +5,6 @@ plugins {
     id 'scala'
     id 'net.researchgate.release' version '3.0.2'
     id "io.freefair.lombok" version "8.4"
-//    id "org.jetbrains.kotlin.jvm" version "1.7.0"
     id "maven-publish"
     id "signing"
 }

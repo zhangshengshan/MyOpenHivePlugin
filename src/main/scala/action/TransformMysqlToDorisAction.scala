@@ -1,6 +1,7 @@
 package action
 
 import cache.CacheUtil
+import com.intellij.notification.{Notification, NotificationType, Notifications}
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
@@ -181,7 +182,7 @@ class TransformMysqlToDorisAction extends AnAction {
           databases.foreach { database =>
             if (
               database != "information_schema" && database != "mysql" && database != "performance_schema" && database != "sys"
-                && database.contains("ods")
+              && database.contains("ods")
             ) {
               val showTablesAction = sql"SHOW TABLES IN #$database".as[String]
               val showTablesFuture = dbConfig.run(showTablesAction)
@@ -218,10 +219,19 @@ class TransformMysqlToDorisAction extends AnAction {
             document.setText(newText)
           }
         })
-        Messages.showInfoMessage(
-          "TransformMysqlToDorisAction Completed",
-          "Information"
+//        Messages.showInfoMessage(
+//          "TransformMysqlToDorisAction Completed",
+//          "Information"
+//        )
+
+        val notification = new Notification(
+          "替换",
+          "剪切板内容",
+          searchTableName + " -> " + choosedTable,
+          NotificationType.INFORMATION
         )
+        Notifications.Bus.notify(notification)
+
       } else {
         Messages.showInfoMessage(
           s"Doris Table ${searchTableName} Not Found!",
@@ -234,10 +244,18 @@ class TransformMysqlToDorisAction extends AnAction {
       replaceMysqlWithDoris(table)
     })
 
-    Messages.showInfoMessage(
+//    Messages.showInfoMessage(
+//      successSubstitude.mkString(System.lineSeparator()),
+//      "TransformMysqlToDorisAction Completed"
+//    )
+
+    val notification = new Notification(
+      "替换",
+      "剪切板内容",
       successSubstitude.mkString(System.lineSeparator()),
-      "TransformMysqlToDorisAction Completed"
+      NotificationType.INFORMATION
     )
+    Notifications.Bus.notify(notification)
 
     ClipBoardUtil.copyToClipBoard(
       successSubstitude.mkString(System.lineSeparator()) + System
