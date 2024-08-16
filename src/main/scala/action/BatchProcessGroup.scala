@@ -2,6 +2,7 @@ package action
 
 import _root_.util.OpenFileUtil
 import action.extract.DorisTableModifier
+import com.intellij.notification.{Notification, NotificationType, Notifications}
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys, DefaultActionGroup}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
@@ -48,24 +49,14 @@ class BatchProcessGroup extends DefaultActionGroup {
 class JoinConditionExtractor extends AnAction("关联条件") {
   override def actionPerformed(e: AnActionEvent): Unit = {
     val clipboard = ClipBoardUtil.getFromClipboard
-    Messages.showInfoMessage(clipboard, "剪切板内容")
-//    ON a .agentid = c.id AND a.aaa = c.ccc 把这个字符串改写为 agentid = id AND aaa = ccc
-
-//    val str = clipboard
-//      .split("\n|AND|and|OR|or|ON|on")
-//      .filter(x => x != "")
-//      .map(x => {
-//        val pair = x.strip().split("=")
-//        pair(0).split("\\.").last + " = " + pair(1).split("\\.").last
-//      })
-//      .mkString(" AND ")
-
     val pattern = """\b(\w+)\.(\w+)\b""".r
     val s = "a.id = b.id"
     val str = pattern.replaceAllIn(clipboard, m => m.group(2))
     val result = str.replaceAll("\\bON\\b", "").replaceAll("\\bon\\b","").strip()
+    // 在这里把行首的空白字符也替换掉
 
-    Messages.showInfoMessage(result, "剪切板内容")
+    val notification = new Notification("JoinConditionExtractor", "剪切板内容", result, NotificationType.INFORMATION)
+    Notifications.Bus.notify(notification)
     ClipBoardUtil.copyToClipBoard(str)
   }
 }
