@@ -114,6 +114,12 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
 
+        <action id="selectpartsasaction" class="action.SelectPartsAsAction" text="SelectPartsAsAction"
+                description="SelectPartsAsAction">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt T"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
         <action id="CompareTwoTablesBasedOnExcel" class="action.CompareTwoTablesBasedOnExcel"
                 text="CompareTwoTablesBasedOnExcel"
                 description="CompareTwoTablesBasedOnExcel">

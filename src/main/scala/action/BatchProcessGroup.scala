@@ -52,12 +52,18 @@ class JoinConditionExtractor extends AnAction("关联条件") {
     val pattern = """\b(\w+)\.(\w+)\b""".r
     val s = "a.id = b.id"
     val str = pattern.replaceAllIn(clipboard, m => m.group(2))
-    val result = str.replaceAll("\\bON\\b", "").replaceAll("\\bon\\b","").strip()
+    val result =
+      str.replaceAll("\\bON\\b", "").replaceAll("\\bon\\b", "").strip()
     // 在这里把行首的空白字符也替换掉
 
-    val notification = new Notification("JoinConditionExtractor", "剪切板内容", result, NotificationType.INFORMATION)
+    val notification = new Notification(
+      "JoinConditionExtractor",
+      "剪切板内容",
+      result,
+      NotificationType.INFORMATION
+    )
     Notifications.Bus.notify(notification)
-    ClipBoardUtil.copyToClipBoard(str)
+    ClipBoardUtil.copyToClipBoard(result)
   }
 }
 class SingleQuoteWrapper extends AnAction("单引号") {
