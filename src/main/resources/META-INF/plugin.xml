@@ -155,5 +155,12 @@
             <action id="createTableAction" class="action.CreateTableActioin" text="CreateTableAction"/>
             <action id="joinconditionextractor" class="action.JoinConditionExtractor" text="joinconditionextractor"/>
         </group>
+
+        <action id="highlightWordAction" class="action.hilight.HighlightWordAction" text="HighlightWordAction"
+                description="extractTablesAction">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
     </actions>
+
+
 </idea-plugin>
