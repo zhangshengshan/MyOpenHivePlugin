@@ -43,7 +43,8 @@ final class HighlightWordService {
     Color.GREEN // Complement of PINK
   )
 
-  private var currentColorIndex = 0
+
+  private var colorIndex = 0
 
   def highlightWordInAllOpenFiles(project: Project, word: String): Unit = {
     val openFiles = OpenFilesUtil.getAllOpenFiles(project)
@@ -55,6 +56,8 @@ final class HighlightWordService {
         ) highlightWordInEditor(project, editor, word)
       }
     }
+
+    colorIndex = (colorIndex + 1) % fontColors.length
   }
 
   private def highlightWordInEditor(
@@ -108,8 +111,8 @@ final class HighlightWordService {
       val highlightKey = TextAttributesKey.createTextAttributesKey(
         "HIGHLIGHT_KEY",
         new TextAttributes(
-          fontColors(currentColorIndex),
-          backgroundColors(currentColorIndex),
+          fontColors(colorIndex),
+          backgroundColors(colorIndex),
           null,
           null,
           Font.BOLD
@@ -125,7 +128,6 @@ final class HighlightWordService {
     }
 
     // Update the color index for the next highlight
-    currentColorIndex = (currentColorIndex + 1) % fontColors.length
   }
 
   def clearHighlightsInAllOpenFiles(project: Project): Unit = {

@@ -157,7 +157,7 @@
         </group>
 
         <action id="highlightWordAction" class="action.hilight.HighlightWordAction" text="HighlightWordAction"
-                description="extractTablesAction">
+                description="highlightWordAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
         <action id="clearAllHighlightAction" class="action.hilight.ClearAllHighlightAction"
