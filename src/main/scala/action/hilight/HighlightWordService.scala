@@ -27,7 +27,7 @@ final class HighlightWordService {
     TextAttributesKey.createTextAttributesKey(
       "HIGHLIGHT_KEY",
       new TextAttributes(Color.RED, Color.GREEN, null, null, Font.BOLD)
-    )
+  )
 
   def highlightWordInAllOpenFiles(project: Project, word: String): Unit = {
     val openFiles = OpenFilesUtil.getAllOpenFiles(project)

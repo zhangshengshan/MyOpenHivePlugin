@@ -162,7 +162,7 @@
         </action>
         <action id="clearAllHighlightAction" class="action.hilight.ClearAllHighlightAction"
                 text="ClearAllHighlightAction"
-                description="extractTablesAction">
+                description="clearAllHighlightAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
     </actions>
