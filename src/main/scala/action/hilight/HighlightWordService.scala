@@ -3,19 +3,11 @@ package action.hilight
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.colors.TextAttributesKey
-import com.intellij.openapi.editor.markup.{
-  HighlighterLayer,
-  HighlighterTargetArea,
-  TextAttributes
-}
+import com.intellij.openapi.editor.markup.{HighlighterLayer, HighlighterTargetArea, TextAttributes}
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
-import com.intellij.psi.search.{
-  GlobalSearchScope,
-  PsiSearchHelper,
-  TextOccurenceProcessor
-}
+import com.intellij.psi.search.{GlobalSearchScope, PsiSearchHelper, TextOccurenceProcessor}
 import com.intellij.psi.{PsiDocumentManager, PsiElement}
 
 import java.awt.{Color, Font}
@@ -27,7 +19,31 @@ final class HighlightWordService {
     TextAttributesKey.createTextAttributesKey(
       "HIGHLIGHT_KEY",
       new TextAttributes(Color.RED, Color.GREEN, null, null, Font.BOLD)
+    )
+
+  private val fontColors = Array(
+    Color.RED,
+    Color.GREEN,
+    Color.BLUE,
+    Color.YELLOW,
+    Color.CYAN,
+    Color.MAGENTA,
+    Color.ORANGE,
+    Color.PINK
   )
+
+  private val backgroundColors = Array(
+    Color.CYAN, // Complement of RED
+    Color.MAGENTA, // Complement of GREEN
+    Color.YELLOW, // Complement of BLUE
+    Color.BLUE, // Complement of YELLOW
+    Color.RED, // Complement of CYAN
+    Color.GREEN, // Complement of MAGENTA
+    Color.BLUE, // Complement of ORANGE
+    Color.GREEN // Complement of PINK
+  )
+
+  private var currentColorIndex = 0
 
   def highlightWordInAllOpenFiles(project: Project, word: String): Unit = {
     val openFiles = OpenFilesUtil.getAllOpenFiles(project)
@@ -76,16 +92,40 @@ final class HighlightWordService {
       true // search in string literals
     )
 
+//    val markupModel = editor.getMarkupModel
+//    for (range <- ranges) {
+//      markupModel.addRangeHighlighter(
+//        range.getStartOffset,
+//        range.getEndOffset,
+//        HighlighterLayer.SELECTION,
+//        HIGHLIGHT_KEY.getDefaultAttributes,
+//        HighlighterTargetArea.EXACT_RANGE
+//      )
+//    }
+
     val markupModel = editor.getMarkupModel
     for (range <- ranges) {
+      val highlightKey = TextAttributesKey.createTextAttributesKey(
+        "HIGHLIGHT_KEY",
+        new TextAttributes(
+          fontColors(currentColorIndex),
+          backgroundColors(currentColorIndex),
+          null,
+          null,
+          Font.BOLD
+        )
+      )
       markupModel.addRangeHighlighter(
         range.getStartOffset,
         range.getEndOffset,
         HighlighterLayer.SELECTION,
-        HIGHLIGHT_KEY.getDefaultAttributes,
+        highlightKey.getDefaultAttributes,
         HighlighterTargetArea.EXACT_RANGE
       )
     }
+
+    // Update the color index for the next highlight
+    currentColorIndex = (currentColorIndex + 1) % fontColors.length
   }
 
   def clearHighlightsInAllOpenFiles(project: Project): Unit = {
