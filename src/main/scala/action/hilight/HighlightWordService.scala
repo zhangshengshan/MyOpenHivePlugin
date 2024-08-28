@@ -87,4 +87,24 @@ final class HighlightWordService {
       )
     }
   }
+
+  def clearHighlightsInAllOpenFiles(project: Project): Unit = {
+    val openFiles = OpenFilesUtil.getAllOpenFiles(project)
+    for (file <- openFiles) {
+      val editors = OpenFilesUtil.getAllEditors
+      for (editor <- editors) {
+        if (
+          FileDocumentManager.getInstance().getFile(editor.getDocument) == file
+        ) {
+          clearHighlightsInEditor(editor)
+        }
+      }
+    }
+  }
+
+  private def clearHighlightsInEditor(editor: Editor): Unit = {
+    val markupModel = editor.getMarkupModel
+    markupModel.removeAllHighlighters()
+  }
+
 }

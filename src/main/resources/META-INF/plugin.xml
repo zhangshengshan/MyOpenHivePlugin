@@ -160,6 +160,11 @@
                 description="extractTablesAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+        <action id="clearAllHighlightAction" class="action.hilight.ClearAllHighlightAction"
+                text="ClearAllHighlightAction"
+                description="extractTablesAction">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
     </actions>
 
 
