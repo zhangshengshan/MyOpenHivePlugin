@@ -6,6 +6,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import org.jetbrains.annotations.NotNull
 
+import scala.util.matching.Regex
+
 class MoveToNextWordAction extends AnAction {
   override def actionPerformed(e: AnActionEvent): Unit = {
     val editor = e.getData(CommonDataKeys.EDITOR)
@@ -23,8 +25,11 @@ class MoveToNextWordAction extends AnAction {
       return
     }
 
-    val nextWordOffset = documentText.indexOf(word, offset + 1)
-    if (nextWordOffset != -1) {
+    val wordPattern = new Regex(s"\\b$word\\b")
+    val nextWordMatch = wordPattern.findFirstMatchIn(documentText.substring(offset + 1))
+
+    nextWordMatch.foreach { m =>
+      val nextWordOffset = offset + 1 + m.start
       caretModel.moveToOffset(nextWordOffset)
       editor.getScrollingModel.scrollToCaret(ScrollType.CENTER)
     }
@@ -34,6 +39,7 @@ class MoveToNextWordAction extends AnAction {
     val caretOffset = editor.getCaretModel.getOffset
     val lineStartOffset = editor.getDocument.getLineStartOffset(editor.getDocument.getLineNumber(caretOffset))
     val lineEndOffset = editor.getDocument.getLineEndOffset(editor.getDocument.getLineNumber(caretOffset))
+
     val lineText = editor.getDocument.getText(new TextRange(lineStartOffset, lineEndOffset))
     val caretPositionInLine = caretOffset - lineStartOffset
 
@@ -41,10 +47,12 @@ class MoveToNextWordAction extends AnAction {
     while (left > 0 && Character.isJavaIdentifierPart(lineText.charAt(left - 1))) {
       left -= 1
     }
+
     var right = caretPositionInLine
     while (right < lineText.length && Character.isJavaIdentifierPart(lineText.charAt(right))) {
       right += 1
     }
+
     lineText.substring(left, right)
   }
 }
