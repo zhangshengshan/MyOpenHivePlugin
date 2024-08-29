@@ -3,7 +3,9 @@ package action
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.editor.markup.{HighlighterLayer, HighlighterTargetArea, TextAttributes}
 import com.intellij.openapi.editor.{CaretModel, Editor, ScrollType}
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
+import org.jetbrains.annotations.NotNull
 
 import java.awt.Color
 import scala.util.matching.Regex
@@ -35,49 +37,32 @@ class MoveToNextWordAction extends AnAction {
     }
 
     nextWordMatch.foreach { m =>
-      val nextWordOffset = offset + m.start
+      val nextWordOffset = offset + 1 + m.start
       caretModel.moveToOffset(nextWordOffset)
       editor.getScrollingModel.scrollToCaret(ScrollType.CENTER)
 
       // Highlight the new word
       val markupModel = editor.getMarkupModel
-      val textAttributes = new TextAttributes(Color.YELLOW, null, null, null, 0)
-      markupModel.addRangeHighlighter(
-        nextWordOffset,
-        nextWordOffset + word.length,
-        HighlighterLayer.LAST,
-        textAttributes,
-        HighlighterTargetArea.EXACT_RANGE
-      )
+      val textAttributes = new TextAttributes(Color.RED, Color.GREEN, null, null, 0)
+      markupModel.addRangeHighlighter(nextWordOffset, nextWordOffset + word.length, HighlighterLayer.LAST, textAttributes, HighlighterTargetArea.EXACT_RANGE)
     }
   }
 
   private def getWordAtCaret(editor: Editor): String = {
     val caretOffset = editor.getCaretModel.getOffset
-    val lineStartOffset = editor.getDocument.getLineStartOffset(
-      editor.getDocument.getLineNumber(caretOffset)
-    )
-    val lineEndOffset = editor.getDocument.getLineEndOffset(
-      editor.getDocument.getLineNumber(caretOffset)
-    )
+    val lineStartOffset = editor.getDocument.getLineStartOffset(editor.getDocument.getLineNumber(caretOffset))
+    val lineEndOffset = editor.getDocument.getLineEndOffset(editor.getDocument.getLineNumber(caretOffset))
 
-    val lineText =
-      editor.getDocument.getText(new TextRange(lineStartOffset, lineEndOffset))
+    val lineText = editor.getDocument.getText(new TextRange(lineStartOffset, lineEndOffset))
     val caretPositionInLine = caretOffset - lineStartOffset
 
     var left = caretPositionInLine
-    while (
-      left > 0 && Character.isJavaIdentifierPart(lineText.charAt(left - 1))
-    ) {
+    while (left > 0 && Character.isJavaIdentifierPart(lineText.charAt(left - 1))) {
       left -= 1
     }
 
     var right = caretPositionInLine
-    while (
-      right < lineText.length && Character.isJavaIdentifierPart(
-        lineText.charAt(right)
-      )
-    ) {
+    while (right < lineText.length && Character.isJavaIdentifierPart(lineText.charAt(right))) {
       right += 1
     }
 
