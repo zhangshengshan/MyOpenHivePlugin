@@ -157,7 +157,7 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
         <!-- Other actions... -->
-        <action id="moveToNextWordAction" class="action.MoveToNextWordAction"
+        <action id="moveToNextWordAction" class="action.hilight.MoveToNextWordAction"
                 text="MoveToNextWordAction"
                 description="Move to the next occurrence of the current word">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt N"/>

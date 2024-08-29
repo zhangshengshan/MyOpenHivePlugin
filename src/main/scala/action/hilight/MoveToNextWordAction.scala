@@ -1,11 +1,9 @@
-package action
+package action.hilight
 
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.editor.markup.{HighlighterLayer, HighlighterTargetArea, TextAttributes}
-import com.intellij.openapi.editor.{CaretModel, Editor, ScrollType}
-import com.intellij.openapi.project.Project
+import com.intellij.openapi.editor.{Editor, ScrollType}
 import com.intellij.openapi.util.TextRange
-import org.jetbrains.annotations.NotNull
 
 import java.awt.Color
 import scala.util.matching.Regex
