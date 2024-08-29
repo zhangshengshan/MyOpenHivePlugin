@@ -43,7 +43,9 @@ class SelectPartsAsAction extends AnAction {
                     document.getLineEndOffset(curLine)
                   )
                 )
-                val pattern = """(\w+)\.(\w+)""".r
+//                val pattern = """(\w+)\.(\w+)""".r
+
+                val pattern = """(`?\p{L}+`?)\.(\w+)""".r
                 val result = pattern.replaceAllIn(
                   lineText,
                   m =>
