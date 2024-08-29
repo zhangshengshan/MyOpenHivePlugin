@@ -171,7 +171,7 @@
     <action id="moveToNextWordAction" class="action.MoveToNextWordAction"
             text="MoveToNextWordAction"
             description="Move to the next occurrence of the current word">
-        <keyboard-shortcut keymap="$default" first-keystroke="ctrl N"/>
+        <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt N"/>
         <add-to-group group-id="EditorPopupMenu" anchor="first"/>
     </action>
 
