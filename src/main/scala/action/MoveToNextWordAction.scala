@@ -11,6 +11,7 @@ import java.awt.Color
 import scala.util.matching.Regex
 
 class MoveToNextWordAction extends AnAction {
+
   override def actionPerformed(e: AnActionEvent): Unit = {
     val editor = e.getData(CommonDataKeys.EDITOR)
     val project = e.getProject
@@ -37,7 +38,9 @@ class MoveToNextWordAction extends AnAction {
     }
 
     nextWordMatch.foreach { m =>
-      val nextWordOffset = offset + 1 + m.start
+      // Add 1 to the offset if the search started not at the beginning of the document
+      val searchStartOffset = if (offset > 0) 1 else 0
+      val nextWordOffset = offset + m.start + searchStartOffset
       caretModel.moveToOffset(nextWordOffset)
       editor.getScrollingModel.scrollToCaret(ScrollType.CENTER)
 
