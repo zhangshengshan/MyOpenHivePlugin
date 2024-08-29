@@ -94,12 +94,10 @@
                 description="extractTablesAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-
         <action id="dsl2sqlgenerator" class="action.DSL2DorisAction" text="dsl2sql"
                 description="dsl2sql">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-
         <action id="processChineseAction" class="action.ProcessChineseAction" text="processChineseAction"
                 description="processChineseAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
@@ -113,35 +111,29 @@
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt T"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-
         <action id="selectpartsasaction" class="action.SelectPartsAsAction" text="SelectPartsAsAction"
                 description="SelectPartsAsAction">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt T"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-
         <action id="CompareTwoTablesBasedOnExcel" class="action.CompareTwoTablesBasedOnExcel"
                 text="CompareTwoTablesBasedOnExcel"
                 description="CompareTwoTablesBasedOnExcel">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-
         <action id="ShowCustomDialogAction" class="action.ShowCustomDialogAction" text="customui"
 
                 description="show">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-
         <action id="batchLinageConstrunct" class="action.linage.BatchLinageConstrunct" text="linage"
                 description="show">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-
         <action id="plotLiangeByTableName" class="action.linage.PlotLiangeByTableName" text="PlotLiangeByTableName"
                 description="show">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-
         <group id="MyActionGroup" class="action.BatchProcessGroup" text="批量操作组" description="MyActionGroup">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <action id="singleQuoteWrapper" class="action.SingleQuoteWrapper" text="SingleQuoteWrapper"/>
@@ -155,7 +147,6 @@
             <action id="createTableAction" class="action.CreateTableActioin" text="CreateTableAction"/>
             <action id="joinconditionextractor" class="action.JoinConditionExtractor" text="joinconditionextractor"/>
         </group>
-
         <action id="highlightWordAction" class="action.hilight.HighlightWordAction" text="HighlightWordAction"
                 description="highlightWordAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
@@ -165,19 +156,12 @@
                 description="clearAllHighlightAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-
-
-    <!-- Other actions... -->
-    <action id="moveToNextWordAction" class="action.MoveToNextWordAction"
-            text="MoveToNextWordAction"
-            description="Move to the next occurrence of the current word">
-        <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt N"/>
-        <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-    </action>
-
-
-
+        <!-- Other actions... -->
+        <action id="moveToNextWordAction" class="action.MoveToNextWordAction"
+                text="MoveToNextWordAction"
+                description="Move to the next occurrence of the current word">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt N"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
     </actions>
-
-
 </idea-plugin>
