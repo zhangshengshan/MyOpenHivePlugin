@@ -1,5 +1,6 @@
 package action.hilight
 
+import action.hilight.ColorScheme.{backgroundColors, fontColors}
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.colors.TextAttributesKey
@@ -20,34 +21,7 @@ final class HighlightWordService {
       "HIGHLIGHT_KEY",
       new TextAttributes(Color.RED, Color.GREEN, null, null, Font.BOLD)
     )
-
-  // 定义一个私有的颜色数组，用于存储字体颜色
-  private val fontColors = Array(
-    Color.RED,
-    Color.GREEN,
-    Color.BLUE,
-    Color.YELLOW,
-    Color.CYAN,
-    Color.MAGENTA,
-    Color.ORANGE,
-    Color.PINK
-  )
-
-  // 定义一个私有的颜色数组，用于存储背景颜色，其中的颜色是根据字体颜色的补色原则选择的
-  private val backgroundColors = Array(
-    Color.CYAN, // Complement of RED
-    Color.MAGENTA, // Complement of GREEN
-    Color.YELLOW, // Complement of BLUE
-    Color.BLUE, // Complement of YELLOW
-    Color.RED, // Complement of CYAN
-    Color.GREEN, // Complement of MAGENTA
-    Color.BLUE, // Complement of ORANGE
-    Color.GREEN // Complement of PINK
-  )
-
-
   private var colorIndex = 0
-
   def highlightWordInAllOpenFiles(project: Project, word: String): Unit = {
     val openFiles = OpenFilesUtil.getAllOpenFiles(project)
     for (file <- openFiles) {
