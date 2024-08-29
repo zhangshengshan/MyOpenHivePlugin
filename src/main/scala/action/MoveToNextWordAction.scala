@@ -2,7 +2,7 @@ package action
 
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.editor.markup.{HighlighterLayer, HighlighterTargetArea, TextAttributes}
-import com.intellij.openapi.editor.{Editor, ScrollType}
+import com.intellij.openapi.editor.{CaretModel, Editor, ScrollType}
 import com.intellij.openapi.util.TextRange
 
 import java.awt.Color
@@ -17,7 +17,7 @@ class MoveToNextWordAction extends AnAction {
     }
 
     val caretModel = editor.getCaretModel
-    val offset = caretModel.getOffset
+    var offset = caretModel.getOffset
     val documentText = editor.getDocument.getText
 
     val word = getWordAtCaret(editor)
@@ -26,11 +26,16 @@ class MoveToNextWordAction extends AnAction {
     }
 
     val wordPattern = new Regex(s"\\b$word\\b")
-    val nextWordMatch =
-      wordPattern.findFirstMatchIn(documentText.substring(offset + 1))
+    var nextWordMatch = wordPattern.findFirstMatchIn(documentText.substring(offset + 1))
+
+    // If no match is found, start from the beginning of the document
+    if (nextWordMatch.isEmpty) {
+      offset = 0
+      nextWordMatch = wordPattern.findFirstMatchIn(documentText)
+    }
 
     nextWordMatch.foreach { m =>
-      val nextWordOffset = offset + 1 + m.start
+      val nextWordOffset = offset + m.start
       caretModel.moveToOffset(nextWordOffset)
       editor.getScrollingModel.scrollToCaret(ScrollType.CENTER)
 
