@@ -1,16 +1,20 @@
 package action.hilight
 
+import action.hilight.ColorScheme.{backgroundColors, fontColors}
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
-import com.intellij.openapi.editor.markup.{HighlighterLayer, HighlighterTargetArea, TextAttributes}
+import com.intellij.openapi.editor.markup.{EffectType, HighlighterLayer, HighlighterTargetArea, TextAttributes}
 import com.intellij.openapi.editor.{Editor, ScrollType}
 import com.intellij.openapi.util.TextRange
 
-import java.awt.Color
 import scala.util.matching.Regex
 
 class MoveToNextWordAction extends AnAction {
 
+  var colorIndex = 0
   override def actionPerformed(e: AnActionEvent): Unit = {
+
+    colorIndex = (colorIndex + 1) % fontColors.length
+
     val editor = e.getData(CommonDataKeys.EDITOR)
     val project = e.getProject
     if (editor == null || project == null) {
@@ -27,7 +31,8 @@ class MoveToNextWordAction extends AnAction {
     }
 
     val wordPattern = new Regex(s"\\b$word\\b")
-    var nextWordMatch = wordPattern.findFirstMatchIn(documentText.substring(offset + 1))
+    var nextWordMatch =
+      wordPattern.findFirstMatchIn(documentText.substring(offset + 1))
 
     // If no match is found, start from the beginning of the document
     if (nextWordMatch.isEmpty) {
@@ -44,26 +49,50 @@ class MoveToNextWordAction extends AnAction {
 
       // Highlight the new word
       val markupModel = editor.getMarkupModel
-      val textAttributes = new TextAttributes(Color.RED, Color.GREEN, null, null, 0)
-      markupModel.addRangeHighlighter(nextWordOffset, nextWordOffset + word.length, HighlighterLayer.LAST, textAttributes, HighlighterTargetArea.EXACT_RANGE)
+      val textAttributes =
+        new TextAttributes(
+          fontColors(colorIndex),
+          backgroundColors(colorIndex),
+          null,
+          EffectType.BOXED,
+          0
+        )
+      markupModel.addRangeHighlighter(
+        nextWordOffset,
+        nextWordOffset + word.length,
+        HighlighterLayer.LAST,
+        textAttributes,
+        HighlighterTargetArea.EXACT_RANGE
+      )
     }
   }
 
   private def getWordAtCaret(editor: Editor): String = {
     val caretOffset = editor.getCaretModel.getOffset
-    val lineStartOffset = editor.getDocument.getLineStartOffset(editor.getDocument.getLineNumber(caretOffset))
-    val lineEndOffset = editor.getDocument.getLineEndOffset(editor.getDocument.getLineNumber(caretOffset))
+    val lineStartOffset = editor.getDocument.getLineStartOffset(
+      editor.getDocument.getLineNumber(caretOffset)
+    )
+    val lineEndOffset = editor.getDocument.getLineEndOffset(
+      editor.getDocument.getLineNumber(caretOffset)
+    )
 
-    val lineText = editor.getDocument.getText(new TextRange(lineStartOffset, lineEndOffset))
+    val lineText =
+      editor.getDocument.getText(new TextRange(lineStartOffset, lineEndOffset))
     val caretPositionInLine = caretOffset - lineStartOffset
 
     var left = caretPositionInLine
-    while (left > 0 && Character.isJavaIdentifierPart(lineText.charAt(left - 1))) {
+    while (
+      left > 0 && Character.isJavaIdentifierPart(lineText.charAt(left - 1))
+    ) {
       left -= 1
     }
 
     var right = caretPositionInLine
-    while (right < lineText.length && Character.isJavaIdentifierPart(lineText.charAt(right))) {
+    while (
+      right < lineText.length && Character.isJavaIdentifierPart(
+        lineText.charAt(right)
+      )
+    ) {
       right += 1
     }
 
