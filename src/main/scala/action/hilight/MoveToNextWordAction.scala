@@ -11,9 +11,9 @@ import scala.util.matching.Regex
 class MoveToNextWordAction extends AnAction {
 
   var colorIndex = 0
-  override def actionPerformed(e: AnActionEvent): Unit = {
+  var currentWord: String = ""
 
-    colorIndex = (colorIndex + 1) % fontColors.length
+  override def actionPerformed(e: AnActionEvent): Unit = {
 
     val editor = e.getData(CommonDataKeys.EDITOR)
     val project = e.getProject
@@ -28,6 +28,12 @@ class MoveToNextWordAction extends AnAction {
     val word = getWordAtCaret(editor)
     if (word == null) {
       return
+    }
+
+    // Check if the word has changed
+    if (!word.equals(currentWord)) {
+      colorIndex = (colorIndex + 1) % fontColors.length
+      currentWord = word
     }
 
     val wordPattern = new Regex(s"\\b$word\\b")
