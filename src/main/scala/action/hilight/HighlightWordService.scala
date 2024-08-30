@@ -36,22 +36,35 @@ final class HighlightWordService {
     colorIndex = (colorIndex + 1) % fontColors.length
   }
 
-  private def highlightWordInEditor(
-      project: Project,
-      editor: Editor,
-      word: String
-  ): Unit = {
+// 在编辑器中高亮显示指定的单词
+// 参数:
+// project: Project - IDEA的项目实例
+// editor: Editor - 当前编辑器实例
+// word: String - 需要高亮显示的单词
+private def highlightWordInEditor(
+    project: Project,
+    editor: Editor,
+    word: String
+): Unit = {
+    // 获取当前编辑器文档对应的PsiFile
     val psiFile =
       PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument)
+    // 如果PsiFile为空，则直接返回
     if (psiFile == null) return
 
+    // 存储需要高亮显示的文本范围
     val ranges = ListBuffer[TextRange]()
+    // 设置搜索范围为当前文件
     val searchScope = GlobalSearchScope.fileScope(psiFile)
+    // 获取Psi搜索帮助实例
     val searchHelper = PsiSearchHelper.getInstance(project)
 
+    // 导入搜索上下文
     import com.intellij.psi.search.UsageSearchContext
+    // 使用自定义的TextOccurenceProcessor处理文件中所有指定单词的出现
     searchHelper.processElementsWithWord(
       new TextOccurenceProcessor {
+        // 执行处理逻辑，为每个单词计算文本范围并添加到ranges列表中
         override def execute(
             element: PsiElement,
             offsetInElement: Int
@@ -66,24 +79,16 @@ final class HighlightWordService {
       },
       searchScope,
       word,
-      UsageSearchContext.IN_CODE, // search context
-      true, // search in comments
-      true // search in string literals
+      UsageSearchContext.IN_CODE, // 搜索上下文，表示在代码中搜索
+      true, // 是否在注释中搜索
+      true // 是否在字符串字面量中搜索
     )
 
-//    val markupModel = editor.getMarkupModel
-//    for (range <- ranges) {
-//      markupModel.addRangeHighlighter(
-//        range.getStartOffset,
-//        range.getEndOffset,
-//        HighlighterLayer.SELECTION,
-//        HIGHLIGHT_KEY.getDefaultAttributes,
-//        HighlighterTargetArea.EXACT_RANGE
-//      )
-//    }
-
+    // 获取编辑器的标记模型
     val markupModel = editor.getMarkupModel
+    // 遍历ranges，为每个范围添加高亮显示
     for (range <- ranges) {
+      // 定义高亮显示的文本属性键
       val highlightKey = TextAttributesKey.createTextAttributesKey(
         "HIGHLIGHT_KEY",
         new TextAttributes(
@@ -94,6 +99,7 @@ final class HighlightWordService {
           Font.BOLD
         )
       )
+      // 添加高亮显示，使用定义的属性键和选择层
       markupModel.addRangeHighlighter(
         range.getStartOffset,
         range.getEndOffset,
@@ -103,8 +109,11 @@ final class HighlightWordService {
       )
     }
 
-    // Update the color index for the next highlight
+    // 更新下次高亮显示的颜色索引
   }
+
+  // 注意：部分代码（如fontColors和backgroundColors方法调用）未在给定的代码片段中定义，
+  // 可能需要在实际使用中定义这些方法或替换为实际的颜色值。
 
   /**
    * 在所有打开的文件中清除高亮标记
