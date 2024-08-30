@@ -46,23 +46,40 @@ class BatchProcessGroup extends DefaultActionGroup {
 
 }
 
+/**
+ * 关联条件提取器类，继承自AnAction类，允许用户通过剪贴板提取关联条件
+ *
+ * @extends AnAction 表示该类继承了AnAction类，并且指定了在用户界面中的显示名称为“关联条件”
+ */
 class JoinConditionExtractor extends AnAction("关联条件") {
+
+  /**
+   * 当动作被触发时执行的方法从剪贴板中提取关联条件并显示通知
+   *
+   * @param e 事件对象，包含了事件的相关信息，如上下文等
+   */
   override def actionPerformed(e: AnActionEvent): Unit = {
+    // 从剪贴板获取内容
     val clipboard = ClipBoardUtil.getFromClipboard
+    // 定义一个模式，用于匹配表名和列名
     val pattern = """\b(\w+)\.(\w+)\b""".r
-    val s = "a.id = b.id"
+    // 在剪贴板内容中，根据模式替换表名，只保留列名
     val str = pattern.replaceAllIn(clipboard, m => m.group(2))
+    // 处理字符串，移除“ON”关键字和前后空白，提取干净的关联条件
     val result =
       str.replaceAll("\\bON\\b", "").replaceAll("\\bon\\b", "").strip()
-    // 在这里把行首的空白字符也替换掉
+    // 在这里把行首的空白字符也替换掉（代码中未体现，但注释建议处理空白字符）
 
+    // 创建一个通知对象，用于显示提取的关联条件
     val notification = new Notification(
       "JoinConditionExtractor",
       "剪切板内容",
       result,
       NotificationType.INFORMATION
     )
+    // 发送通知
     Notifications.Bus.notify(notification)
+    // 将提取的关联条件复制回剪贴板
     ClipBoardUtil.copyToClipBoard(result)
   }
 }
@@ -588,48 +605,60 @@ class CreateTableActioin extends AnAction("建表语句") {
   }
 }
 
+// 定义一个名为DDLFixer的类，继承自AnAction，显示名称为"DDL修正"
 class DDLFixer extends AnAction("DDL修正") {
 
+  // 重写actionPerformed方法，该方法在用户执行该操作时被调用
   override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
 
-    // obtain the content of current file
+    // 获取当前文件的内容
     val editor: Editor = anActionEvent.getData(CommonDataKeys.EDITOR)
     val text: String = editor.getDocument.getText
 
-    // process the text with Doris
+    // 使用Doris处理文本
 
+    // 创建DorisLexer实例，用于将输入文本转换为词法符号序列
     val lexer = new DorisLexer(
       new CaseChangingCharStream(CharStreams.fromString(text), true)
     )
 
+    // 创建CommonTokenStream实例，用于存储词法符号的流
     val commonTokenStream: CommonTokenStream = new CommonTokenStream(lexer)
+    // 创建DorisParser实例，用于解析词法符号流
     val parser: DorisParser = new DorisParser(commonTokenStream)
 
+    // 调用parser的multiStatements方法，开始解析输入的DDL语句
     val context = parser.multiStatements()
 
+    // 创建TokenStreamRewriter实例，用于修改词法符号流
     val tokenStreamRewriter =
       new org.antlr.v4.runtime.TokenStreamRewriter(commonTokenStream)
+    // 创建DorisTableModifier实例，用于修改表名等
     val visitor = new DorisTableModifier(tokenStreamRewriter)
+    // 访问解析树，进行必要的修改
     visitor.visit(context)
+    // 获取修改后的DDL语句文本
     val newText = tokenStreamRewriter.getText()
+    // 显示修正后的DDL语句
     Messages.showInfoMessage(newText, "修正后的DDL")
+    // 将修正后的DDL语句复制到剪贴板
     ClipBoardUtil.copyToClipBoard(newText)
     // 是否要用newText去覆盖文件
     val result =
       Messages.showYesNoDialog("是否覆盖当前文件?", "确认", Messages.getWarningIcon)
 
+    // 根据用户选择是否覆盖文件
     if (result == Messages.YES) {
-      // 用户点击了 "Yes"
+      // 用户点击了 "Yes"，覆盖当前文件
       ApplicationManager.getApplication.runWriteAction(new Runnable {
         override def run(): Unit = {
           editor.getDocument.setText(newText)
         }
       })
     } else if (result == Messages.NO) {
-      // 用户点击了 "No"
+      // 用户点击了 "No"，不做任何操作
       return
     }
-
   }
 }
 
