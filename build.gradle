@@ -9,6 +9,9 @@ plugins {
     id "signing"
 }
 
+sourceCompatibility = '11'  // Set Java version here
+targetCompatibility = '11'  // Set Java version here
+
 group 'io.github.zhangshengshan'
 
 repositories {
@@ -68,7 +71,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
     implementation 'org.antlr:antlr4:4.11.1'
     implementation "org.antlr:antlr4-intellij-adaptor:0.1"
-    implementation 'org.scala-lang:scala-library:2.13.10'
+    implementation 'org.scala-lang:scala-library:2.13.11'
     implementation 'com.github.vertical-blank:sql-formatter:2.0.3'
     implementation 'io.github.zhangshengshan:mygraphapp_2.13:0.1.8'
     // mygraphapp中包含此依赖，此处不再需要，防止冲突
