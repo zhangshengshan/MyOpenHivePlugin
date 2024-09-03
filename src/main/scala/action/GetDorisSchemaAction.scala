@@ -53,15 +53,30 @@ class GetDorisSchemaAction extends AnAction {
       " " * spaceNum
     }
 
+    val sqlStyle = Messages.showYesNoDialog(
+      "Do you want to use Doris SQL style?",
+      "SQL Style",
+      Messages.getQuestionIcon
+    )
+
+    def getAliasName(item: Property): String = {
+      if (item.comment == null || item.comment.isEmpty) {
+        item.name
+      } else {
+        "`" + item.comment + "`"
+      }
+    }
+
     val selectList = responseObj.data.properties
-      .map(item => {
-        item.name + fillAsSpaces(
-          item.name
-        ) + " AS " + item.name + fillCommentSpaces(
-          item.name
-        ) + " -- " + item.comment + SEP
-      })
+      .map { item =>
+        val aliasName =
+          if (sqlStyle == Messages.NO) getAliasName(item) else item.name
+        val spaces = fillAsSpaces(item.name)
+        val commentSpaces = fillCommentSpaces(aliasName)
+        s"${item.name}$spaces AS $aliasName$commentSpaces -- ${item.comment}$SEP"
+      }
       .mkString("\t,")
+
     s"SELECT${SEP}\t $selectList${SEP}FROM${SEP}\t$db.$tb ;"
   }
   override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
@@ -123,12 +138,14 @@ class GetDorisSchemaAction extends AnAction {
 
     var db = ""
     var tb = ""
-    if ( expandObj != null && expandObj.contains(".") && expandObj.split("\\.").length == 2){
+    if (
+      expandObj != null && expandObj
+        .contains(".") && expandObj.split("\\.").length == 2
+    ) {
       val strings = expandObj.split("\\.")
       db = strings(0)
       tb = strings(1)
-    }
-    else if (
+    } else if (
       selectText != null && selectText
         .contains(".") && selectText.split("\\.").length == 2
     ) {
