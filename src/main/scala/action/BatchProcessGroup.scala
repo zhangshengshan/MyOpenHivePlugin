@@ -5,9 +5,10 @@ import action.extract.DorisTableModifier
 import com.intellij.notification.{Notification, NotificationType, Notifications}
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys, DefaultActionGroup}
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
-import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.{Project, ProjectManager}
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.vfs.VirtualFile
@@ -696,7 +697,7 @@ class SearchTable extends AnAction("模糊搜索表格") {
 
 class ClipBoardHistoryAction extends AnAction("查看剪切板历史") {
   override def actionPerformed(e: AnActionEvent): Unit = {
-    val clipboardHistory = ClipBoardUtil.getClipboardHistory.map( x=>x + "\n")
+    val clipboardHistory = ClipBoardUtil.getClipboardHistory.map(x => x + "\n")
     val message = clipboardHistory.mkString("\n")
 //    Messages.showInfoMessage(message, "剪切板历史")
 
@@ -716,13 +717,15 @@ class ClipBoardHistoryAction extends AnAction("查看剪切板历史") {
       val document = editor.getDocument
       val caretModel = editor.getCaretModel
       val offset = caretModel.getOffset
-      document.insertString(offset, selected)
-      ApplicationManager.getApplication.runWriteAction(new Runnable {
+      val project = ProjectManager.getInstance().getOpenProjects.head
+      WriteCommandAction.runWriteCommandAction(project, new Runnable {
         override def run(): Unit = {
+          // Your document modification code here
           editor.getDocument.insertString(offset, selected)
         }
       })
     }
+
 
   }
 }
