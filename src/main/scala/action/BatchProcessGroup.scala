@@ -40,24 +40,23 @@ class BatchProcessGroup extends DefaultActionGroup {
       new DDLFixer,
       new SearchTable,
       new CreateTableActioin,
-      new JoinConditionExtractor
+      new JoinConditionExtractor,
+      new ClipBoardHistoryAction
     )
   }
 
 }
 
-/**
- * 关联条件提取器类，继承自AnAction类，允许用户通过剪贴板提取关联条件
- *
- * @extends AnAction 表示该类继承了AnAction类，并且指定了在用户界面中的显示名称为“关联条件”
- */
+/** 关联条件提取器类，继承自AnAction类，允许用户通过剪贴板提取关联条件
+  *
+  * @extends AnAction 表示该类继承了AnAction类，并且指定了在用户界面中的显示名称为“关联条件”
+  */
 class JoinConditionExtractor extends AnAction("关联条件") {
 
-  /**
-   * 当动作被触发时执行的方法从剪贴板中提取关联条件并显示通知
-   *
-   * @param e 事件对象，包含了事件的相关信息，如上下文等
-   */
+  /** 当动作被触发时执行的方法从剪贴板中提取关联条件并显示通知
+    *
+    * @param e 事件对象，包含了事件的相关信息，如上下文等
+    */
   override def actionPerformed(e: AnActionEvent): Unit = {
     // 从剪贴板获取内容
     val clipboard = ClipBoardUtil.getFromClipboard
@@ -692,5 +691,38 @@ class SearchTable extends AnAction("模糊搜索表格") {
         .mkString("\nOR\n")
     Messages.showInfoMessage(result, "搜索结果")
     ClipBoardUtil.copyToClipBoard(result)
+  }
+}
+
+class ClipBoardHistoryAction extends AnAction("查看剪切板历史") {
+  override def actionPerformed(e: AnActionEvent): Unit = {
+    val clipboardHistory = ClipBoardUtil.getClipboardHistory.map( x=>x + "\n")
+    val message = clipboardHistory.mkString("\n")
+//    Messages.showInfoMessage(message, "剪切板历史")
+
+    // chose one of the following options
+    val selected: String = Messages.showEditableChooseDialog(
+      "Choose one of the following options",
+      "Choose one of the following options",
+      Messages.getInformationIcon,
+      clipboardHistory.toArray,
+      clipboardHistory.head,
+      null
+    )
+
+    if (selected != null) {
+      // copy to editor in current cursor position
+      val editor = e.getRequiredData(CommonDataKeys.EDITOR)
+      val document = editor.getDocument
+      val caretModel = editor.getCaretModel
+      val offset = caretModel.getOffset
+      document.insertString(offset, selected)
+      ApplicationManager.getApplication.runWriteAction(new Runnable {
+        override def run(): Unit = {
+          editor.getDocument.insertString(offset, selected)
+        }
+      })
+    }
+
   }
 }
