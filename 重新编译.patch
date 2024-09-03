@@ -1,0 +1,111 @@
+Subject: [PATCH] 重新编译
+---
+Index: src/main/java/action/HiveFormatAction.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/action/HiveFormatAction.java b/src/main/java/action/HiveFormatAction.java
+--- a/src/main/java/action/HiveFormatAction.java	(revision e8452feaf2550bcb81a1593c6e98250ab83b6e41)
++++ b/src/main/java/action/HiveFormatAction.java	(date 1725329250808)
+@@ -11,7 +11,7 @@
+ import com.intellij.openapi.editor.Editor;
+ import com.intellij.openapi.project.Project;
+ import com.intellij.openapi.ui.Messages;
+-import misc.ClipBoardUtil;
++//import misc.ClipBoardUtil;
+ import org.jetbrains.annotations.NotNull;
+ import com.intellij.openapi.application.ApplicationManager;
+ 
+@@ -36,7 +36,7 @@
+                                         .build());
+ 
+         final Document document = editor.getDocument();
+-        ClipBoardUtil.copyToClipBoard(format);
++//        ClipBoardUtil.copyToClipBoard(format);
+         Messages.showInfoMessage("Formatted SQL has been copied to clipboard", "Success");
+ 
+         int result = Messages.showYesNoDialog(
+Index: src/main/java/mydata/studio/op/GenOp.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/mydata/studio/op/GenOp.java b/src/main/java/mydata/studio/op/GenOp.java
+--- a/src/main/java/mydata/studio/op/GenOp.java	(revision e8452feaf2550bcb81a1593c6e98250ab83b6e41)
++++ b/src/main/java/mydata/studio/op/GenOp.java	(date 1725329196709)
+@@ -1,7 +1,7 @@
+ package mydata.studio.op;
+ 
+ import mydata.studio.service.SessionService;
+-import openbrowser.GenCodeOp$;
++//import openbrowser.GenCodeOp$;
+ 
+ /**
+  * @author nobody
+@@ -9,6 +9,6 @@
+ public class GenOp {
+ 
+     public static String getSelectPart(String param) {
+-        return GenCodeOp$.MODULE$.genSelectCodePiece(param, SessionService.getSessionId());
++        return null;
+     }
+ }
+Index: src/main/java/mydata/studio/MyDataStudioFactory.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/mydata/studio/MyDataStudioFactory.java b/src/main/java/mydata/studio/MyDataStudioFactory.java
+--- a/src/main/java/mydata/studio/MyDataStudioFactory.java	(revision e8452feaf2550bcb81a1593c6e98250ab83b6e41)
++++ b/src/main/java/mydata/studio/MyDataStudioFactory.java	(date 1725329454490)
+@@ -3,6 +3,7 @@
+ 
+ package mydata.studio;
+ 
++import com.intellij.openapi.components.ServiceManager;
+ import com.intellij.openapi.project.Project;
+ import com.intellij.openapi.wm.ToolWindow;
+ import com.intellij.openapi.wm.ToolWindowFactory;
+@@ -24,7 +25,7 @@
+     @Override
+     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
+         MyDataStudio myToolWindow = new MyDataStudio(toolWindow);
+-        ContentFactory contentFactory = ContentFactory.getInstance();
++        ContentFactory contentFactory = ServiceManager.getService(ContentFactory.class);
+         Content content = contentFactory.createContent(myToolWindow.getContent(), "", false);
+         toolWindow.getContentManager().addContent(content);
+     }
+Index: src/main/java/mydata/studio/listener/ExecuteButtonListener.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/mydata/studio/listener/ExecuteButtonListener.java b/src/main/java/mydata/studio/listener/ExecuteButtonListener.java
+--- a/src/main/java/mydata/studio/listener/ExecuteButtonListener.java	(revision e8452feaf2550bcb81a1593c6e98250ab83b6e41)
++++ b/src/main/java/mydata/studio/listener/ExecuteButtonListener.java	(date 1725329186766)
+@@ -4,8 +4,8 @@
+ import lombok.SneakyThrows;
+ import mydata.studio.DataStudioCommonParam;
+ import mydata.studio.MyDataStudio;
+-import mydata.studio.op.GenOp;
+-import openbrowser.TenonStructureOp$;
++//import mydata.studio.op.GenOp;
++//import openbrowser.TenonStructureOp$;
+ 
+ import java.awt.event.ActionEvent;
+ import java.awt.event.ActionListener;
+@@ -37,11 +37,11 @@
+         params.forEach(param -> {
+ 
+             if (this.myDataStudio.getFieldsInfoButton().isSelected()) {
+-                GenOp.getSelectPart(param);
++//                GenOp.getSelectPart(param);
+             }
+ 
+             if (this.myDataStudio.getTennonButton().isSelected()) {
+-                TenonStructureOp$.MODULE$.genTenonStructureGraph(param);
++//                TenonStructureOp$.MODULE$.genTenonStructureGraph(param);
+             }
+ 
+             if (this.myDataStudio.getHierachyFieldRadioButton().isSelected()) {
