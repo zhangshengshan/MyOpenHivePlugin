@@ -11,16 +11,16 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.search.{GlobalSearchScope, PsiSearchHelper, TextOccurenceProcessor}
 import com.intellij.psi.{PsiDocumentManager, PsiElement}
 
-import java.awt.{Color, Font}
+import java.awt.Font
 import scala.collection.mutable.ListBuffer
 
 @Service
 final class HighlightWordService {
-  private val HIGHLIGHT_KEY =
-    TextAttributesKey.createTextAttributesKey(
-      "HIGHLIGHT_KEY",
-      new TextAttributes(Color.RED, Color.GREEN, null, null, Font.BOLD)
-    )
+//  private val HIGHLIGHT_KEY =
+//    TextAttributesKey.createTextAttributesKey(
+//      "HIGHLIGHT_KEY",
+//      new TextAttributes(Color.RED, Color.GREEN, null, null, Font.BOLD)
+//    )
   private var colorIndex = 0
   def highlightWordInAllOpenFiles(project: Project, word: String): Unit = {
     val openFiles = OpenFilesUtil.getAllOpenFiles(project)
@@ -41,11 +41,11 @@ final class HighlightWordService {
 // project: Project - IDEA的项目实例
 // editor: Editor - 当前编辑器实例
 // word: String - 需要高亮显示的单词
-private def highlightWordInEditor(
-    project: Project,
-    editor: Editor,
-    word: String
-): Unit = {
+  private def highlightWordInEditor(
+      project: Project,
+      editor: Editor,
+      word: String
+  ): Unit = {
     // 获取当前编辑器文档对应的PsiFile
     val psiFile =
       PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument)
@@ -90,7 +90,7 @@ private def highlightWordInEditor(
     for (range <- ranges) {
       // 定义高亮显示的文本属性键
       val highlightKey = TextAttributesKey.createTextAttributesKey(
-        "HIGHLIGHT_KEY",
+        s"HIGHLIGHT_KEY_$colorIndex",
         new TextAttributes(
           fontColors(colorIndex),
           backgroundColors(colorIndex),
@@ -115,15 +115,14 @@ private def highlightWordInEditor(
   // 注意：部分代码（如fontColors和backgroundColors方法调用）未在给定的代码片段中定义，
   // 可能需要在实际使用中定义这些方法或替换为实际的颜色值。
 
-  /**
-   * 在所有打开的文件中清除高亮标记
-   *
-   * 此函数的目的是遍历所有打开的文件和编辑器，清除每个文件中的高亮标记
-   * 它首先获取所有打开的文件，然后获取所有编辑器，通过比较文件和编辑器中的文件实例，
-   * 确保正确的文件对应的编辑器被找到，然后调用私有函数 clearHighlightsInEditor 来清除高亮标记
-   *
-   * @param project 当前项目，用于获取打开的文件和编辑器
-   */
+  /** 在所有打开的文件中清除高亮标记
+    *
+    * 此函数的目的是遍历所有打开的文件和编辑器，清除每个文件中的高亮标记
+    * 它首先获取所有打开的文件，然后获取所有编辑器，通过比较文件和编辑器中的文件实例，
+    * 确保正确的文件对应的编辑器被找到，然后调用私有函数 clearHighlightsInEditor 来清除高亮标记
+    *
+    * @param project 当前项目，用于获取打开的文件和编辑器
+    */
   def clearHighlightsInAllOpenFiles(project: Project): Unit = {
     // 获取当前项目中所有打开的文件
     val openFiles = OpenFilesUtil.getAllOpenFiles(project)
@@ -144,14 +143,13 @@ private def highlightWordInEditor(
     }
   }
 
-  /**
-   * 在指定的编辑器中清除所有高亮标记
-   *
-   * 此函数通过获取编辑器的标记模型，然后调用 removeAllHighlighters 方法来清除所有高亮标记
-   * 它是一个辅助函数，用于 clearHighlightsInAllOpenFiles 函数中清除每个编辑器中的高亮标记
-   *
-   * @param editor 需要清除高亮标记的编辑器
-   */
+  /** 在指定的编辑器中清除所有高亮标记
+    *
+    * 此函数通过获取编辑器的标记模型，然后调用 removeAllHighlighters 方法来清除所有高亮标记
+    * 它是一个辅助函数，用于 clearHighlightsInAllOpenFiles 函数中清除每个编辑器中的高亮标记
+    *
+    * @param editor 需要清除高亮标记的编辑器
+    */
   private def clearHighlightsInEditor(editor: Editor): Unit = {
     // 获取编辑器的标记模型
     val markupModel = editor.getMarkupModel
