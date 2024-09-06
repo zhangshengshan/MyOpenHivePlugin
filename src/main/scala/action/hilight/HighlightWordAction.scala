@@ -2,6 +2,7 @@ package action.hilight
 
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent}
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.ui.Messages
 import com.intellij.psi.{PsiDocumentManager, PsiWhiteSpace}
 
 class HighlightWordAction extends AnAction {
@@ -16,23 +17,16 @@ class HighlightWordAction extends AnAction {
     // 如果编辑器为空，或不实例化为Editor类型，则直接返回
     if (editor == null || !editor.isInstanceOf[Editor]) return
 
-    // 通过PsiDocumentManager获取当前编辑器文档对应的PsiFile
-    val psiFile = PsiDocumentManager
-      .getInstance(project)
-      .getPsiFile(editor.asInstanceOf[Editor].getDocument)
-    // 如果PsiFile为空，则直接返回
-    if (psiFile == null) return
+    // action.hilight.MoveToNextWordAction#getWordAtCaret
+    val moveToNextWordAction = new MoveToNextWordAction
+    val word = moveToNextWordAction.getWordAtCaret(editor.asInstanceOf[Editor])
 
-    // 获取当前编辑器光标所在的位置偏移量
-    val offset = editor.asInstanceOf[Editor].getCaretModel.getOffset
-    // 根据偏移量找到PsiFile中的对应元素
-    val elementAt = psiFile.findElementAt(offset)
-
-    // 如果找到的元素为空，或其实例化为PsiWhiteSpace（PsiWhiteSpace代表空白字符，如空格、换行等），则直接返回
-    if (elementAt == null || elementAt.isInstanceOf[PsiWhiteSpace]) return
-
-    // 获取找到的元素的文本内容
-    val word = elementAt.getText
+//    Messages.showMessageDialog(
+//      project,
+//      word,
+//      "Word at Caret",
+//      Messages.getInformationIcon
+//    )
 
     // 如果文本内容非空且非空字符串，则进行高亮处理
     if (word != null && word.nonEmpty) {
@@ -44,18 +38,16 @@ class HighlightWordAction extends AnAction {
   }
 }
 
-/**
- * 定义一个清除所有高亮标记的操作类，继承自AnAction
- * 该类的作用是当用户执行该操作时，清除所有打开文件中的高亮标记
- */
+/** 定义一个清除所有高亮标记的操作类，继承自AnAction
+  * 该类的作用是当用户执行该操作时，清除所有打开文件中的高亮标记
+  */
 class ClearAllHighlightAction extends AnAction {
 
-  /**
-   * 当动作被触发时执行的方法
-   * 它从当前项目中获取HighlightWordService服务，并调用其方法来清除所有打开文件中的高亮标记
-   *
-   * @param e AnActionEvent事件对象，包含与操作相关的所有信息
-   */
+  /** 当动作被触发时执行的方法
+    * 它从当前项目中获取HighlightWordService服务，并调用其方法来清除所有打开文件中的高亮标记
+    *
+    * @param e AnActionEvent事件对象，包含与操作相关的所有信息
+    */
   override def actionPerformed(e: AnActionEvent): Unit = {
     // 从事件对象中获取当前项目
     val project = e.getProject

@@ -4,6 +4,7 @@ import action.hilight.ColorScheme.{backgroundColors, fontColors}
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.editor.markup.{EffectType, HighlighterLayer, HighlighterTargetArea, TextAttributes}
 import com.intellij.openapi.editor.{Editor, ScrollType}
+import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.TextRange
 
 import scala.util.matching.Regex
@@ -32,6 +33,12 @@ class MoveToNextWordAction extends AnAction {
 
     // 获取光标下的单词
     val word = getWordAtCaret(editor)
+//    Messages.showMessageDialog(
+//      project,
+//      word,
+//      "Word at Caret",
+//      Messages.getInformationIcon
+//    )
     // 如果获取不到单词，则直接返回
     if (word == null) {
       return
@@ -45,7 +52,7 @@ class MoveToNextWordAction extends AnAction {
     }
 
     // 构建单词的正则表达式，用于查找下一个匹配的单词
-    val wordPattern = new Regex(s"\b$word\b")
+    val wordPattern = new Regex(s"\\b$word\\b")
     // 尝试从当前光标位置之后查找下一个匹配的单词
     var nextWordMatch =
       wordPattern.findFirstMatchIn(documentText.substring(offset + 1))
@@ -97,7 +104,7 @@ class MoveToNextWordAction extends AnAction {
    * @param editor 当前的编辑器对象，提供了对光标位置、文档结构的访问
    * @return 光标位置的单词字符串如果光标位于单词内，则返回该单词；如果光标位于单词边界，则返回空字符串
    */
-  private def getWordAtCaret(editor: Editor): String = {
+  def getWordAtCaret(editor: Editor): String = {
     // 获取当前光标的位置在文档中的偏移量
     val caretOffset = editor.getCaretModel.getOffset
     // 获取当前光标所在行的开始偏移量
