@@ -1,9 +1,8 @@
 package action.hilight
 
+import action.hilight.CaretUtil.getWordAtCaret
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent}
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.ui.Messages
-import com.intellij.psi.{PsiDocumentManager, PsiWhiteSpace}
 
 class HighlightWordAction extends AnAction {
   override def actionPerformed(e: AnActionEvent): Unit = {
@@ -16,17 +15,8 @@ class HighlightWordAction extends AnAction {
     val editor = e.getDataContext.getData("editor")
     // 如果编辑器为空，或不实例化为Editor类型，则直接返回
     if (editor == null || !editor.isInstanceOf[Editor]) return
-
-    // action.hilight.MoveToNextWordAction#getWordAtCaret
-    val moveToNextWordAction = new MoveToNextWordAction
-    val word = moveToNextWordAction.getWordAtCaret(editor.asInstanceOf[Editor])
-
-//    Messages.showMessageDialog(
-//      project,
-//      word,
-//      "Word at Caret",
-//      Messages.getInformationIcon
-//    )
+    // 使用action.hilight.MoveToNextWordAction.getWordAtCaret 方法获取当前光标下的单词
+    val word = getWordAtCaret(editor.asInstanceOf[Editor])
 
     // 如果文本内容非空且非空字符串，则进行高亮处理
     if (word != null && word.nonEmpty) {
