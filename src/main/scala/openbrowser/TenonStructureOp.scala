@@ -40,7 +40,13 @@ object TenonStructureOp {
       new FileChooserDescriptor(false, true, false, false, false, false)
     val project: Project = ProjectManager.getInstance().getDefaultProject
 
-    val initialFileName: String = param.split("/").last.split("\\.").head
+    val initialFileName: String = param
+      .split("/")
+      .last
+      .split("\\.")
+      .head
+      .replaceAll("[（）\\(\\)\\s]", "_")
+
     //TODO: 给一个默认的文件名
     val fileName: String = Messages.showInputDialog(
       project,
@@ -51,7 +57,7 @@ object TenonStructureOp {
       null
     )
 
-    val filterName =Messages.showInputDialog(
+    val filterName = Messages.showInputDialog(
       project,
       "请输入过滤字段名",
       "过滤字段名",
@@ -60,11 +66,16 @@ object TenonStructureOp {
       null
     )
 
-    val fieldNameFilter = if( filterName == null) None else Some(filterName)
-
+    val fieldNameFilter = if (filterName == null) None else Some(filterName)
 
     val graph: Graph =
-      GraphBuilder.make(param, Some(genUrl), Some(config), Some(fileName), fieldNameFilter)
+      GraphBuilder.make(
+        param,
+        Some(genUrl),
+        Some(config),
+        Some(fileName),
+        fieldNameFilter
+      )
 
     val dialog: FileChooserDialog = FileChooserFactory
       .getInstance()
