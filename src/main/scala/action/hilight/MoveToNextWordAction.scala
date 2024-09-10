@@ -37,16 +37,31 @@ class MoveToNextWordAction extends AnAction {
       return
     }
 
-    // 检查单词是否变化
-    if (!word.toLowerCase().equals(currentWord.toLowerCase())) {
-      // 切换到下一个字体颜色
-      colorIndex = (colorIndex + 1) % fontColors.length
-      currentWord = word
-    }
+    // 高亮当前的单词
+    val markupModel = editor.getMarkupModel
+
+    // 根据当前的颜色索引创建文本属性
+    val textAttributes =
+      new TextAttributes(
+        fontColors(colorIndex),
+        backgroundColors(colorIndex),
+        null,
+        EffectType.BOXED,
+        0
+      )
+
+    // 添加高亮标记到文档中
+    markupModel.addRangeHighlighter(
+      caretModel.getOffset,
+      caretModel.getOffset + word.length,
+      HighlighterLayer.LAST,
+      textAttributes,
+      HighlighterTargetArea.EXACT_RANGE
+    )
 
     // 构建单词的正则表达式，用于查找下一个匹配的单词
-    val wordPattern =
-      new Regex(s"(?i)\\b$word\\b").unanchored // 尝试从当前光标位置之后查找下一个匹配的单词
+    val wordPattern = new Regex(s"(?i)\\b$word\\b").unanchored
+    // 尝试从当前光标位置之后查找下一个匹配的单词
     var nextWordMatch =
       wordPattern.findFirstMatchIn(documentText.substring(offset + 1))
 
@@ -56,7 +71,7 @@ class MoveToNextWordAction extends AnAction {
       nextWordMatch = wordPattern.findFirstMatchIn(documentText)
     }
 
-    // 如果找到匹配的单词，则进行高亮并滚动到该单词的位置
+    // 如果找到匹配的单词，则滚动到该单词的位置，但不进行高亮
     nextWordMatch.foreach { m =>
       // 如果搜索不是从文档的开头开始，则调整搜索开始的偏移量
       val searchStartOffset = if (offset > 0) 1 else 0
@@ -66,27 +81,6 @@ class MoveToNextWordAction extends AnAction {
       caretModel.moveToOffset(nextWordOffset)
       // 滚动编辑器使当前光标位置居中显示
       editor.getScrollingModel.scrollToCaret(ScrollType.CENTER)
-
-      // 高亮新的单词
-      val markupModel = editor.getMarkupModel
-      // 根据当前的颜色索引创建文本属性
-      val textAttributes =
-        new TextAttributes(
-          fontColors(colorIndex),
-          backgroundColors(colorIndex),
-          null,
-          EffectType.BOXED,
-          0
-        )
-      // 添加高亮标记到文档中
-      markupModel.addRangeHighlighter(
-        nextWordOffset,
-        nextWordOffset + word.length,
-        HighlighterLayer.LAST,
-        textAttributes,
-        HighlighterTargetArea.EXACT_RANGE
-      )
     }
   }
-
 }
