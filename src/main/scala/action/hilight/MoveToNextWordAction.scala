@@ -3,9 +3,8 @@ package action.hilight
 import action.hilight.CaretUtil.getWordAtCaret
 import action.hilight.ColorScheme.{backgroundColors, fontColors}
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
+import com.intellij.openapi.editor.ScrollType
 import com.intellij.openapi.editor.markup.{EffectType, HighlighterLayer, HighlighterTargetArea, TextAttributes}
-import com.intellij.openapi.editor.{Editor, ScrollType}
-import com.intellij.openapi.util.TextRange
 
 import scala.util.matching.Regex
 
@@ -39,15 +38,15 @@ class MoveToNextWordAction extends AnAction {
     }
 
     // 检查单词是否变化
-    if (!word.equals(currentWord)) {
+    if (!word.toLowerCase().equals(currentWord.toLowerCase())) {
       // 切换到下一个字体颜色
       colorIndex = (colorIndex + 1) % fontColors.length
       currentWord = word
     }
 
     // 构建单词的正则表达式，用于查找下一个匹配的单词
-    val wordPattern = new Regex(s"\\b$word\\b")
-    // 尝试从当前光标位置之后查找下一个匹配的单词
+    val wordPattern =
+      new Regex(s"(?i)\\b$word\\b").unanchored // 尝试从当前光标位置之后查找下一个匹配的单词
     var nextWordMatch =
       wordPattern.findFirstMatchIn(documentText.substring(offset + 1))
 

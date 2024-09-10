@@ -479,30 +479,27 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
       else if (SystemInfo.isMac) OsConfig.macOutputPath
       else OsConfig.winOutputPath
     }
-
     var workbook: Workbook =
       new XSSFWorkbook() // new HSSFWorkbook() for generating `.xls` file
-
     var listsheet = workbook.createSheet("all")
 
+    val initialFileName = tableList.map(x => x.split("\\.")(1)).mkString("_")
     val fileName: String = Messages.showInputDialog(
       project,
       "请输入文件名",
       "文件名",
       Messages.getQuestionIcon,
-      "HelloWorld",
+      initialFileName,
       null
     )
 
     tableList.foreach(table => {
       val yourdb = table.split("\\.")(0)
       val yourtb = table.split("\\.")(1)
-
       Messages.showInfoMessage(
         s"正在处理 $yourdb.$yourtb",
         s"正在处理 $yourdb.$yourtb"
       )
-
       val responseObj: Response = misc.DorisHttpUtil
         .getTableMeta(user, password, host, port, yourdb, yourtb) match {
         case Some(result) => result
@@ -718,14 +715,16 @@ class ClipBoardHistoryAction extends AnAction("查看剪切板历史") {
       val caretModel = editor.getCaretModel
       val offset = caretModel.getOffset
       val project = ProjectManager.getInstance().getOpenProjects.head
-      WriteCommandAction.runWriteCommandAction(project, new Runnable {
-        override def run(): Unit = {
-          // Your document modification code here
-          editor.getDocument.insertString(offset, selected)
+      WriteCommandAction.runWriteCommandAction(
+        project,
+        new Runnable {
+          override def run(): Unit = {
+            // Your document modification code here
+            editor.getDocument.insertString(offset, selected)
+          }
         }
-      })
+      )
     }
-
 
   }
 }
