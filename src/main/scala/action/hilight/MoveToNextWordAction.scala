@@ -2,9 +2,18 @@ package action.hilight
 
 import action.hilight.CaretUtil.getWordAtCaret
 import action.hilight.ColorScheme.{backgroundColors, fontColors}
-import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
+import com.intellij.openapi.actionSystem.{
+  AnAction,
+  AnActionEvent,
+  CommonDataKeys
+}
 import com.intellij.openapi.editor.ScrollType
-import com.intellij.openapi.editor.markup.{EffectType, HighlighterLayer, HighlighterTargetArea, TextAttributes}
+import com.intellij.openapi.editor.markup.{
+  EffectType,
+  HighlighterLayer,
+  HighlighterTargetArea,
+  TextAttributes
+}
 
 import scala.util.matching.Regex
 
@@ -35,6 +44,13 @@ class MoveToNextWordAction extends AnAction {
     // 如果获取不到单词，则直接返回
     if (word == null) {
       return
+    }
+    // 如果当前的单词和上一次的单词不同，就切换颜色
+    if (
+      currentWord == null || word.toLowerCase() != currentWord.toLowerCase()
+    ) {
+      currentWord = word
+      colorIndex = (colorIndex + 1) % fontColors.length
     }
 
     // 高亮当前的单词
@@ -82,5 +98,6 @@ class MoveToNextWordAction extends AnAction {
       // 滚动编辑器使当前光标位置居中显示
       editor.getScrollingModel.scrollToCaret(ScrollType.CENTER)
     }
+
   }
 }
