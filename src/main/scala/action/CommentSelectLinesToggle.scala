@@ -11,7 +11,7 @@ import com.intellij.openapi.util.TextRange
 class CommentSelectLinesToggle extends AnAction {
   override def actionPerformed(e: AnActionEvent): Unit = {
 
-    // 获取编辑器选择的行，然后在行首添加 -- 进行注释
+    // 获取编辑器选择的行，然后在行首添加
     val project: Project = e.getData(CommonDataKeys.PROJECT)
     val editor: Editor = e.getData(CommonDataKeys.EDITOR)
 
