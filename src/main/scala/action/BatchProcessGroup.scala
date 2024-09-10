@@ -2,6 +2,7 @@ package action
 
 import _root_.util.OpenFileUtil
 import action.extract.DorisTableModifier
+import action.util.ExceptionHandle
 import com.intellij.notification.{Notification, NotificationType, Notifications}
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys, DefaultActionGroup}
 import com.intellij.openapi.application.ApplicationManager
@@ -393,17 +394,10 @@ class CompareTwoTables extends AnAction("表格比对") {
 
         Messages.showInfoMessage(finalStr, "最终得到的SQL")
         ClipBoardUtil.copyToClipBoard(finalStr)
-
       }
-
     } catch {
       case e: Throwable =>
-        e.printStackTrace()
-        Messages.showMessageDialog(
-          e.getMessage,
-          "Error",
-          Messages.getErrorIcon
-        )
+        ExceptionHandle.handleException(e)
 
     }
   }
@@ -551,12 +545,7 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
       Messages.showInfoMessage("保存成功", "保存成功")
     } catch {
       case e: Throwable =>
-        e.printStackTrace()
-        Messages.showMessageDialog(
-          e.getMessage,
-          "Error",
-          Messages.getErrorIcon
-        )
+        ExceptionHandle.handleException(e)
     }
   }
 

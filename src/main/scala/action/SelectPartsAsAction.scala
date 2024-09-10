@@ -1,10 +1,10 @@
 package action
 
+import action.util.ExceptionHandle
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.{Document, Editor, SelectionModel}
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.TextRange
 
 /** SelectPartsAsAction 类用于处理将编辑器中选中的部分代码转换为带有 AS 关键字的格式
@@ -74,13 +74,7 @@ class SelectPartsAsAction extends AnAction {
             }
           } catch {
             case e: Throwable =>
-              // 处理异常，打印堆栈跟踪并显示错误对话框
-              e.printStackTrace()
-              Messages.showMessageDialog(
-                e.getMessage,
-                "Error",
-                Messages.getErrorIcon
-              )
+              ExceptionHandle.handleException(e)
           }
         }
       }

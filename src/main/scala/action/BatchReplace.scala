@@ -1,17 +1,13 @@
 package action
 
-import com.intellij.openapi.actionSystem.{
-  AnAction,
-  AnActionEvent,
-  CommonDataKeys
-}
+import action.util.ExceptionHandle
+import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.{Document, Editor}
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.{DialogWrapper, Messages}
+import com.intellij.openapi.ui.Messages
 import misc.ClipBoardUtil
 
-import javax.swing.JComponent
 import scala.util.matching.Regex
 
 class BatchReplace extends AnAction {
@@ -84,13 +80,8 @@ class BatchReplace extends AnAction {
             })
           } catch {
             case e: Throwable =>
-              e.printStackTrace()
-              // 弹出错误对话框显示错误信息
-              Messages.showMessageDialog(
-                e.getMessage,
-                "Error",
-                Messages.getErrorIcon
-              )
+
+              ExceptionHandle.handleException(e)
           }
         } else if (subMode == REGEX_MODE) {
           // 获取源正则表达式和目标字符串
@@ -116,13 +107,7 @@ class BatchReplace extends AnAction {
             })
           } catch {
             case e: Throwable =>
-              e.printStackTrace()
-              // 弹出错误对话框显示错误信息
-              Messages.showMessageDialog(
-                e.getMessage,
-                "Error",
-                Messages.getErrorIcon
-              )
+              ExceptionHandle.handleException(e)
           }
         } else {
           // 获取正则表达式

@@ -1,5 +1,6 @@
 package action
 
+import action.util.ExceptionHandle
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.{Document, Editor}
@@ -35,13 +36,7 @@ class ProcessChineseAction extends AnAction {
       })
     } catch {
       case e: Throwable =>
-        e.printStackTrace()
-        Messages.showMessageDialog(
-          e.getMessage,
-          "Error",
-          Messages.getErrorIcon
-        )
+        ExceptionHandle.handleException(e)
     }
   }
 }
-

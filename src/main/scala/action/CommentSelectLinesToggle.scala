@@ -1,10 +1,7 @@
 package action
 
-import com.intellij.openapi.actionSystem.{
-  AnAction,
-  AnActionEvent,
-  CommonDataKeys
-}
+import action.util.ExceptionHandle
+import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.{Document, Editor, SelectionModel}
 import com.intellij.openapi.project.Project
@@ -116,14 +113,7 @@ class CommentSelectLinesToggle extends AnAction {
               }
             }
           } catch {
-            case e: Throwable =>
-              e.printStackTrace()
-              // 弹出错误对话框显示错误信息
-              Messages.showMessageDialog(
-                e.getMessage,
-                "Error",
-                Messages.getErrorIcon
-              )
+            case e: Exception => ExceptionHandle.handleException(e)
           }
         }
       }

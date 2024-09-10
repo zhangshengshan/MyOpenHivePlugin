@@ -1,9 +1,9 @@
 package action
 
+import action.util.ExceptionHandle
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.{Document, Editor}
-import com.intellij.openapi.ui.Messages
 
 class CommentProcess extends AnAction("注释处理") {
   override def actionPerformed(e: AnActionEvent): Unit = {
@@ -22,13 +22,7 @@ class CommentProcess extends AnAction("注释处理") {
         }
       })
     } catch {
-      case e: Throwable =>
-        e.printStackTrace()
-        Messages.showMessageDialog(
-          e.getMessage,
-          "Error",
-          Messages.getErrorIcon
-        )
+      case e: Throwable => ExceptionHandle.handleException(e)
     }
   }
 }
