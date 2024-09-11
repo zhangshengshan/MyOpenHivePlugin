@@ -1,7 +1,7 @@
 package action.hilight
 
 import action.hilight.CaretUtil.getWordAtCaret
-import action.hilight.ColorScheme.{backgroundColors, fontColors}
+import action.hilight.ColorScheme.{BACKGROUD_COLORS, FONT_COLORS}
 import com.intellij.openapi.actionSystem.{
   AnAction,
   AnActionEvent,
@@ -50,7 +50,7 @@ class MoveToNextWordAction extends AnAction {
       currentWord == null || word.toLowerCase() != currentWord.toLowerCase()
     ) {
       currentWord = word
-      colorIndex = (colorIndex + 1) % fontColors.length
+      colorIndex = (colorIndex + 1) % FONT_COLORS.length
     }
 
     // 高亮当前的单词
@@ -59,8 +59,8 @@ class MoveToNextWordAction extends AnAction {
     // 根据当前的颜色索引创建文本属性
     val textAttributes =
       new TextAttributes(
-        fontColors(colorIndex),
-        backgroundColors(colorIndex),
+        FONT_COLORS(colorIndex),
+        BACKGROUD_COLORS(colorIndex),
         null,
         EffectType.BOXED,
         0

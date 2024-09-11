@@ -1,6 +1,6 @@
 package action.hilight
 
-import action.hilight.ColorScheme.{backgroundColors, fontColors}
+import action.hilight.ColorScheme.{BACKGROUD_COLORS, FONT_COLORS}
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.colors.TextAttributesKey
@@ -33,7 +33,7 @@ final class HighlightWordService {
       }
     }
 
-    colorIndex = (colorIndex + 1) % fontColors.length
+    colorIndex = (colorIndex + 1) % FONT_COLORS.length
   }
 
 // 在编辑器中高亮显示指定的单词
@@ -92,8 +92,8 @@ final class HighlightWordService {
       val highlightKey = TextAttributesKey.createTextAttributesKey(
         s"HIGHLIGHT_KEY_$colorIndex",
         new TextAttributes(
-          fontColors(colorIndex),
-          backgroundColors(colorIndex),
+          FONT_COLORS(colorIndex),
+          BACKGROUD_COLORS(colorIndex),
           null,
           null,
           Font.BOLD
