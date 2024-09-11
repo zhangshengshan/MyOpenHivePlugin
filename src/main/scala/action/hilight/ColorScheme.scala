@@ -14,11 +14,8 @@ object ColorScheme {
     Color.MAGENTA,
     Color.ORANGE,
     Color.PINK,
-    Color.LIGHT_GRAY,
-    Color.DARK_GRAY,
     new Color(85, 107, 47), // Olive Drab color
     new Color(139, 69, 19), // Saddle Brown color
-    // 添加更多颜色
     new Color(255, 215, 0), // Gold color
     new Color(218, 165, 32), // Goldenrod color
     new Color(210, 105, 30), // Chocolate color
@@ -26,14 +23,6 @@ object ColorScheme {
     new Color(244, 164, 96), // Sandy Brown color
     new Color(210, 180, 140), // Tan color
     new Color(222, 184, 135), // Burlywood color
-    new Color(245, 245, 220), // Beige color
-    new Color(255, 228, 196), // Bisque color
-    new Color(255, 235, 205), // Blanched Almond color
-    new Color(245, 222, 179), // Wheat color
-    new Color(255, 248, 220), // Cornsilk color
-    new Color(255, 250, 205), // Lemon Chiffon color
-    new Color(250, 250, 210), // Light Goldenrod color
-    new Color(255, 255, 224), // Light Yellow color
     new Color(139, 0, 139), // Dark Magenta color
     new Color(148, 0, 211), // Dark Violet color
     new Color(153, 50, 204), // Dark Orchid color
@@ -59,11 +48,8 @@ object ColorScheme {
     Color.GREEN, // Complement of MAGENTA
     Color.BLUE, // Complement of ORANGE
     Color.GREEN, // Complement of PINK
-    Color.BLACK, // Complement of LIGHT_GRAY
-    Color.WHITE, // Complement of DARK_GRAY
     new Color(170, 148, 208), // Complement of Olive Drab color
     new Color(116, 186, 236), // Complement of Saddle Brown color
-    // 添加更多颜色
     new Color(0, 40, 255), // Complement of Gold color
     new Color(37, 90, 223), // Complement of Goldenrod color
     new Color(45, 150, 225), // Complement of Chocolate color
@@ -71,13 +57,6 @@ object ColorScheme {
     new Color(11, 91, 159), // Complement of Sandy Brown color
     new Color(45, 75, 115), // Complement of Tan color
     new Color(33, 71, 120), // Complement of Burlywood color
-    new Color(10, 17, 35), // Complement of Beige color
-    new Color(0, 27, 59), // Complement of Bisque color
-    new Color(10, 20, 50), // Complement of Blanched Almond color
-    new Color(10, 33, 76), // Complement of Wheat color
-    new Color(0, 7, 35), // Complement of Cornsilk color
-    new Color(0, 5, 50), // Complement of Lemon Chiffon color
-    new Color(5, 5, 45), // Complement of Light Goldenrod color
     new Color(0, 0, 31), // Complement of Light Yellow color
     new Color(116, 255, 116), // Complement of Dark Magenta color
     new Color(107, 255, 44), // Complement of Dark Violet color
