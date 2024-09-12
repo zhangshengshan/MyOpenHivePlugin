@@ -164,5 +164,10 @@
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt N"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+
+        <action id="fieldMatch" class="action.fieldmatch.FieldMatchAction" text="字段匹配"
+                description="fieldMatch">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
     </actions>
 </idea-plugin>
