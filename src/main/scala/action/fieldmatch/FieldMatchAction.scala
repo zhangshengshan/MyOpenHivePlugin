@@ -73,8 +73,9 @@ class FieldMatchAction extends AnAction {
       val newFieldPattern = s"$sourceField AS $targetField"
       val oldText = document.getText
 
-//      val newText = oldText.replaceAll(oldFieldPattern, newFieldPattern)
+      // val newText = oldText.replaceAll(oldFieldPattern, newFieldPattern)
       // NULL 和 AS之间可能有多个空格， 怎么处理？
+
       val newText = oldText.replaceAll(
         s"NULL\\s+AS\\s+$targetField",
         s"$sourceField AS $targetField"
