@@ -2,6 +2,7 @@ package misc
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 import java.io.{FileInputStream, FileOutputStream}
+import scala.jdk.CollectionConverters.IteratorHasAsScala
 
 class ExcelObject {
 
@@ -44,6 +45,35 @@ class ExcelObject {
         val cell = row.getCell(cellIndex)
         cell.toString
       }
+    }
+    workbook.close()
+    inputStream.close()
+    data.map(_.toList).toList
+  }
+
+  def readExcel(filePath: String, headers: List[String]): List[List[String]] = {
+    val inputStream = new FileInputStream(filePath)
+    val workbook = new XSSFWorkbook(inputStream)
+
+    val data = for {
+      sheetIndex <- 0 until workbook.getNumberOfSheets
+      sheet = workbook.getSheetAt(sheetIndex)
+      headerRow = sheet.getRow(0)
+      headerIndexes = headers.map(header =>
+        headerRow
+          .cellIterator()
+          .asScala
+          .find(cell => cell.toString == header)
+          .map(_.getColumnIndex)
+          .getOrElse(-1)
+      )
+      rowIndex <- 1 to sheet.getLastRowNum
+      row = sheet.getRow(rowIndex)
+    } yield {
+      headerIndexes.map(index => {
+        val cell = row.getCell(index)
+        if (cell != null) cell.toString else ""
+      })
     }
     workbook.close()
     inputStream.close()
