@@ -1,9 +1,9 @@
 package action.fieldmatch
 
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.{Document, Editor}
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.Messages
 
 class FieldMatchAction extends AnAction {
   override def actionPerformed(e: AnActionEvent): Unit = {
@@ -40,14 +40,19 @@ class FieldMatchAction extends AnAction {
       val oldFieldPattern = s"NULL AS $targetField"
       val newFieldPattern = s"$sourceField AS $targetField"
       val oldText = document.getText
-      val newText = oldText.replaceAll(oldFieldPattern, newFieldPattern)
 
-      Messages.showMessageDialog(
-        newText,
-        "Done",
-        Messages.getInformationIcon
+//      val newText = oldText.replaceAll(oldFieldPattern, newFieldPattern)
+      // NULL 和 AS之间可能有多个空格， 怎么处理？
+      val newText = oldText.replaceAll(
+        s"NULL\\s+AS\\s+$targetField",
+        s"$sourceField AS $targetField"
       )
-
+      ApplicationManager.getApplication.runWriteAction(new Runnable {
+        override def run(): Unit = {
+          document.setText(newText)
+          editor.getCaretModel.moveToOffset(0)
+        }
+      })
     })
   }
 }
