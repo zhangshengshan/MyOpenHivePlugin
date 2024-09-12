@@ -80,6 +80,7 @@ class FieldMatchAction extends AnAction {
         s"NULL\\s+AS\\s+$targetField",
         s"$sourceField AS $targetField"
       )
+
       ApplicationManager.getApplication.runWriteAction(new Runnable {
         override def run(): Unit = {
           document.setText(newText)
