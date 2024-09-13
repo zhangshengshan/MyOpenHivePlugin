@@ -1,12 +1,13 @@
 package action
 
+import action.util.EditorUtil
 import another.ClusDbTbNode
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
-import com.intellij.openapi.util.{SystemInfo, TextRange}
+import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.{PsiDocumentManager, PsiFile}
 import com.zss.graph.{Graph, Node}
@@ -94,47 +95,7 @@ class GetDorisSchemaAction extends AnAction {
     val psiFile: PsiFile =
       PsiDocumentManager getInstance project getPsiFile editor.getDocument;
 
-    // from cursor's offset move to the left until meet a space
-    // move to the right until meet a space
-
-    var leftOffset = offset
-    var rightOffset = offset
-
-    // 判断是空格还是换行符,或者\t
-    Character.isWhitespace(
-      editor.getDocument.getText.charAt(offset - 1)
-    )
-
-    while (
-      leftOffset > 0 && !Character.isWhitespace(
-        editor.getDocument.getText.charAt(leftOffset - 1)
-      )
-    ) {
-      leftOffset = leftOffset - 1
-    }
-    while (
-      rightOffset < editor.getDocument.getTextLength && !Character.isWhitespace(
-        editor.getDocument.getText.charAt(rightOffset)
-      )
-    ) {
-      rightOffset = rightOffset + 1
-    }
-
-    val expandObj: String = editor.getDocument.getText(
-      new TextRange(leftOffset, rightOffset)
-    )
-    Messages.showInfoMessage(expandObj, "get table from current cursor")
-
-//    val element = psiFile.findElementAt(offset)
-//    val word: PsiElement =
-//      PsiTreeUtil.getParentOfType(element, classOf[PsiElement])
-//    println(word.getText)
-//    Messages.showInfoMessage(word.getText, "Error")
-
-//    val file = FileDocumentManager.getInstance().getFile(editor.getDocument())
-//    val off = editor.getCaretModel().getOffset()
-//
-//    val ele = PsiManager.getInstance(project).findFile(file).findElementAt(off)
+    val expandObj = EditorUtil.getCaretUnderCursor(editor)
 
     var db = ""
     var tb = ""

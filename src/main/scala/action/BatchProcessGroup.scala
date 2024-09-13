@@ -2,7 +2,7 @@ package action
 
 import _root_.util.OpenFileUtil
 import action.extract.DorisTableModifier
-import action.util.ExceptionHandle
+import action.util.{EditorUtil, ExceptionHandle}
 import com.intellij.notification.{Notification, NotificationType, Notifications}
 import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys, DefaultActionGroup}
 import com.intellij.openapi.application.ApplicationManager
@@ -533,9 +533,20 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
       project: Project
     ) = misc.GetConfig.getConfig(e)
 
+    val table_list =
+      if (
+        EditorUtil.getCaretUnderCursor(e.getData(CommonDataKeys.EDITOR)) != null
+      ) {
+        EditorUtil
+          .getCaretUnderCursor(e.getData(CommonDataKeys.EDITOR))
+          .split("\n")
+          .toList
+      } else {
+        clipboard.strip().split("\n").toList
+      }
     try {
       processDorisSchema(
-        clipboard.strip().split("\n").toList,
+        table_list,
         user,
         password,
         host,
