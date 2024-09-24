@@ -1,0 +1,15 @@
+
+### GET request with dynamic variables
+GET https://examples.http-client.intellij.net/anything?id={{$random.uuid}}&ts={{$timestamp}}
+
+
+### get
+GET https://www.baidu.com
+
+AK:a8f64e98-6c03-4929-8bb6-8488e6d7a855
+SK:1f67b0ce-d4a4-4a00-9126-3130c69626ed
+
+### QUICK BI
+GET https://qbi.chintanneng.com/openapi/v2/organization/user
+
+

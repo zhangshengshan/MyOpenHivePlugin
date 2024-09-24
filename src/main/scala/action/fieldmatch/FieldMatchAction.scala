@@ -1,22 +1,12 @@
 package action.fieldmatch
 
-import com.intellij.openapi.actionSystem.{
-  AnAction,
-  AnActionEvent,
-  CommonDataKeys
-}
+import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.{Document, Editor}
-import com.intellij.openapi.fileChooser.{
-  FileChooserDescriptor,
-  FileChooserDialog,
-  FileChooserFactory
-}
+import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import misc.ExcelObject
-
-import scala.collection.mutable
 
 class FieldMatchAction extends AnAction {
   override def actionPerformed(e: AnActionEvent): Unit = {
@@ -67,13 +57,12 @@ class FieldMatchAction extends AnAction {
       e -> f
      */
 
-    val reversedMatchMap: Map[String, mutable.Map[String, String]] =
-      matchMap.groupBy(_._2)
+    val reversedMatchMap = matchMap.groupBy(_._2).mapValues(_.map(kv => kv._1))
 
     reversedMatchMap.foreach(kv => {
 
       /** SELECT
-        *  NULL AS b
+        *         NULL AS b
         *  , NULL AS d
         *  , NULL AS f
         *  , NULL AS h
@@ -100,7 +89,7 @@ class FieldMatchAction extends AnAction {
       // NULL 和 AS之间可能有多个空格， 怎么处理？
 
       val newText = oldText.replaceAll(
-        s"NULL\\s+AS\\s+$targetField",
+        s"(?i)NULL\\s+AS\\s+$targetField",
         s"$sourceField AS $targetField"
       )
 
