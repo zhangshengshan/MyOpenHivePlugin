@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.{Document, Editor}
 import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.vfs.VirtualFile
 import misc.ExcelObject
 
@@ -39,6 +40,13 @@ class FieldMatchAction extends AnAction {
     val content: List[List[String]] = excelObject.readExcel(
       chosenFile.getPath,
       List("sourceTable", "sourceField", "targetTable", "targetField")
+    )
+
+    // 这里弹出一个框，提示需要输入的excel文件的路径的表头定义
+    // 例如：sourceTable,sourceField,targetTable,targetField
+    Messages.showInfoMessage(
+      "Please input the header of the excel file, sourceTable, sourceField, targetTable, targetField",
+      "Input Header"
     )
 
     for (i <- 0 until content.length) {

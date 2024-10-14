@@ -194,12 +194,17 @@ class GetDorisSchemaAction extends AnAction {
       null
     )
 
+    // 检测属于什么系统
+    val isMac = SystemInfo.isMac
+    val graphvizPath = if (isMac) OsConfig.macDotPath else OsConfig.winDotPath
+    val isWin = SystemInfo.isWindows
+
     graph.render(
       fileName,
       Some(outPutDir),
       Some(true),
-      Some(OsConfig.winDotPath),
-      Some(true)
+      Some(graphvizPath),
+      Some(isWin)
     )
 
     val sql = genDorisSelectQuery(responseObj, yourdb, yourtb)
