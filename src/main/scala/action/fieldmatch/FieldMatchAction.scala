@@ -17,6 +17,23 @@ class FieldMatchAction extends AnAction {
     val document: Document = editor.getDocument
     val matchMap = scala.collection.mutable.Map[String, String]()
 
+    // 这里弹出一个框，提示需要输入的excel文件的路径的表头定义
+    // 例如：sourceTable,sourceField,targetTable,targetField
+    val result = Messages.showYesNoDialog(
+      "Please input the header definition of the excel file path",
+      "Header Definition",
+      Messages.getQuestionIcon
+    )
+    // 如果没有输入，这里提供一个按钮供用户点击下载末班EXCEL文件
+    result match {
+      case Messages.YES =>
+      // do nothing
+      case Messages.NO =>
+        ExcelUtil.createAndOpenExcel(
+          s"/Users/zhangshengshan/Desktop/field_match模版.xlsx"
+        )
+    }
+
     /** ExcelObject
       * 在这里用ExcelObject代替Excel，ExcelObject是一个类，包含了Excel的所有属性和方法，这样就可以直接调用ExcelObject的方法，而不用再去调用Excel的方法了。
       */
@@ -40,13 +57,6 @@ class FieldMatchAction extends AnAction {
     val content: List[List[String]] = excelObject.readExcel(
       chosenFile.getPath,
       List("sourceTable", "sourceField", "targetTable", "targetField")
-    )
-
-    // 这里弹出一个框，提示需要输入的excel文件的路径的表头定义
-    // 例如：sourceTable,sourceField,targetTable,targetField
-    Messages.showInfoMessage(
-      "Please input the header of the excel file, sourceTable, sourceField, targetTable, targetField",
-      "Input Header"
     )
 
     for (i <- 0 until content.length) {
