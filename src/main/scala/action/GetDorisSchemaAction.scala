@@ -185,6 +185,10 @@ class GetDorisSchemaAction extends AnAction {
       else OsConfig.winOutputPath
     }
 
+    val dotPath = if (SystemInfo.isMac) OsConfig.macDotPath else OsConfig.winDotPath
+
+    val isWin = SystemInfo.isWindows
+
     val fileName: String = Messages.showInputDialog(
       project,
       "请输入文件名",
@@ -198,8 +202,8 @@ class GetDorisSchemaAction extends AnAction {
       fileName,
       Some(outPutDir),
       Some(true),
-      Some(OsConfig.winDotPath),
-      Some(true)
+      Some(dotPath),
+      Some(isWin)
     )
 
     val sql = genDorisSelectQuery(responseObj, yourdb, yourtb)
