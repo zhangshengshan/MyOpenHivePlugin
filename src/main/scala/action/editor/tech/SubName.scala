@@ -22,12 +22,6 @@ class SubName extends AnAction {
    */
   override def actionPerformed(e: AnActionEvent): Unit = {
 
-
-    Messages.showInfoMessage(
-      "请选择替换模式",
-      "替换模式"
-    )
-
     // 获取项目和编辑器实例
     val project: Project = e.getData(CommonDataKeys.PROJECT)
     val editor: Editor = e.getData(CommonDataKeys.EDITOR)
@@ -76,6 +70,8 @@ class SubName extends AnAction {
                 document.getLineEndOffset(curLine),
                 finalResult
               )
+
+              Messages.showInfoMessage(project, "SUCESS", "替换成功")
             }
             }
           } catch {
