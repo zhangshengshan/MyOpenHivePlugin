@@ -50,15 +50,15 @@ class BatchProcessGroup extends DefaultActionGroup {
 }
 
 /** 关联条件提取器类，继承自AnAction类，允许用户通过剪贴板提取关联条件
-  *
-  * @extends AnAction 表示该类继承了AnAction类，并且指定了在用户界面中的显示名称为“关联条件”
-  */
+ *
+ * @extends AnAction 表示该类继承了AnAction类，并且指定了在用户界面中的显示名称为“关联条件”
+ */
 class JoinConditionExtractor extends AnAction("关联条件") {
 
   /** 当动作被触发时执行的方法从剪贴板中提取关联条件并显示通知
-    *
-    * @param e 事件对象，包含了事件的相关信息，如上下文等
-    */
+   *
+   * @param e 事件对象，包含了事件的相关信息，如上下文等
+   */
   override def actionPerformed(e: AnActionEvent): Unit = {
     // 从剪贴板获取内容
     val clipboard = ClipBoardUtil.getFromClipboard
@@ -84,6 +84,7 @@ class JoinConditionExtractor extends AnAction("关联条件") {
     ClipBoardUtil.copyToClipBoard(result)
   }
 }
+
 class SingleQuoteWrapper extends AnAction("单引号") {
   override def actionPerformed(e: AnActionEvent): Unit = {
     val clipboard = ClipBoardUtil.getFromClipboard
@@ -402,6 +403,7 @@ class CompareTwoTables extends AnAction("表格比对") {
     }
   }
 }
+
 class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
 
   import org.apache.poi.ss.usermodel.{Cell, Row, Sheet, Workbook}
@@ -410,12 +412,12 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
   var listRowIdx = 2
 
   private def getXlsxFileFromDoris(
-      responseObj: Response,
-      workbook: Workbook,
-      db: String,
-      tb: String,
-      listsheet: Sheet
-  ) = {
+                                    responseObj: Response,
+                                    workbook: Workbook,
+                                    db: String,
+                                    tb: String,
+                                    listsheet: Sheet
+                                  ) = {
 
     val tableName = db + "." + tb
 
@@ -451,14 +453,15 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
       }
     }
   }
+
   def processDorisSchema(
-      tableList: List[String],
-      user: String,
-      password: String,
-      host: String,
-      port: String,
-      project: Project
-  ): Unit = {
+                          tableList: List[String],
+                          user: String,
+                          password: String,
+                          host: String,
+                          port: String,
+                          project: Project
+                        ): Unit = {
 
     val descriptor: FileChooserDescriptor =
       new FileChooserDescriptor(false, true, false, false, false, false)
@@ -497,7 +500,7 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
       val responseObj: Response = misc.DorisHttpUtil
         .getTableMeta(user, password, host, port, yourdb, yourtb) match {
         case Some(result) => result
-        case None         => return
+        case None => return
       }
 
       val fieldComments =
@@ -531,7 +534,7 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
       user: String,
       password: String,
       project: Project
-    ) = misc.GetConfig.getConfig(e)
+      ) = misc.GetConfig.getConfig(e)
 
     val table_list =
       if (
@@ -696,7 +699,7 @@ class ClipBoardHistoryAction extends AnAction("查看剪切板历史") {
   override def actionPerformed(e: AnActionEvent): Unit = {
     val clipboardHistory = ClipBoardUtil.getClipboardHistory.map(x => x + "\n")
     val message = clipboardHistory.mkString("\n")
-//    Messages.showInfoMessage(message, "剪切板历史")
+    //    Messages.showInfoMessage(message, "剪切板历史")
 
     // chose one of the following options
     val selected: String = Messages.showEditableChooseDialog(
@@ -725,6 +728,5 @@ class ClipBoardHistoryAction extends AnAction("查看剪切板历史") {
         }
       )
     }
-
   }
 }

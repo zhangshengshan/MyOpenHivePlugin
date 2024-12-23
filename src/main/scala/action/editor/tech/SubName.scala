@@ -71,13 +71,14 @@ class SubName extends AnAction {
                 finalResult
               )
 
-              Messages.showInfoMessage(project, "SUCESS", "替换成功")
             }
             }
           } catch {
             case e: Throwable =>
               ExceptionHandle.handleException(e)
+
           }
+          Messages.showInfoMessage(project, "SUCESS", "替换成功")
         }
       }
     )
