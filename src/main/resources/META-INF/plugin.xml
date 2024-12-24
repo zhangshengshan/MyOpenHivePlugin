@@ -71,27 +71,27 @@
             <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl meta alt G"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-        <action id="HiveWholeProjectRenameAction" class="action.HiveWholeProjectRenameAction"
-                text="HiveWholeProjectRenameAction">
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl meta alt T"/>
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-        </action>
+        <!--        <action id="HiveWholeProjectRenameAction" class="action.HiveWholeProjectRenameAction"-->
+        <!--                text="HiveWholeProjectRenameAction">-->
+        <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl meta alt T"/>-->
+        <!--            <add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
+        <!--        </action>-->
         <action id="PsiParseAction" class="experimental.PsiParseAction" text="PsiParse">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt P"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-        <action id="getDorisTableAction" class="action.GetDorisSchemaAction" text="getDorisTableAction"
-                description="getDorisTableAction">
+        <action id="getDorisTableAction" class="action.GetDorisSchemaAction" text="获取GRAPH与SQL生成"
+                description="获取GRAPH与SQL生成">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt G"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-        <action id="transformMysqlToDoris" class="action.TransformMysqlToDorisAction" text="TranformMysqlToDoris"
+        <action id="transformMysqlToDoris" class="action.TransformMysqlToDorisAction" text="MYSQL转化为DORIS"
                 description="MYSQL2DORIS">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt h"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-        <action id="extractTablesAction" class="action.ExtractTablesAction" text="extractTablesAction"
-                description="extractTablesAction">
+        <action id="extractTablesAction" class="action.ExtractTablesAction" text="抽取所有依赖表"
+                description="抽取所有依赖表">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
         <action id="dsl2sqlgenerator" class="action.DSL2DorisAction" text="dsl2sql"
@@ -170,6 +170,12 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
         <action id="subName" class="action.editor.tech.SubName" text="SubName" description="SubName">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+        <action id="substituewordundercursorwithclipboard"
+                class="action.editor.tech.SubstitueWordUnderCursorWithClipboard"
+                text="SubstitueWordUnderCursorWithClipboard"
+                description="SubstitueWordUnderCursorWithClipboard">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
     </actions>

@@ -6,6 +6,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.PsiElement
 import psi.node.IdentifierNode
 
+@Deprecated
 class HiveWholeProjectRenameAction extends AnAction {
   val SEP = "\r"
 
