@@ -451,7 +451,30 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
 
         listRowIdx += 1
       }
+
+
     }
+
+    val columnsList = responseObj.data.properties.map(x => x.name).mkString(",") + ",ts_ms,op,`table`"
+    val jsonPath = responseObj.data.properties.map(x => "\\\"$.after." + x.name + "\\\"").mkString(",") + "\\\"$.source.ts_ms\\\",\\\"$.op\\\",\\\"$.source.table\\\""
+    Messages.showInfoMessage(columnsList, "Copy Columns")
+    ClipBoardUtil.copyToClipBoard(columnsList)
+    Messages.showInfoMessage(jsonPath, "Copy JSONPath")
+    ClipBoardUtil.copyToClipBoard(jsonPath)
+
+    listRowIdx += 3
+//    val columnlistRow = sheet.createRow(1)
+//    val columnlistCell0: Cell = columnlistRow.createCell(0)
+//    columnlistCell0.setCellValue(columnsList)
+
+    listRowIdx += 1
+//    val jsonPathRow = sheet.createRow(1)
+//    val jsonPathCell0: Cell = jsonPathRow.createCell(0)
+//    jsonPathCell0.setCellValue(jsonPath)
+
+
+
+
   }
 
   def processDorisSchema(
@@ -503,15 +526,12 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
         case None => return
       }
 
-      val fieldComments =
-        responseObj.data.properties
-          .map(item => (item.name, item.comment))
-          .toList
+
       getXlsxFileFromDoris(responseObj, workbook, yourdb, yourtb, listsheet)
     })
 
     val filePathName = outPutDir + File.separator + fileName + ".xlsx"
-    val fileOut = new FileOutputStream(
+    val fileOut: FileOutputStream = new FileOutputStream(
       filePathName
     )
     workbook.write(fileOut)
