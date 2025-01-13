@@ -353,7 +353,7 @@ class CompareTwoTables extends AnAction("表格比对") {
 
         val wherePart = "\nWHERE\n" + bothSids
           .map(x => {
-            s"a.${x} != b.${x}"
+            s"COALESCE(a.${x},'') != COALESCE(b.${x},'')"
           })
           .mkString("\n(\n", " \nOR\n ", ")") + "\n OR \n" + values
           .map(x => {
