@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.datatransfer.DataFlavor;
 
-public class SubstitueWordUnderCursorWithClipboard extends AnAction {
+public class  SubstitueWordUnderCursorWithClipboard extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         // 获取项目和编辑器实例
