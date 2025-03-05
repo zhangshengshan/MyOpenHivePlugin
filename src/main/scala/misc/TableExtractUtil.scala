@@ -117,7 +117,9 @@ object TableExtractUtil {
         JOptionPane.showInputDialog(null, "请输入文件名", defaultFileName)
 
       // 这里的filePath是用户选择的目录路径和输入的文件名的组合
-      val filePath = directory.getAbsolutePath + "\\" + fileName + ".xlsx"
+
+      val separator = if (SystemInfo.isWindows) "\\" else "/"
+      val filePath = directory.getAbsolutePath + separator + fileName + ".xlsx"
       val excel = new ExcelObject
       val list: List[List[String]] =
         tuples.toList.map(x => List(x._1, x._2)).toList

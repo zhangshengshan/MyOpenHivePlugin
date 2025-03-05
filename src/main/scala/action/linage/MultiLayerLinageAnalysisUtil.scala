@@ -126,7 +126,10 @@ object MultiLayerLinageAnalysisUtil {
     ).toSet
 
     val excel = new ExcelObject
-    val excelFilePath = outputDir.get + "\\" + fileName + ".xlsx"
+
+    val separator = if (SystemInfo.isWindows) "\\" else "/"
+    val excelFilePath = outputDir.get + separator + fileName + ".xlsx"
+
     excel.saveToExcel(
       set.toList.map(x => List(x)),
       List("依赖关系"),
@@ -139,8 +142,8 @@ object MultiLayerLinageAnalysisUtil {
       fileName,
       outputDir,
       Some(true),
-      Some(OsConfig.winDotPath),
-      Some(true)
+      Some(OsConfig.macDotPath),
+      Some(false)
     )
   }
 
