@@ -105,7 +105,8 @@ generateGrammarSource {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = '2024.3'
+    version = '2025.1'
+    type = 'RR'
 }
 patchPluginXml {
     changeNotes = """ """
