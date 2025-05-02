@@ -5,14 +5,10 @@
 
 ## TODO
 
-- [ ] Doris数据源的端口要支持URL和JDBC的端口配置， 要支持默认的Schema
 - [ ] 要能剔除默认的Schema
-- [ ] Meta Info Action 接口走通
-- [ ] Query Schema Action 接口走通
-- 
-- [ ] org.jetbrains.intellij version 只能升级到1.12.0， 无法进一步升级，否则会出现启动问题
-- [ ] Doris Live Templates Support
-- [ ] 本工程编译需要mix java 和 scala , 编译的时候存在相互依赖， 需要手动处理， 1、先编译JAVA， 2， 再编译Scala , 3 在编译JAVA， 从长远看需要处理。
+- [*] org.jetbrains.intellij version 只能升级到1.12.0， 无法进一步升级，否则会出现启动问题
+- [*] Doris Live Templates Support
+- [*] 本工程编译需要mix java 和 scala , 编译的时候存在相互依赖， 需要手动处理， 1、先编译JAVA， 2， 再编译Scala , 3 在编译JAVA， 从长远看需要处理。
 - [ ] 开发新的SQL FORMATTER用于格式化SQL代替现有的三方库以及Intellij_Platform的Formatter
 - [ ] optimize the strategy of folding 折叠策略优化, set key=value 开始的SQL不能正常fold
 - [ ] extract with part support
@@ -81,6 +77,7 @@
 - [x] MyToolWindow 中如果输入的文件名称有问题，现在没有错误提示，需要进行修正˚
 - [x] 拖拉拽的榫卯设计雏形可行性尝试。
 
+- [ ] Doris数据源的端口要支持URL和JDBC的端口配置， 要支持默认的Schema
 
 
 https://github.com/sqlparser/python_data_lineage
