@@ -1,28 +1,78 @@
 <templateSet group="Hive">
     <template name="select"
-              value="SELECT &#x000A;$FIELD$ AS $FIELD_NAME$ &#x000A;FROM&#x000A;$TABLE_NAME$&#x000A;WHERE&#x000A;date = '${date}'"
-              description="SELECT"
-              toReformat="true"
-              toShortenFQNames="false">
-        <variable name="FIELD" expression="complete()" defaultValue="template for select"
-                  alwaysStopAt="true"/>
-        <variable name="FIELD_NAME" expression="complete()" defaultValue="template for select"
-                  alwaysStopAt="true"/>
-        <variable name="TABLE_NAME" expression="complete()" defaultValue="template for select"
-                  alwaysStopAt="true"/>
+              value="SELECT $FIELD$ AS $FIELD_NAME$ FROM $TABLE_NAME$ WHERE date = '${date}'"
+              description="SELECT" toReformat="true" toShortenFQNames="false">
+        <variable name="FIELD" expression="complete()"
+                  defaultValue="template for select" alwaysStopAt="true"/>
+        <variable name="FIELD_NAME" expression="complete()"
+                  defaultValue="template for select" alwaysStopAt="true"/>
+        <variable name="TABLE_NAME" expression="complete()"
+                  defaultValue="template for select" alwaysStopAt="true"/>
         <context>
             <option name="Hive" value="true"/>
         </context>
     </template>
-    <template name="fas"
-              value="$FIELD_NAME$ AS $ALIAS_NAME$"
-              description="AS"
-              toReformat="true"
+    <template name="fas" value="$FIELD_NAME$ AS $ALIAS_NAME$"
+              description="AS" toReformat="true" toShortenFQNames="false">
+        <variable name="FIELD_NAME" expression="complete()"
+                  defaultValue="template for select" alwaysStopAt="true"/>
+        <variable name="ALIAS_NAME" expression="complete()"
+                  defaultValue="template for select" alwaysStopAt="true"/>
+        <context>
+            <option name="Hive" value="true"/>
+        </context>
+    </template>
+    <template name="bak_and_recreate_table"
+              value=" CREATE TABLE $TABLE_NAME$_CACHE LIKE $TABLE_NAME$; INSERT INTO $TABLE_NAME$_CACHE SELECT * FROM $TABLE_NAME$ ; ALTER TABLE $TABLE_NAME$ RENAME $TABLE_NAME$_TMP ; ALTER TABLE $TABLE_NAME$_CACHE RENAME $TABLE_NAME$ ; "
+              description="CREATE TABLE CACHE" toReformat="true"
               toShortenFQNames="false">
-        <variable name="FIELD_NAME" expression="complete()" defaultValue="template for select"
-                  alwaysStopAt="true"/>
-        <variable name="ALIAS_NAME" expression="complete()" defaultValue="template for select"
-                  alwaysStopAt="true"/>
+        <variable name="TABLE_NAME" expression="clipboard()"
+                  defaultValue="template for select" alwaysStopAt="true"/>
+        <context>
+            <option name="Hive" value="true"/>
+        </context>
+    </template>
+    <template name="dropcreate"
+              value=" DROP TABLE $table_name$; create table $table_name$ AS -- truncate table $table_name$; -- insert into $table_name$ "
+              description="" toReformat="true" toShortenFQNames="false">
+        <variable name="table_name" expression="clipboard()"
+                  defaultValue="template for select" alwaysStopAt="true"/>
+        <context>
+            <option name="Hive" value="true"/>
+        </context>
+    </template>
+    <template name="sc"
+              value=" ; SELECT COUNT(*) AS cnt FROM $TABLE$ ; " description=""
+              toReformat="true" toShortenFQNames="false">
+        <variable name="TABLE" expression="clipboard()"
+                  defaultValue="template for select" alwaysStopAt="true"/>
+        <context>
+            <option name="Hive" value="true"/>
+        </context>
+    </template>
+    <template name="s*" value="SELECT * FROM $TABLE$" description
+            ="SELECT *" toReformat="true" toShortenFQNames="false">
+        <variable name="TABLE" expression="clipboard()"
+                  defaultValue="template for select" alwaysStopAt="true"/>
+        <context>
+            <option name="Hive" value="true"/>
+        </context>
+    </template>
+    <template name="ssc" value=" SELECT COUNT(*) FROM ($CONTECT$) AS
+        tmp ; " description="SELECT COUNT(*)" toReformat="true"
+    >
+        <variable name="CONTECT" expression="clipboard()"
+                  defaultValue="template for select" alwaysStopAt="true"/>
+        <context>
+            <option name="Hive" value="true"/>
+        </context>
+    </template>
+    <template name="truncinsert" value=" TRUNCATE TABLE $TABLE_NAME$;
+        INSERT INTO $TABLE_NAME$ "
+              description="TRUNCATE TABLE"
+              toReformat="true" toShortenFQNames="false">
+        <variable name="TABLE_NAME" expression="clipboard()"
+                  defaultValue="template for select" alwaysStopAt="true"/>
         <context>
             <option name="Hive" value="true"/>
         </context>
