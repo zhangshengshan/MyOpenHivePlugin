@@ -14,6 +14,9 @@ import com.intellij.openapi.util.TextRange
 
 /** SelectPartsAsAction 类用于处理将编辑器中选中的部分代码转换为带有 AS 关键字的格式
   * 它通过覆盖 actionPerformed 方法来实现这一功能
+  * selectedText.replaceAll("#\\{([^}]*)}", "\\${$1}")
+  *      } else {
+  *        selectedText.replaceAll("\\$\\{([^}]*)}", "#{$1}")
   */
 class ParamSub extends AnAction {
 
@@ -39,48 +42,57 @@ class ParamSub extends AnAction {
       else selectionModel.getSelectionEnd
     val document: Document = editor.getDocument
 
-    var replacedText: String = ""
+    // 获取选中文字所在行的起始和结束行号
+    val lineStart: Int = document.getLineNumber(start)
+    val lineEnd: Int = document.getLineNumber(end)
 
-    // 弹出选择框，选择把 #{ 替换为 ${ 还是 ${ 替换为 #{ ?
-    val choice = Messages.showYesNoDialog(
+    val transform_flag = Messages.showYesNoDialog(
       project,
-      "#{替换为${ 还是 ${ 替换为 #{ ?",
-      "替换",
-      Messages.getQuestionIcon
+      "是否将参数名替换为列名?",
+      "替换参数名",
+      Messages.getQuestionIcon()
     )
 
-    try {
-      val selectedText = document.getText(new TextRange(start, end))
+    // 在一个写命令动作中执行替换操作，确保线程安全
+    WriteCommandAction.runWriteCommandAction(
+      project,
+      new Runnable {
+        override def run(): Unit = {
+          try {
+            // 对每一行进行处理，添加 -- 注释，并进行替换操作
+            lineStart to lineEnd foreach { curLine: Int =>
+              {
+                val insertPos: Int = document.getLineStartOffset(curLine)
+                val lineText: String = document.getText(
+                  new TextRange(
+                    document.getLineStartOffset(curLine),
+                    document.getLineEndOffset(curLine)
+                  )
+                )
 
-      // 根据用户的选择计算替换后的文本
-      replacedText = if (choice == Messages.YES) {
-        selectedText.replaceAll("#\\{([^}]*)}", "\\${$1}")
-      } else {
-        selectedText.replaceAll("\\$\\{([^}]*)}", "#{$1}")
-      }
+                val finalResult = if (transform_flag == Messages.YES) {
+                  lineText.replaceAll("#\\{([^}]*)}", "'\\${$1}\'")
+                } else {
+                  lineText.replaceAll("\'\\$\\{([^}]*)}\'", "#{$1}")
+                }
+                // 定义匹配模式的正则表达式
+                // 将替换后的结果写入文档
+                document.replaceString(
+                  document.getLineStartOffset(curLine),
+                  document.getLineEndOffset(curLine),
+                  finalResult
+                )
 
+              }
+            }
+          } catch {
+            case e: Throwable =>
+              ExceptionHandle.handleException(e)
 
-      Messages.showInfoMessage(
-        project,
-        s"替换后的文本: $replacedText",
-        "替换结果"
-      )
-
-      // 在一个写命令动作中执行替换操作，确保线程安全
-      WriteCommandAction.runWriteCommandAction(
-        project,
-        new Runnable {
-          override def run(): Unit = {
-            // 将替换后的文本写回文档
-            document.replaceString(start, end, replacedText)
           }
         }
-      )
-    } catch {
-      case e: Throwable =>
-        ExceptionHandle.handleException(e)
-    }
-
+      }
+    )
     // 显示替换成功的消息
     Messages.showInfoMessage(project, "SUCCESS", "替换成功")
   }
