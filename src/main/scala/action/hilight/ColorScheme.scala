@@ -5,71 +5,40 @@ import java.awt.Color
 object ColorScheme {
 
   // 定义一个私有的颜色数组，用于存储字体颜色
-  val FONT_COLORS = Array(
-    Color.RED,
-    Color.GREEN,
-    Color.BLUE,
-    Color.YELLOW,
-    Color.CYAN,
-    Color.MAGENTA,
-    Color.ORANGE,
-    Color.PINK,
-    new Color(85, 107, 47), // Olive Drab color
-    new Color(139, 69, 19), // Saddle Brown color
-    new Color(255, 215, 0), // Gold color
-    new Color(218, 165, 32), // Goldenrod color
-    new Color(210, 105, 30), // Chocolate color
-    new Color(205, 133, 63), // Peru color
-    new Color(244, 164, 96), // Sandy Brown color
-    new Color(210, 180, 140), // Tan color
-    new Color(222, 184, 135), // Burlywood color
-    new Color(139, 0, 139), // Dark Magenta color
-    new Color(148, 0, 211), // Dark Violet color
-    new Color(153, 50, 204), // Dark Orchid color
-    new Color(186, 85, 211), // Medium Orchid color
-    new Color(218, 112, 214), // Orchid color
-    new Color(221, 160, 221), // Plum color
-    new Color(238, 130, 238), // Violet color
-    new Color(255, 0, 255), // Fuchsia color
-    new Color(255, 105, 180), // Hot Pink color
-    new Color(255, 20, 147), // Deep Pink color
-    new Color(255, 192, 203), // Pink color
-    new Color(255, 182, 193), // Light Pink color
-    new Color(219, 112, 147) // Pale Violet Red color
+  val FONT_COLORS: Array[Color] = Array(
+    new Color(255, 255, 255), // White
+    new Color(0, 0, 0), // Black
+    new Color(255, 0, 0), // Red
+    new Color(0, 255, 0), // Green
+    new Color(0, 0, 255), // Blue
+    new Color(255, 255, 0), // Yellow
+    new Color(0, 255, 255), // Cyan
+    new Color(255, 0, 255), // Magenta
+    new Color(128, 0, 0), // Maroon
+    new Color(0, 128, 0), // Green (Dark)
+    new Color(0, 0, 128), // Navy
+    new Color(128, 128, 0), // Olive
+    new Color(0, 128, 128), // Teal
+    new Color(128, 0, 128), // Purple
+    new Color(192, 192, 192) // Silver
   )
 
   // 定义一个私有的颜色数组，用于存储背景颜色，其中的颜色是根据字体颜色的补色原则选择的
-  val BACKGROUD_COLORS = Array(
-    Color.CYAN, // Complement of RED
-    Color.MAGENTA, // Complement of GREEN
-    Color.YELLOW, // Complement of BLUE
-    Color.BLUE, // Complement of YELLOW
-    Color.RED, // Complement of CYAN
-    Color.GREEN, // Complement of MAGENTA
-    Color.BLUE, // Complement of ORANGE
-    Color.GREEN, // Complement of PINK
-    new Color(170, 148, 208), // Complement of Olive Drab color
-    new Color(116, 186, 236), // Complement of Saddle Brown color
-    new Color(0, 40, 255), // Complement of Gold color
-    new Color(37, 90, 223), // Complement of Goldenrod color
-    new Color(45, 150, 225), // Complement of Chocolate color
-    new Color(50, 122, 192), // Complement of Peru color
-    new Color(11, 91, 159), // Complement of Sandy Brown color
-    new Color(45, 75, 115), // Complement of Tan color
-    new Color(33, 71, 120), // Complement of Burlywood color
-    new Color(0, 0, 31), // Complement of Light Yellow color
-    new Color(116, 255, 116), // Complement of Dark Magenta color
-    new Color(107, 255, 44), // Complement of Dark Violet color
-    new Color(102, 205, 51), // Complement of Dark Orchid color
-    new Color(69, 170, 44), // Complement of Medium Orchid color
-    new Color(37, 143, 41), // Complement of Orchid color
-    new Color(34, 95, 34), // Complement of Plum color
-    new Color(17, 125, 17), // Complement of Violet color
-    new Color(0, 150, 75), // Complement of Fuchsia color
-    new Color(150, 150, 75), // Complement of Hot Pink color
-    new Color(108, 235, 108), // Complement of Deep Pink color
-    new Color(63, 63, 52), // Complement of Pink color
-    new Color(73, 73, 62), // Complement of Light Pink color
-    new Color(36, 143, 108) // Complement of Pale Violet Red color
+  val BACKGROUD_COLORS: Array[Color] = Array(
+    new Color(0, 0, 0), // Black (complement of White)
+    new Color(255, 255, 255), // White (complement of Black)
+    new Color(0, 255, 255), // Cyan (complement of Red)
+    new Color(255, 0, 255), // Magenta (complement of Green)
+    new Color(255, 255, 0), // Yellow (complement of Blue)
+    new Color(0, 0, 255), // Blue (complement of Yellow)
+    new Color(255, 0, 0), // Red (complement of Cyan)
+    new Color(0, 255, 0), // Green (complement of Magenta)
+    new Color(128, 128, 128), // Gray (complement of Maroon)
+    new Color(128, 255, 128), // Light Green (complement of Dark Green)
+    new Color(128, 128, 255), // Light Blue (complement of Navy)
+    new Color(128, 0, 128), // Purple (complement of Olive)
+    new Color(255, 128, 128), // Light Red (complement of Teal)
+    new Color(128, 128, 0), // Olive (complement of Purple)
+    new Color(64, 64, 64) // Dark Gray (complement of Silver)
   )
 }

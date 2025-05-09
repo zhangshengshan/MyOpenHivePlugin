@@ -48,7 +48,7 @@ class ParamSub extends AnAction {
 
     val transform_flag = Messages.showYesNoDialog(
       project,
-      "是否将参数名替换为列名?",
+      s" #{xxx} => ${} 请按Y \n  ${} => #{xxx} 请按N",
       "替换参数名",
       Messages.getQuestionIcon()
     )
@@ -73,7 +73,7 @@ class ParamSub extends AnAction {
                 val finalResult = if (transform_flag == Messages.YES) {
                   lineText.replaceAll("#\\{([^}]*)}", "'\\${$1}\'")
                 } else {
-                  lineText.replaceAll("\'\\$\\{([^}]*)}\'", "#{$1}")
+                  lineText.replaceAll("\'*\\$\\{([^}]*)}\'*", "#{$1}")
                 }
                 // 定义匹配模式的正则表达式
                 // 将替换后的结果写入文档
