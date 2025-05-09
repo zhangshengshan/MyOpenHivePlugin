@@ -13,9 +13,6 @@ object ColorScheme {
     Color.CYAN,
     Color.MAGENTA,
     Color.ORANGE,
-    Color.PINK,
-    new Color(85, 107, 47), // Olive Drab color
-    new Color(139, 69, 19), // Saddle Brown color
     new Color(255, 215, 0), // Gold color
     new Color(218, 165, 32), // Goldenrod color
     new Color(210, 105, 30), // Chocolate color
@@ -52,12 +49,6 @@ object ColorScheme {
     new Color(116, 186, 236), // Complement of Saddle Brown color
     new Color(0, 40, 255), // Complement of Gold color
     new Color(37, 90, 223), // Complement of Goldenrod color
-    new Color(45, 150, 225), // Complement of Chocolate color
-    new Color(50, 122, 192), // Complement of Peru color
-    new Color(11, 91, 159), // Complement of Sandy Brown color
-    new Color(45, 75, 115), // Complement of Tan color
-    new Color(33, 71, 120), // Complement of Burlywood color
-    new Color(0, 0, 31), // Complement of Light Yellow color
     new Color(116, 255, 116), // Complement of Dark Magenta color
     new Color(107, 255, 44), // Complement of Dark Violet color
     new Color(102, 205, 51), // Complement of Dark Orchid color
@@ -68,8 +59,6 @@ object ColorScheme {
     new Color(0, 150, 75), // Complement of Fuchsia color
     new Color(150, 150, 75), // Complement of Hot Pink color
     new Color(108, 235, 108), // Complement of Deep Pink color
-    new Color(63, 63, 52), // Complement of Pink color
-    new Color(73, 73, 62), // Complement of Light Pink color
     new Color(36, 143, 108) // Complement of Pale Violet Red color
   )
 }
