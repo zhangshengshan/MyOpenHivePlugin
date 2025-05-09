@@ -39,48 +39,49 @@ class ParamSub extends AnAction {
       else selectionModel.getSelectionEnd
     val document: Document = editor.getDocument
 
-    // 获取选中文字所在行的起始和结束行号
-    val lineStart: Int = document.getLineNumber(start)
-    val lineEnd: Int = document.getLineNumber(end)
+    var replacedText: String = ""
 
-    // 在一个写命令动作中执行替换操作，确保线程安全
-    WriteCommandAction.runWriteCommandAction(
+    // 弹出选择框，选择把 #{ 替换为 ${ 还是 ${ 替换为 #{ ?
+    val choice = Messages.showYesNoDialog(
       project,
-      new Runnable {
-        override def run(): Unit = {
-          try {
-            // 把每一行的 #{ 给替换为 ${
+      "#{替换为${ 还是 ${ 替换为 #{ ?",
+      "替换",
+      Messages.getQuestionIcon
+    )
 
-            val selectedText = document.getText(new TextRange(start, end))
-            // 将 #{ 替换为 ${
+    try {
+      val selectedText = document.getText(new TextRange(start, end))
 
-            // 弹出选择框，选择把#{替换为${ 还是 ${ 替换为 ${}
-            // 这里可以使用一个对话框来让用户选择
+      // 根据用户的选择计算替换后的文本
+      replacedText = if (choice == Messages.YES) {
+        selectedText.replaceAll("#\\{([^}]*)}", "\\${$1}")
+      } else {
+        selectedText.replaceAll("\\$\\{([^}]*)}", "#{$1}")
+      }
 
-            val choice = Messages.showYesNoDialog(
-              project,
-              "#{替换为${ 还是 ${ 替换为 ${} ?",
-              "替换",
-              Messages.getQuestionIcon
-            )
-            val replacedText = if (choice == Messages.YES) {
-//              selectedText.replace("#{", "\"${").replace("}", "}\"")
-              selectedText.replace("#{", "${")
-            } else {
-//              selectedText.replace("\"${", "#{").replace("}\"", "}")
-              selectedText.replace("${", "#{")
-            }
+
+      Messages.showInfoMessage(
+        project,
+        s"替换后的文本: $replacedText",
+        "替换结果"
+      )
+
+      // 在一个写命令动作中执行替换操作，确保线程安全
+      WriteCommandAction.runWriteCommandAction(
+        project,
+        new Runnable {
+          override def run(): Unit = {
             // 将替换后的文本写回文档
             document.replaceString(start, end, replacedText)
-
-          } catch {
-            case e: Throwable =>
-              ExceptionHandle.handleException(e)
-
           }
-          Messages.showInfoMessage(project, "SUCESS", "替换成功")
         }
-      }
-    )
+      )
+    } catch {
+      case e: Throwable =>
+        ExceptionHandle.handleException(e)
+    }
+
+    // 显示替换成功的消息
+    Messages.showInfoMessage(project, "SUCCESS", "替换成功")
   }
 }
