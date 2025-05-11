@@ -78,18 +78,15 @@ class DataQualityCheck extends AnAction {
 
     val selectList = responseObj.data.properties
       .map { item =>
-        s"""COUNT(DISITNCT ${item.name} ) AS ${item.name}_cnt """ + "\n," + s"""COUNT(CASE WHEN ${item.name} IS NULL THEN 1 ELSE NULL END) AS ${item.name}_null_cnt """
+        s"""COUNT(DISTINCT ${item.name} ) AS COUNT_DISINTCT_${item.name}  """ + "\n," + s"""COUNT(CASE WHEN ${item.name} IS NULL THEN 1 ELSE NULL END) AS ${item.name}_NULL_CNT """
       }
       .mkString("\n,")
 
     s"SELECT${SEP}\t $selectList${SEP}FROM${SEP}\t$db.$tb ;"
   }
   override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
-    val value: MyConfigurable = MyConfigurable.getInstance()
-    val host = value.getHost
-    val port = value.getPort
-    val user = value.getUser
-    val password = value.getPassword
+    val (host, port, user, password) = getConfigValues()
+
     val editor: Editor = anActionEvent.getData(CommonDataKeys.EDITOR)
 
     val selectText = editor.getSelectionModel.getSelectedText
@@ -160,6 +157,11 @@ class DataQualityCheck extends AnAction {
 
     Messages.showInfoMessage(sql, "Generated Doris SQL")
     ClipBoardUtil.copyToClipBoard(sql)
+  }
+
+  private def getConfigValues(): (String, String, String, String) = {
+    val value: MyConfigurable = MyConfigurable.getInstance()
+    (value.getHost, value.getPort, value.getUser, value.getPassword)
   }
 }
 
