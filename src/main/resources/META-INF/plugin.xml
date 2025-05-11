@@ -86,9 +86,9 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
 
-        <action id="getDorisTableAction" class="action.DataQualityCheck" text="DataQualityCheck"
+        <action id="dataQualityCheck" class="action.DataQualityCheck" text="DataQualityCheck"
                 description="DataQualityCheck">
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt G"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt D"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
 

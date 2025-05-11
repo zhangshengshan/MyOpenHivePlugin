@@ -78,9 +78,9 @@ class DataQualityCheck extends AnAction {
 
     val selectList = responseObj.data.properties
       .map { item =>
-        s"""COUNT(DISITNCT ${item.name} ) AS ${item.name}_cnt """
+        s"""COUNT(DISITNCT ${item.name} ) AS ${item.name}_cnt """ + "\n," + s"""COUNT(CASE WHEN ${item.name} IS NULL THEN 1 ELSE NULL END) AS ${item.name}_null_cnt """
       }
-      .mkString("\t,")
+      .mkString("\n,")
 
     s"SELECT${SEP}\t $selectList${SEP}FROM${SEP}\t$db.$tb ;"
   }
