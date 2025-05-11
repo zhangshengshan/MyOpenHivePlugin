@@ -85,6 +85,13 @@
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt G"/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+
+        <action id="getDorisTableAction" class="action.DataQualityCheck" text="DataQualityCheck"
+                description="DataQualityCheck">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt G"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
         <action id="transformMysqlToDoris" class="action.TransformMysqlToDorisAction" text="MYSQL转化为DORIS"
                 description="MYSQL2DORIS">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt h"/>
