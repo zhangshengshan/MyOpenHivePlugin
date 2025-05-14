@@ -156,12 +156,13 @@
             <action id="clipboardhistoryaction" class="action.ClipBoardHistoryAction" text="ClipBoardHistoryAction"/>
         </group>
         <action id="highlightWordAction" class="action.hilight.HighlightWordAction" text="HighlightWordAction"
-                description="highlightWordAction">
+                description="HighlightWordAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
         <action id="clearAllHighlightAction" class="action.hilight.ClearAllHighlightAction"
                 text="ClearAllHighlightAction"
-                description="clearAllHighlightAction">
+                description="ClearAllHighlightAction">
+            
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
         <!-- Other actions... -->

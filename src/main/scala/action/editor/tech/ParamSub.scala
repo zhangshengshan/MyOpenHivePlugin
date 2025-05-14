@@ -71,7 +71,9 @@ class ParamSub extends AnAction {
                 )
 
                 val finalResult = if (transform_flag == Messages.YES) {
-                  lineText.replaceAll("#\\{([^}]*)}", "'\\${$1}\'")
+                  // 把  <if test="xxxxxxxxxxx">  这种行
+                  // 或者 </if>  进行删除
+                  lineText.replaceAll("#\\{([^}]*)}", "'\\${$1}\'").replaceAll("<if test=\"([^>]*)\">", "").replaceAll("</if>", "")
                 } else {
                   lineText.replaceAll("\'*\\$\\{([^}]*)}\'*", "#{$1}")
                 }
