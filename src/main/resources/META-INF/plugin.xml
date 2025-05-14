@@ -180,7 +180,7 @@
         <action id="subName" class="action.editor.tech.SubName" text="SubName" description="SubName">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
-        <action id="paramSub" class="action.editor.tech.ParamSub" text="SQL 参数替换" description="ParamSub">
+        <action id="paramSub" class="action.editor.tech.SqlParamSub" text="SQL 参数替换" description="ParamSub">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
         <action id="substituewordundercursorwithclipboard"

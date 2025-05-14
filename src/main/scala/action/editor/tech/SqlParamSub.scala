@@ -18,7 +18,7 @@ import com.intellij.openapi.util.TextRange
   *      } else {
   *        selectedText.replaceAll("\\$\\{([^}]*)}", "#{$1}")
   */
-class ParamSub extends AnAction {
+class SqlParamSub extends AnAction {
 
   /** 当动作触发时执行的方法
     * 它会获取当前选中的文本，并在每行的行首添加 -- 进行注释
