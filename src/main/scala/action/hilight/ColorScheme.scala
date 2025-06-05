@@ -18,7 +18,6 @@ object ColorScheme {
     new Color(128, 128, 0), // Olive
     new Color(0, 128, 128), // Teal
     new Color(128, 0, 128), // Purple
-    new Color(192, 192, 192) // Silver
   )
 
   // 定义一个私有的颜色数组，用于存储背景颜色，其中的颜色是根据字体颜色的补色原则选择的
@@ -35,6 +34,5 @@ object ColorScheme {
     new Color(128, 0, 128), // Purple (complement of Olive)
     new Color(255, 128, 128), // Light Red (complement of Teal)
     new Color(128, 128, 0), // Olive (complement of Purple)
-    new Color(64, 64, 64) // Dark Gray (complement of Silver)
   )
 }

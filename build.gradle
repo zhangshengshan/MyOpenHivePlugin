@@ -9,8 +9,8 @@ plugins {
     id "signing"
 }
 
-sourceCompatibility = '11'  // Set Java version here
-targetCompatibility = '11'  // Set Java version here
+//sourceCompatibility = '11'  // Set Java version here
+//targetCompatibility = '11'  // Set Java version here
 
 group 'io.github.zhangshengshan'
 
