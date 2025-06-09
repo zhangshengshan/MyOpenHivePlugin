@@ -99,17 +99,17 @@ class DataQualityCheck extends AnAction {
         {
           val isDateType = item.`type`.toUpperCase.contains("DATE")
           val stddevExpr = if (isDateType) s"STDDEV(${item.name})" else "NULL"
-          s"""COUNT(DISTINCT ${item.name}) AS COUNT_DISINTCT_${item.name}
-             |,COUNT(CASE WHEN ${item.name} IS NULL THEN 1 ELSE NULL END) AS ${item.name}_NULL_CNT
-             |,STDDEV( ${item.name} ) AS STDDEV_${item.name}
-             |,AVG(${item.name}) AS AVG_${item.name}
-             |,SUM(${item.name}) AS SUM_${item.name}
-             |,MIN(${item.name}) AS MIN_${item.name}
-             |,MAX(${item.name}) AS MAX_${item.name}
-             |,PERCENTILE(${item.name}, 0.25) AS PERCENTILE_25_${item.name}
-             |,PERCENTILE(${item.name}, 0.5) AS PERCENTILE_50_${item.name}
-             |,PERCENTILE(${item.name}, 0.75) AS PERCENTILE_75_${item.name}
+          s"""COUNT(DISTINCT ${item.name}) AS COUNT_DISINTCT_${item.name} -- 计算COUNT( DISTINCT ${item.name})
+             |,COUNT(CASE WHEN ${item.name} IS NULL THEN 1 ELSE NULL END) AS ${item.name}_NULL_CNT -- 计算${item.name}NULL值个数
+             |,STDDEV( ${item.name} ) AS STDDEV_${item.name} -- 获取${item.name}的STDDEV
+             |,AVG(${item.name}) AS AVG_${item.name} -- 获取${item.name}的AVG
+             |,SUM(${item.name}) AS SUM_${item.name} -- 获取${item.name}的SUM
+             |,MIN(${item.name}) AS MIN_${item.name} -- 获取${item.name}的最小值
+             |,MAX(${item.name}) AS MAX_${item.name} -- 获取${item.name}的最小值
              |""".stripMargin
+//          |,PERCENTILE(${item.name}, 0.25) AS PERCENTILE_25_${item.name}
+//          |,PERCENTILE(${item.name}, 0.5) AS PERCENTILE_50_${item.name}
+//          |,PERCENTILE(${item.name}, 0.75) AS PERCENTILE_75_${item.name}
         }
       }
       .mkString("\n,")
