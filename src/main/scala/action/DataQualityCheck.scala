@@ -78,12 +78,22 @@ class DataQualityCheck extends AnAction {
       }
     }
 
+    val groupByList = responseObj.data.properties.map(item => item.name).asJava
+
+    val dialog = new MyMultiChoiceDialog(groupByList)
+    dialog.show()
+    val selectedGroupFields = dialog.getSelectedOptions.asScala.toList.distinct
+
     val selectList = responseObj.data.properties
       .filter(item =>
-        item.`type`.toUpperCase.contains("DECIMAL")
-          || item.`type`.toUpperCase.contains("INT")
-          || item.`type`.toUpperCase.contains("FLOAT")
-          || item.`type`.toUpperCase.contains("DOUBLE")
+        (
+          item.`type`.toUpperCase.contains("DECIMAL")
+            || item.`type`.toUpperCase.contains("INT")
+            || item.`type`.toUpperCase.contains("FLOAT")
+            || item.`type`.toUpperCase.contains("DOUBLE")
+        ) && (
+          !selectedGroupFields.contains(item.name)
+        )
       )
       .map { item =>
         {
@@ -103,12 +113,6 @@ class DataQualityCheck extends AnAction {
         }
       }
       .mkString("\n,")
-
-    val groupByList = responseObj.data.properties.map(item => item.name).asJava
-
-    val dialog = new MyMultiChoiceDialog(groupByList)
-    dialog.show()
-    val selectedGroupFields = dialog.getSelectedOptions.asScala.toList.distinct
 
     if (selectedGroupFields.isEmpty)
       s"SELECT${SEP}\t $selectList${SEP}FROM${SEP}\t$db.$tb ;"
