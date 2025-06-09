@@ -22,7 +22,9 @@ import com.zss.graph.{Graph, Node}
 import config.os.OsConfig
 import hierachyconfig.MyConfigurable
 import misc.ClipBoardUtil
+import myui.MyMultiChoiceDialog
 
+import scala.jdk.CollectionConverters.{CollectionHasAsScala, SeqHasAsJava}
 //case class Property(
 //    name: String,
 //    aggregation_type: String,
@@ -77,13 +79,19 @@ class DataQualityCheck extends AnAction {
     }
 
     val selectList = responseObj.data.properties
+      .filter(item =>
+        item.`type`.toUpperCase.contains("DECIMAL")
+          || item.`type`.toUpperCase.contains("INT")
+          || item.`type`.toUpperCase.contains("FLOAT")
+          || item.`type`.toUpperCase.contains("DOUBLE")
+      )
       .map { item =>
         {
           val isDateType = item.`type`.toUpperCase.contains("DATE")
           val stddevExpr = if (isDateType) s"STDDEV(${item.name})" else "NULL"
           s"""COUNT(DISTINCT ${item.name}) AS COUNT_DISINTCT_${item.name}
              |,COUNT(CASE WHEN ${item.name} IS NULL THEN 1 ELSE NULL END) AS ${item.name}_NULL_CNT
-             |,$stddevExpr AS STDDEV_${item.name}
+             |,STDDEV( ${item.name} ) AS STDDEV_${item.name}
              |,AVG(${item.name}) AS AVG_${item.name}
              |,SUM(${item.name}) AS SUM_${item.name}
              |,MIN(${item.name}) AS MIN_${item.name}
@@ -96,7 +104,24 @@ class DataQualityCheck extends AnAction {
       }
       .mkString("\n,")
 
-    s"SELECT${SEP}\t $selectList${SEP}FROM${SEP}\t$db.$tb ;"
+    val groupByList = responseObj.data.properties.map(item => item.name).asJava
+
+    val dialog = new MyMultiChoiceDialog(groupByList)
+    dialog.show()
+    val selectedGroupFields = dialog.getSelectedOptions.asScala.toList.distinct
+
+    if (selectedGroupFields.isEmpty)
+      s"SELECT${SEP}\t $selectList${SEP}FROM${SEP}\t$db.$tb ;"
+    else
+      s"""
+         |SELECT 
+         |${selectedGroupFields.mkString(",\n")} 
+         |, ${selectList}
+         |FROM 
+         |  $db.$tb
+         |GROUP BY 
+         |  ${selectedGroupFields.mkString(",")}
+         |""".stripMargin
   }
   override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
     val (host, port, user, password) = getConfigValues()
