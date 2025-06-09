@@ -79,17 +79,32 @@ class DataQualityCheck extends AnAction {
     val selectList = responseObj.data.properties
       .map { item =>
         {
-          s"""COUNT(DISTINCT ${item.name}) AS COUNT_DISINTCT_${item.name}
-           |,COUNT(CASE WHEN ${item.name} IS NULL THEN 1 ELSE NULL END) AS ${item.name}_NULL_CNT
-           |,STDDEV(${item.name}) AS STDDEV_${item.name}
-           |,AVG(${item.name}) AS AVG_${item.name}
-           |,SUM(${item.name}) AS SUM_${item.name}
-           |,MIN(${item.name}) AS MIN_${item.name}
-           |,MAX(${item.name}) AS MAX_${item.name}
-           |,PERCENTILE(${item.name}, 0.25) AS PERCENTILE_25_${item.name}
-           |,PERCENTILE(${item.name}, 0.5) AS PERCENTILE_50_${item.name}
-           |,PERCENTILE(${item.name}, 0.75) AS PERCENTILE_75_${item.name}
-           |""".stripMargin
+
+          if(item.`type`.toUpperCase().contains("DATE")){
+            s"""COUNT(DISTINCT ${item.name}) AS COUNT_DISINTCT_${item.name}
+               |,COUNT(CASE WHEN ${item.name} IS NULL THEN 1 ELSE NULL END) AS ${item.name}_NULL_CNT
+               |,STDDEV(${item.name}) AS STDDEV_${item.name}
+               |,AVG(${item.name}) AS AVG_${item.name}
+               |,SUM(${item.name}) AS SUM_${item.name}
+               |,MIN(${item.name}) AS MIN_${item.name}
+               |,MAX(${item.name}) AS MAX_${item.name}
+               |,PERCENTILE(${item.name}, 0.25) AS PERCENTILE_25_${item.name}
+               |,PERCENTILE(${item.name}, 0.5) AS PERCENTILE_50_${item.name}
+               |,PERCENTILE(${item.name}, 0.75) AS PERCENTILE_75_${item.name}
+               |""".stripMargin
+          } else {
+            s"""COUNT(DISTINCT ${item.name}) AS COUNT_DISINTCT_${item.name}
+               |,COUNT(CASE WHEN ${item.name} IS NULL THEN 1 ELSE NULL END) AS ${item.name}_NULL_CNT
+               |,NULL AS STDDEV_${item.name}
+               |,AVG(${item.name}) AS AVG_${item.name}
+               |,SUM(${item.name}) AS SUM_${item.name}
+               |,MIN(${item.name}) AS MIN_${item.name}
+               |,MAX(${item.name}) AS MAX_${item.name}
+               |,PERCENTILE(${item.name}, 0.25) AS PERCENTILE_25_${item.name}
+               |,PERCENTILE(${item.name}, 0.5) AS PERCENTILE_50_${item.name}
+               |,PERCENTILE(${item.name}, 0.75) AS PERCENTILE_75_${item.name}
+               |""".stripMargin
+          }
         }
       }
       .mkString("\n,")
