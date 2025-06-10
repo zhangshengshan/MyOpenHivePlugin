@@ -115,16 +115,19 @@ class DataQualityCheck extends AnAction {
       .mkString("\n,")
 
     if (selectedGroupFields.isEmpty)
-      s"SELECT${SEP}\t $selectList${SEP}FROM${SEP}\t$db.$tb ;"
+      s"${SEP}SELECT${SEP}\t $selectList${SEP}FROM${SEP}\t$db.$tb ;${SEP}${SEP}"
     else
       s"""
-         |SELECT 
+         |
+         |SELECT
          |${selectedGroupFields.mkString(",\n")} 
          |, ${selectList}
          |FROM 
          |  $db.$tb
          |GROUP BY 
          |  ${selectedGroupFields.mkString(",")}
+         |  ;
+         |
          |""".stripMargin
   }
   override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
