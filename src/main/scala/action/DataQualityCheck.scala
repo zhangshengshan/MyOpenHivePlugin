@@ -171,6 +171,26 @@ class DataQualityCheck extends AnAction {
       db = strings(0)
       tb = strings(1)
     }
+
+    val str: Option[String] =
+      getSingleTableDataCheckSQL(host, port, user, password, db, tb)
+
+    str match {
+      case Some(value) =>
+        Messages.showInfoMessage(value, "Data Quality Check")
+        ClipBoardUtil.copyToClipBoard(value)
+      case None =>
+    }
+  }
+
+  private def getSingleTableDataCheckSQL(
+      host: String,
+      port: String,
+      user: String,
+      password: String,
+      db: String,
+      tb: String
+  ): Option[String] = {
     val yourdb = db
     val yourtb = tb
     println(yourdb)
@@ -187,7 +207,7 @@ class DataQualityCheck extends AnAction {
 
     if (jsonValue("code").num != 0) {
       Messages.showInfoMessage(jsonValue("msg").str, "Error")
-      return
+      return None
     }
 
     implicit val propertyRW = upickle.default.macroRW[Property]
@@ -201,8 +221,9 @@ class DataQualityCheck extends AnAction {
 
     val sql = GenDataCheckSQL(responseObj, yourdb, yourtb)
 
-    Messages.showInfoMessage(sql, "Generated Doris SQL")
+    //    Messages.showInfoMessage(sql, "Generated Doris SQL")
     ClipBoardUtil.copyToClipBoard(sql)
+    Some(sql)
   }
 
   private def getConfigValues(): (String, String, String, String) = {
