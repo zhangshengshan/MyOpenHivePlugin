@@ -66,7 +66,7 @@ class DataQualityCheck extends AnAction {
 
     val sqlStyle = Messages.showYesNoDialog(
       "Do you want to use Doris SQL style?",
-      "SQL Style",
+      s""" FOR ${db}.${tb} """,
       Messages.getQuestionIcon
     )
 
@@ -272,8 +272,6 @@ class DataQualityCheck extends AnAction {
 
     val sql = GenDataCheckSQL(responseObj, yourdb, yourtb)
 
-    //    Messages.showInfoMessage(sql, "Generated Doris SQL")
-    ClipBoardUtil.copyToClipBoard(sql)
     Some(sql)
   }
 
