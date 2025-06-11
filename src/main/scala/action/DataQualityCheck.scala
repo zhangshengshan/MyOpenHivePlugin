@@ -80,7 +80,7 @@ class DataQualityCheck extends AnAction {
 
     val groupByList = responseObj.data.properties.map(item => item.name).asJava
 
-    val dialog = new MyMultiChoiceDialog(groupByList)
+    val dialog = new MyMultiChoiceDialog(groupByList, s"""${db}.${tb}""")
     dialog.show()
     val selectedGroupFields = dialog.getSelectedOptions.asScala.toList.distinct
 
@@ -171,6 +171,11 @@ class DataQualityCheck extends AnAction {
             case None =>
           }
         })
+
+      Messages.showInfoMessage(
+        s"""共计生成SQL数量 ${sqlList.size}, 输入的表格数量为  ${selectText.split(System.lineSeparator()).length}""",
+        "Data Quality Check"
+      )
       ClipBoardUtil.copyToClipBoard(sqlList.mkString("\n"))
     } else if (
       expandObj != null && expandObj

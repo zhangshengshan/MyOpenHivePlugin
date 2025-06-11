@@ -20,18 +20,31 @@ public class MyMultiChoiceDialog extends DialogWrapper {
     private JBList<String> list;
     private JTextField searchField;
     private DefaultListModel<String> model;
+    private String title ;
 
     public MyMultiChoiceDialog(List<String> options) {
         super(true);
         this.options = options;
         init();
+
         setTitle("Multi Choice Dialog");
     }
 
+    public MyMultiChoiceDialog(List<String> options, String customTitle) {
+        super(true);
+        this.options = options;
+        init();
+        this.title = customTitle;
+        setTitle(customTitle);
+    }
     @Override
     protected JComponent createCenterPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
+
+        int width = 600 ;
+
+        panel.setPreferredSize(new Dimension(width, 600)); // 设置面板的首选大小为宽400像素，高300像素
         // Create the search field
         searchField = new JTextField();
         searchField.getDocument().addDocumentListener(new DocumentListener() {
