@@ -136,6 +136,7 @@ class DataQualityCheck extends AnAction {
     val editor: Editor = anActionEvent.getData(CommonDataKeys.EDITOR)
 
     val selectText = editor.getSelectionModel.getSelectedText
+    Messages.showInfoMessage(selectText, "selected text!")
     val model = editor.getCaretModel
     val offset = model.getOffset
     val project: Project = editor.getProject
@@ -146,11 +147,17 @@ class DataQualityCheck extends AnAction {
 
     var db = ""
     var tb = ""
-    if (selectText.split("\r").length > 1) {
+    if (selectText.split(System.lineSeparator()).length > 1) {
+
+      Messages.showInfoMessage(
+        "SELECT MULTIPLE TABLES, SEPARATED BY LINE BREAKS",
+        "Data Quality Check"
+      )
 
       var sqlList: List[String] = List()
       selectText
-        .split("\r")
+        .split(System.lineSeparator())
+        .map(_.strip())
         .foreach(item => {
           val strings = item.split("\\.")
           db = strings(0)
@@ -169,6 +176,11 @@ class DataQualityCheck extends AnAction {
       expandObj != null && expandObj
         .contains(".") && expandObj.split("\\.").length == 2
     ) {
+
+      Messages.showInfoMessage(
+        "SELECT A SINGLE TABLE",
+        "Data Quality Check"
+      )
       val strings = expandObj.split("\\.")
       db = strings(0)
       tb = strings(1)
@@ -187,6 +199,10 @@ class DataQualityCheck extends AnAction {
       selectText != null && selectText
         .contains(".") && selectText.split("\\.").length == 2
     ) {
+      Messages.showInfoMessage(
+        "SELECT A SINGLE TABLE",
+        "Data Quality Check"
+      )
       val strings = selectText.split("\\.")
       db = strings(0)
       tb = strings(1)
@@ -201,6 +217,10 @@ class DataQualityCheck extends AnAction {
         case None =>
       }
     } else {
+      Messages.showInfoMessage(
+        "SELECT A SINGLE TABLE",
+        "Data Quality Check"
+      )
       // intellij pop up a input to get the db and table name
       val str = Messages.showInputDialog(
         "Please input the db and table name",
