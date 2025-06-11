@@ -146,13 +146,43 @@ class DataQualityCheck extends AnAction {
 
     var db = ""
     var tb = ""
-    if (
+    if (selectText.split("\r").length > 1) {
+
+      var sqlList: List[String] = List()
+      selectText
+        .split("\r")
+        .foreach(item => {
+          val strings = item.split("\\.")
+          db = strings(0)
+          tb = strings(1)
+          val str: Option[String] =
+            getSingleTableDataCheckSQL(host, port, user, password, db, tb)
+          str match {
+            case Some(value) =>
+              Messages.showInfoMessage(value, "Data Quality Check")
+              sqlList = sqlList :+ value
+            case None =>
+          }
+        })
+      ClipBoardUtil.copyToClipBoard(sqlList.mkString("\n"))
+    } else if (
       expandObj != null && expandObj
         .contains(".") && expandObj.split("\\.").length == 2
     ) {
       val strings = expandObj.split("\\.")
       db = strings(0)
       tb = strings(1)
+
+      val str: Option[String] =
+        getSingleTableDataCheckSQL(host, port, user, password, db, tb)
+
+      str match {
+        case Some(value) =>
+          Messages.showInfoMessage(value, "Data Quality Check")
+          ClipBoardUtil.copyToClipBoard(value)
+        case None =>
+      }
+
     } else if (
       selectText != null && selectText
         .contains(".") && selectText.split("\\.").length == 2
@@ -160,6 +190,16 @@ class DataQualityCheck extends AnAction {
       val strings = selectText.split("\\.")
       db = strings(0)
       tb = strings(1)
+
+      val str: Option[String] =
+        getSingleTableDataCheckSQL(host, port, user, password, db, tb)
+
+      str match {
+        case Some(value) =>
+          Messages.showInfoMessage(value, "Data Quality Check")
+          ClipBoardUtil.copyToClipBoard(value)
+        case None =>
+      }
     } else {
       // intellij pop up a input to get the db and table name
       val str = Messages.showInputDialog(
@@ -172,15 +212,6 @@ class DataQualityCheck extends AnAction {
       tb = strings(1)
     }
 
-    val str: Option[String] =
-      getSingleTableDataCheckSQL(host, port, user, password, db, tb)
-
-    str match {
-      case Some(value) =>
-        Messages.showInfoMessage(value, "Data Quality Check")
-        ClipBoardUtil.copyToClipBoard(value)
-      case None =>
-    }
   }
 
   private def getSingleTableDataCheckSQL(
