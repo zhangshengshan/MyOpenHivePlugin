@@ -2,7 +2,11 @@ package action
 
 import cache.CacheUtil
 import com.intellij.notification.{Notification, NotificationType, Notifications}
-import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
+import com.intellij.openapi.actionSystem.{
+  AnAction,
+  AnActionEvent,
+  CommonDataKeys
+}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
@@ -77,6 +81,13 @@ class TransformMysqlToDorisAction extends AnAction {
       user = s"$user",
       password = s"$password",
       driver = "com.mysql.cj.jdbc.Driver"
+    )
+
+    Messages.showInfoMessage(
+      "DBCONFIG =>",
+      s"url: $jdbcUrl, user: $user, password: $password " + System
+        .lineSeparator() +
+        s"host: $host, port: $port"
     )
 
     def replaceMysqlWithDoris(searchTableName: String): Unit = {
@@ -240,27 +251,31 @@ class TransformMysqlToDorisAction extends AnAction {
         failSubstitude.append(s"-- $searchTableName -> 没有找到")
       }
     }
-    sourceTables.foreach(table => {
-      replaceMysqlWithDoris(table)
-    })
 
-//    Messages.showInfoMessage(
-//      successSubstitude.mkString(System.lineSeparator()),
-//      "TransformMysqlToDorisAction Completed"
-//    )
+    try {
+      sourceTables.foreach(table => {
+        replaceMysqlWithDoris(table)
+      })
+      val notification = new Notification(
+        "替换",
+        "剪切板内容",
+        successSubstitude.mkString(System.lineSeparator()),
+        NotificationType.INFORMATION
+      )
+      Notifications.Bus.notify(notification)
+      ClipBoardUtil.copyToClipBoard(
+        successSubstitude.mkString(System.lineSeparator()) + System
+          .lineSeparator() + failSubstitude
+          .mkString(System.lineSeparator())
+      )
+    } catch {
+      case e: Exception =>
+        Messages.showInfoMessage(
+          s"Error: ${e.getMessage}",
+          "Information"
+        )
+        failSubstitude.append(s"-- $searchTableName -> 没有找到")
+    }
 
-    val notification = new Notification(
-      "替换",
-      "剪切板内容",
-      successSubstitude.mkString(System.lineSeparator()),
-      NotificationType.INFORMATION
-    )
-    Notifications.Bus.notify(notification)
-
-    ClipBoardUtil.copyToClipBoard(
-      successSubstitude.mkString(System.lineSeparator()) + System
-        .lineSeparator() + failSubstitude
-        .mkString(System.lineSeparator())
-    )
   }
 }
