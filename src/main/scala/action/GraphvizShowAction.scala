@@ -5,7 +5,6 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
 import config.os.OsConfig
-import config.os.OsConfig.{macDotPath, winDotPath}
 import demo.SparkSqlVisitorV2
 import hierachyconfig.MyConfigurable
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
@@ -14,6 +13,9 @@ import zss.mysqlparser.{CaseChangingCharStream, SqlBaseLexer, SqlBaseParser}
 class GraphvizShowAction extends AnAction {
   override def actionPerformed(event: AnActionEvent): Unit = {
     try {
+      val value: MyConfigurable = MyConfigurable.getInstance()
+      val dotPathConfig = value.getDotPathConfig
+
       val editor: Editor = event.getData(CommonDataKeys.EDITOR)
 
       val text = editor.getDocument.getText
@@ -42,7 +44,7 @@ class GraphvizShowAction extends AnAction {
           Some("test"),
           Some(OsConfig.macOutputPath),
           Some(true),
-          Some(macDotPath),
+          Some(dotPathConfig),
           Some(false)
         )
       } else if (SystemInfo.isWindows) {
@@ -50,7 +52,7 @@ class GraphvizShowAction extends AnAction {
           Some("test"),
           Some(OsConfig.winOutputPath),
           Some(true),
-          Some(winDotPath),
+          Some(dotPathConfig),
           Some(true)
         )
       }

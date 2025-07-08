@@ -4,6 +4,7 @@ import com.intellij.openapi.util.SystemInfo
 import com.zss.graph.const.{Color, NodeStyle}
 import com.zss.graph.{Graph, Node, NodeElem}
 import config.os.OsConfig
+import hierachyconfig.MyConfigurable
 import misc.ExcelObject
 import openbrowser.HierachyConfigStrategy
 
@@ -107,6 +108,9 @@ object MultiLayerLinageAnalysisUtil {
       fileName: String,
       source: String
   ): Unit = {
+    val value: MyConfigurable = MyConfigurable.getInstance()
+    val dotPathConfig = value.getDotPathConfig
+
     val stack = new mutable.Stack[String]
     val paris: List[TargetSourcePair] =
       input.map(x => TargetSourcePair(x._1, x._2))
@@ -142,7 +146,7 @@ object MultiLayerLinageAnalysisUtil {
       fileName,
       outputDir,
       Some(true),
-      Some(OsConfig.macDotPath),
+      Some(dotPathConfig),
       Some(false)
     )
   }

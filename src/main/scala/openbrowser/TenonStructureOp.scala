@@ -13,6 +13,8 @@ import misc.ClipBoardUtil
 object TenonStructureOp {
 
   def genTenonStructureGraph(param: String): Unit = {
+    val value: MyConfigurable = MyConfigurable.getInstance()
+    val dotPathConfig = value.getDotPathConfig
 
     param
       .replace("(", "_")
@@ -32,7 +34,10 @@ object TenonStructureOp {
 
     val openOrNot: Boolean = MyConfigurable.getInstance().isOpenAfterGen
 
-    import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserFactory}
+    import com.intellij.openapi.fileChooser.{
+      FileChooserDescriptor,
+      FileChooserFactory
+    }
     import com.intellij.openapi.project.ProjectManager
     import com.intellij.openapi.ui.Messages
 
@@ -94,7 +99,7 @@ object TenonStructureOp {
           fileName,
           Some(outPutDir),
           Some(openOrNot),
-          Some(OsConfig.macDotPath),
+          Some(dotPathConfig),
           Some(false)
         )
       } else {
@@ -102,7 +107,7 @@ object TenonStructureOp {
           fileName,
           Some(outPutDir),
           Some(openOrNot),
-          Some(OsConfig.winDotPath),
+          Some(dotPathConfig),
           Some(true)
         )
       }

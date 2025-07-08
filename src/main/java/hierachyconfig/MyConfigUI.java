@@ -88,6 +88,7 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
     private JTextField IPTextField;
     private JTextField PORTTextField;
     private JTextField jdbcURL;
+    private JTextField dotPathConfig;
 
 
     {
@@ -420,6 +421,12 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         jdbcURL = new JTextField();
         jdbcURL.setText("");
         panel7.add(jdbcURL, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        dotPathConfig = new JTextField();
+        dotPathConfig.setText("");
+        panel7.add(dotPathConfig, new com.intellij.uiDesigner.core.GridConstraints(2, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        final JLabel label12 = new JLabel();
+        label12.setText("DOT");
+        panel7.add(label12, new com.intellij.uiDesigner.core.GridConstraints(2, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         label6.setLabelFor(tableSize);
     }
     public MyConfigUI(MyConfigurable settings) {
@@ -767,6 +774,7 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         this.USERNAMETextField.setText(settings.getUser());
         this.PASSWORDPasswordField.setText(settings.getPassword());
         this.jdbcURL.setText(settings.getJdbcURL());
+        this.dotPathConfig.setText(settings.getDotPathConfig());
     }
 
     @Override
@@ -838,6 +846,8 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
 
         isModified |= !(this.jdbcURL.getText().equals(settings.getJdbcURL()));
 
+        isModified |= !(this.dotPathConfig.getText().equals(settings.getDotPathConfig()));
+
 
         return isModified;
     }
@@ -904,6 +914,7 @@ public class MyConfigUI implements ConfigurableUi<MyConfigurable> {
         settings.setPassword(this.PASSWORDPasswordField.getText());
 
         settings.setJdbcURL(this.jdbcURL.getText());
+        settings.setDotPathConfig(this.dotPathConfig.getText());
 
     }
 

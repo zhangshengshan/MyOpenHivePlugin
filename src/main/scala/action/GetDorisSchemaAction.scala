@@ -2,9 +2,17 @@ package action
 
 import action.util.EditorUtil
 import another.ClusDbTbNode
-import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys}
+import com.intellij.openapi.actionSystem.{
+  AnAction,
+  AnActionEvent,
+  CommonDataKeys
+}
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
+import com.intellij.openapi.fileChooser.{
+  FileChooserDescriptor,
+  FileChooserDialog,
+  FileChooserFactory
+}
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
@@ -86,6 +94,7 @@ class GetDorisSchemaAction extends AnAction {
     val port = value.getPort
     val user = value.getUser
     val password = value.getPassword
+    val dotPathConfig = value.getDotPathConfig
     val editor: Editor = anActionEvent.getData(CommonDataKeys.EDITOR)
 
     val selectText = editor.getSelectionModel.getSelectedText
@@ -185,8 +194,7 @@ class GetDorisSchemaAction extends AnAction {
       else OsConfig.winOutputPath
     }
 
-    val dotPath = if (SystemInfo.isMac) OsConfig.macDotPath else OsConfig.winDotPath
-
+    val dotPath = dotPathConfig
     val isWin = SystemInfo.isWindows
 
     val fileName: String = Messages.showInputDialog(
