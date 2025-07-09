@@ -1,7 +1,11 @@
 package action.linage
 
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
+import com.intellij.openapi.fileChooser.{
+  FileChooserDescriptor,
+  FileChooserDialog,
+  FileChooserFactory
+}
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
@@ -41,34 +45,35 @@ object PlotUtil {
     )
     myMultiChoiceDialog.show()
 
-    val source = myMultiChoiceDialog.isOK match {
+    val sources = myMultiChoiceDialog.isOK match {
       case true =>
-        myMultiChoiceDialog.getSelectedOptions.toArray().toList.head.toString
-      case _ => {
-        Messages.showInfoMessage("没有选择任何一个表格作为分析对象， 退出处理程序", "Information")
+        myMultiChoiceDialog.getSelectedOptions.toArray().toList.map(_.toString)
+      case _ =>
+        Messages.showInfoMessage("没有选择任何一个表格作为分析对象，退出处理程序", "Information")
         return
+    }
+
+    for (source <- sources) yield {
+      val tableName = source.split("\\.") match {
+        case Array(_, tb) => tb
+        case _            => source
       }
-    }
+      val fileName: String = Messages.showInputDialog(
+        project,
+        "请输入保存的文件名",
+        "文件名",
+        Messages.getQuestionIcon,
+        tableName,
+        null
+      )
 
+      MultiLayerLinageAnalysisUtil.plotDependency(
+        mutableList,
+        Some(outPutDir),
+        fileName,
+        source
+      )
+    }
     // source 如果是 db.tb 这种形式取 tb
-    val tableName = source.split("\\.") match {
-      case Array(_, tb) => tb
-      case _            => source
-    }
-    val fileName: String = Messages.showInputDialog(
-      project,
-      "请输入保存的文件名",
-      "文件名",
-      Messages.getQuestionIcon,
-      tableName,
-      null
-    )
-
-    MultiLayerLinageAnalysisUtil.plotDependency(
-      mutableList,
-      Some(outPutDir),
-      fileName,
-      source
-    )
   }
 }
