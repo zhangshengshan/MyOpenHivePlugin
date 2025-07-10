@@ -35,22 +35,31 @@ object PlotUtil {
       else OsConfig.winOutputPath
     }
 
-    import scala.jdk.CollectionConverters._
+    // Get selected text from editor
+    val selectedText = editor.getSelectionModel.getSelectedText
 
-    val scalaList: List[String] = sourceList
-    val javaList: java.util.List[String] = scalaList.asJava
+    val sources = if (selectedText != null && selectedText.trim.nonEmpty) {
+      // Split the selected text by newline or comma to get multiple sources
+      selectedText.split("[\n,]").map(_.trim).filter(_.nonEmpty).toList
+    } else {
+      // Fall back to the original dialog-based approach
+      import scala.jdk.CollectionConverters._
 
-    val myMultiChoiceDialog: MyMultiChoiceDialog = new MyMultiChoiceDialog(
-      javaList
-    )
-    myMultiChoiceDialog.show()
+      val scalaList: List[String] = sourceList
+      val javaList: java.util.List[String] = scalaList.asJava
 
-    val sources = myMultiChoiceDialog.isOK match {
-      case true =>
-        myMultiChoiceDialog.getSelectedOptions.toArray().toList.map(_.toString)
-      case _ =>
-        Messages.showInfoMessage("没有选择任何一个表格作为分析对象，退出处理程序", "Information")
-        return
+      val myMultiChoiceDialog: MyMultiChoiceDialog = new MyMultiChoiceDialog(
+        javaList
+      )
+      myMultiChoiceDialog.show()
+
+      myMultiChoiceDialog.isOK match {
+        case true =>
+          myMultiChoiceDialog.getSelectedOptions.toArray().toList.map(_.toString)
+        case _ =>
+          Messages.showInfoMessage("没有选择任何一个表格作为分析对象，退出处理程序", "Information")
+          return
+      }
     }
 
     for (source <- sources) yield {
