@@ -4,19 +4,35 @@ import doris.{DorisParser, DorisParserBaseVisitor}
 import org.antlr.v4.runtime.TokenStreamRewriter
 import org.antlr.v4.runtime.tree.ParseTree
 
-class DorisTableNameModifier(tokenStream: TokenStreamRewriter, )
-    extends DorisParserBaseVisitor[Any] {
+class DorisTableNameModifier(
+    tokenStream: TokenStreamRewriter,
+    addSuffix: Boolean = true
+) extends DorisParserBaseVisitor[Any] {
 
   // 添加后缀的辅助方法
   private def addTestSuffix(tableName: String): String = {
     val cleanName = tableName.replaceAll("`", "")
-    if (cleanName.endsWith("_test")) {
-      tableName // 保持原格式（包括反引号）
-    } else {
-      if (tableName.contains("`")) {
-        s"`${cleanName}_stragety_test`"
+
+    if (addSuffix == true) {
+      if (cleanName.endsWith("_stragegy_test")) {
+        tableName // 保持原格式（包括反引号）
       } else {
-        s"${cleanName}_stragety_test"
+        if (tableName.contains("`")) {
+          s"`${cleanName}_stragety_test`"
+        } else {
+          s"${cleanName}_stragety_test"
+        }
+      }
+    } else {
+      if (cleanName.endsWith("_stragegy_test")) {
+        tableName // 保持原格式（包括反引号）
+      } else {
+        // 删除 _stragegy_test 后缀
+        if (tableName.contains("`")) {
+          s"`${cleanName.stripSuffix("_stragety_test")}`"
+        } else {
+          cleanName.stripSuffix("_stragety_test")
+        }
       }
     }
   }

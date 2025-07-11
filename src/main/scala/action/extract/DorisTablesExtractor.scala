@@ -4,6 +4,10 @@ import doris.{DorisParser, DorisParserBaseVisitor}
 
 import scala.collection.mutable
 
+/**
+ * Extracts table relationships from Doris SQL queries by visiting parse tree nodes.
+ * Tracks source and target tables, their aliases, and dependencies between tables.
+ */
 class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
   private val tablesMap: mutable.Map[String, Int] =
     scala.collection.mutable.HashMap[String, Int]()
@@ -66,14 +70,29 @@ class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
     super.visitAliasQuery(ctx)
   }
 
+  /**
+   * Returns a list of table names and their usage count, excluding aliases.
+   *
+   * @return List of tuples containing table name and its occurrence count
+   */
   def plot(): List[(String, Int)] = {
     tablesMap.filter(x => !aliasTables.contains(x._1)).toList
   }
 
+  /**
+   * Returns the set of target tables found in INSERT statements.
+   *
+   * @return Set of target table names
+   */
   def getTargetTables(): Set[String] = {
     targetTables.toSet
   }
 
+  /**
+   * Analyzes and returns table dependencies, filtering out alias references.
+   *
+   * @return List of tuples representing (target_table, source_table) relationships
+   */
   def getDepedence: List[(String, String)] = {
     val iterable = targetTableSourceTablesMap
       .map(x => {

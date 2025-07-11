@@ -4,11 +4,20 @@ import _root_.util.OpenFileUtil
 import action.extract.{DorisTableModifier, DorisTableNameModifier}
 import action.util.{EditorUtil, ExceptionHandle}
 import com.intellij.notification.{Notification, NotificationType, Notifications}
-import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys, DefaultActionGroup}
+import com.intellij.openapi.actionSystem.{
+  AnAction,
+  AnActionEvent,
+  CommonDataKeys,
+  DefaultActionGroup
+}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
+import com.intellij.openapi.fileChooser.{
+  FileChooserDescriptor,
+  FileChooserDialog,
+  FileChooserFactory
+}
 import com.intellij.openapi.project.{Project, ProjectManager}
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
@@ -771,7 +780,20 @@ class DorisTableRanmeActioin extends AnAction("DORIS测试环境") {
 
     val tokenStreamRewriter =
       new org.antlr.v4.runtime.TokenStreamRewriter(commonTokenStream)
-    val visitor = new DorisTableNameModifier(tokenStreamRewriter)
+
+    val OK = Messages.showYesNoDialog(
+      "是否添加后缀_stragety_test?",
+      "确认",
+      Messages.getWarningIcon
+    )
+
+    val visitor =
+      if (OK == Messages.YES) {
+        new DorisTableNameModifier(tokenStreamRewriter, true)
+      } else {
+        new DorisTableNameModifier(tokenStreamRewriter, false)
+      }
+
     visitor.visit(context)
     val newText = tokenStreamRewriter.getText()
     Messages.showInfoMessage(newText, "修正后的DDL")
