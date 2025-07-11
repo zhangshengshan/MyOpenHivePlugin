@@ -4,7 +4,7 @@ import doris.{DorisParser, DorisParserBaseVisitor}
 import org.antlr.v4.runtime.TokenStreamRewriter
 import org.antlr.v4.runtime.tree.ParseTree
 
-class DorisTableNameModifier(tokenStream: TokenStreamRewriter)
+class DorisTableNameModifier(tokenStream: TokenStreamRewriter, )
     extends DorisParserBaseVisitor[Any] {
 
   // 添加后缀的辅助方法
@@ -14,9 +14,9 @@ class DorisTableNameModifier(tokenStream: TokenStreamRewriter)
       tableName // 保持原格式（包括反引号）
     } else {
       if (tableName.contains("`")) {
-        s"`${cleanName}_test`"
+        s"`${cleanName}_stragety_test`"
       } else {
-        s"${cleanName}_test"
+        s"${cleanName}_stragety_test"
       }
     }
   }
