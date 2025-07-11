@@ -154,6 +154,7 @@
             <action id="createTableAction" class="action.CreateTableActioin" text="CreateTableAction"/>
             <action id="joinconditionextractor" class="action.JoinConditionExtractor" text="joinconditionextractor"/>
             <action id="clipboardhistoryaction" class="action.ClipBoardHistoryAction" text="ClipBoardHistoryAction"/>
+            <action id="dorisTableRenameAction" class="action.DorisTableRanmeActioin" text="DORIS表测试环境"/>
         </group>
         <action id="highlightWordAction" class="action.hilight.HighlightWordAction" text="HighlightWordAction"
                 description="HighlightWordAction">
