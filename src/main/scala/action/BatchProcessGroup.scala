@@ -802,7 +802,7 @@ class DorisTableRanmeActioin extends AnAction("DORIS测试环境") {
           if (onlyInsertChange == Messages.YES) true else false
         )
       } else {
-        new DorisTableNameModifier(tokenStreamRewriter, false)
+        new DorisTableNameModifier(tokenStreamRewriter, false, false)
       }
 
     visitor.visit(context)
