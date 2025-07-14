@@ -1,6 +1,8 @@
 package action.extract
 
+import com.intellij.openapi.ui.Messages
 import doris.{DorisParser, DorisParserBaseVisitor}
+import okhttp3.internal.ws.RealWebSocket.Message
 import org.antlr.v4.runtime.TokenStreamRewriter
 import org.antlr.v4.runtime.tree.ParseTree
 
@@ -8,6 +10,8 @@ class DorisTableNameModifier(
     tokenStream: TokenStreamRewriter,
     addSuffix: Boolean = true
 ) extends DorisParserBaseVisitor[Any] {
+
+  private val aliasTableNames = scala.collection.mutable.Set[String]()
 
   // 添加后缀的辅助方法
   private def addTestSuffix(tableName: String): String = {
@@ -76,7 +80,12 @@ class DorisTableNameModifier(
     super.visitDelete(ctx)
   }
 
-//  // 修改 FROM 子句和其他地方的表名，但排除别名查询
+  override def visitAliasQuery(ctx: DorisParser.AliasQueryContext): Any = {
+    val originalText = ctx.identifier().getText
+    aliasTableNames += originalText
+    super.visitAliasQuery(ctx)
+  }
+  //  // 修改 FROM 子句和其他地方的表名，但排除别名查询
 //  override def visitTableName(ctx: DorisParser.TableNameContext): Any = {
 //    // 如果在别名查询上下文中，则不修改
 //    if (!isInAliasQueryContext(ctx)) {
@@ -163,6 +172,31 @@ class DorisTableNameModifier(
       )
     }
     super.visitCreateTable(ctx)
+  }
+
+  override def visitTableName(ctx: DorisParser.TableNameContext): Any = {
+    val originalText = ctx.multipartIdentifier().getText
+    val cleanName = originalText.replaceAll("`", "")
+
+    // 不修改的情况：
+    // 1. 在别名查询上下文中
+    // 2. 当前表名是已知的别名
+    // 3. 在表别名定义上下文中
+    if (!aliasTableNames.contains(cleanName)) {
+      val modifiedText = addTestSuffix(originalText)
+
+      tokenStream.replace(
+        ctx.multipartIdentifier().getStart,
+        ctx.multipartIdentifier().getStop,
+        modifiedText
+      )
+    } else {
+      Messages.showInfoMessage(
+        s"${cleanName} 已经是别名，不需要修改",
+        aliasTableNames.mkString("\r")
+      )
+    }
+    super.visitTableName(ctx)
   }
 
 }
