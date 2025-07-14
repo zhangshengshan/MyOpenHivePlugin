@@ -25,14 +25,14 @@ class DorisTableNameModifier(
       }
     } else {
       if (cleanName.endsWith("_strategy_test")) {
-        tableName // 保持原格式（包括反引号）
-      } else {
         // 删除 _strategy_test 后缀
         if (tableName.contains("`")) {
           s"`${cleanName.stripSuffix("_strategy_test")}`"
         } else {
           cleanName.stripSuffix("_strategy_test")
         }
+      } else {
+        tableName // 保持原格式（包括反引号）
       }
     }
   }
