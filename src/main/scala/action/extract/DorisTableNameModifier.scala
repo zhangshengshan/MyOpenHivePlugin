@@ -187,7 +187,7 @@ class DorisTableNameModifier(
       // 并且 cleanName 是 a.b.c 这种形式的才修改
       if (
         !aliasTableNames
-          .contains(cleanName) && cleanName.split("\\.").length == 3
+          .contains(cleanName) && cleanName.split("\\.").length != 3
       ) {
         val modifiedText = addTestSuffix(originalText)
 
