@@ -1,7 +1,11 @@
 package action.linage
 
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
+import com.intellij.openapi.fileChooser.{
+  FileChooserDescriptor,
+  FileChooserDialog,
+  FileChooserFactory
+}
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
@@ -31,44 +35,54 @@ object PlotUtil {
       else OsConfig.winOutputPath
     }
 
-    import scala.jdk.CollectionConverters._
+    // Get selected text from editor
+    val selectedText = editor.getSelectionModel.getSelectedText
 
-    val scalaList: List[String] = sourceList
-    val javaList: java.util.List[String] = scalaList.asJava
+    val sources = if (selectedText != null && selectedText.trim.nonEmpty) {
+      // Split the selected text by newline or comma to get multiple sources
+      selectedText.split("[\n,]").map(_.trim).filter(_.nonEmpty).toList
+    } else {
+      // Fall back to the original dialog-based approach
+      import scala.jdk.CollectionConverters._
 
-    val myMultiChoiceDialog: MyMultiChoiceDialog = new MyMultiChoiceDialog(
-      javaList
-    )
-    myMultiChoiceDialog.show()
+      val scalaList: List[String] = sourceList
+      val javaList: java.util.List[String] = scalaList.asJava
 
-    val source = myMultiChoiceDialog.isOK match {
-      case true =>
-        myMultiChoiceDialog.getSelectedOptions.toArray().toList.head.toString
-      case _ => {
-        Messages.showInfoMessage("没有选择任何一个表格作为分析对象， 退出处理程序", "Information")
-        return
+      val myMultiChoiceDialog: MyMultiChoiceDialog = new MyMultiChoiceDialog(
+        javaList
+      )
+      myMultiChoiceDialog.show()
+
+      myMultiChoiceDialog.isOK match {
+        case true =>
+          myMultiChoiceDialog.getSelectedOptions.toArray().toList.map(_.toString)
+        case _ =>
+          Messages.showInfoMessage("没有选择任何一个表格作为分析对象，退出处理程序", "Information")
+          return
       }
     }
 
-    // source 如果是 db.tb 这种形式取 tb
-    val tableName = source.split("\\.") match {
-      case Array(_, tb) => tb
-      case _            => source
-    }
-    val fileName: String = Messages.showInputDialog(
-      project,
-      "请输入保存的文件名",
-      "文件名",
-      Messages.getQuestionIcon,
-      tableName,
-      null
-    )
+    for (source <- sources) yield {
+      val tableName = source.split("\\.") match {
+        case Array(_, tb) => tb
+        case _            => source
+      }
+      val fileName: String = Messages.showInputDialog(
+        project,
+        "请输入保存的文件名",
+        "文件名",
+        Messages.getQuestionIcon,
+        tableName,
+        null
+      )
 
-    MultiLayerLinageAnalysisUtil.plotDependency(
-      mutableList,
-      Some(outPutDir),
-      fileName,
-      source
-    )
+      MultiLayerLinageAnalysisUtil.plotDependency(
+        mutableList,
+        Some(outPutDir),
+        fileName,
+        source
+      )
+    }
+    // source 如果是 db.tb 这种形式取 tb
   }
 }

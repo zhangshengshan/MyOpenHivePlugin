@@ -1,14 +1,23 @@
 package action
 
 import _root_.util.OpenFileUtil
-import action.extract.DorisTableModifier
+import action.extract.{DorisTableModifier, DorisTableNameModifier}
 import action.util.{EditorUtil, ExceptionHandle}
 import com.intellij.notification.{Notification, NotificationType, Notifications}
-import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent, CommonDataKeys, DefaultActionGroup}
+import com.intellij.openapi.actionSystem.{
+  AnAction,
+  AnActionEvent,
+  CommonDataKeys,
+  DefaultActionGroup
+}
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.fileChooser.{FileChooserDescriptor, FileChooserDialog, FileChooserFactory}
+import com.intellij.openapi.fileChooser.{
+  FileChooserDescriptor,
+  FileChooserDialog,
+  FileChooserFactory
+}
 import com.intellij.openapi.project.{Project, ProjectManager}
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
@@ -43,22 +52,23 @@ class BatchProcessGroup extends DefaultActionGroup {
       new SearchTable,
       new CreateTableActioin,
       new JoinConditionExtractor,
-      new ClipBoardHistoryAction
+      new ClipBoardHistoryAction,
+      new DorisTableRanmeActioin
     )
   }
 
 }
 
 /** 关联条件提取器类，继承自AnAction类，允许用户通过剪贴板提取关联条件
- *
- * @extends AnAction 表示该类继承了AnAction类，并且指定了在用户界面中的显示名称为“关联条件”
- */
+  *
+  * @extends AnAction 表示该类继承了AnAction类，并且指定了在用户界面中的显示名称为“关联条件”
+  */
 class JoinConditionExtractor extends AnAction("关联条件") {
 
   /** 当动作被触发时执行的方法从剪贴板中提取关联条件并显示通知
-   *
-   * @param e 事件对象，包含了事件的相关信息，如上下文等
-   */
+    *
+    * @param e 事件对象，包含了事件的相关信息，如上下文等
+    */
   override def actionPerformed(e: AnActionEvent): Unit = {
     // 从剪贴板获取内容
     val clipboard = ClipBoardUtil.getFromClipboard
@@ -412,12 +422,12 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
   var listRowIdx = 2
 
   private def getXlsxFileFromDoris(
-                                    responseObj: Response,
-                                    workbook: Workbook,
-                                    db: String,
-                                    tb: String,
-                                    listsheet: Sheet
-                                  ) = {
+      responseObj: Response,
+      workbook: Workbook,
+      db: String,
+      tb: String,
+      listsheet: Sheet
+  ) = {
 
     val tableName = db + "." + tb
 
@@ -452,11 +462,16 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
         listRowIdx += 1
       }
 
-
     }
 
-    val columnsList = responseObj.data.properties.map(x => x.name).mkString(",") + ",ts_ms,op,`table`"
-    val jsonPath = responseObj.data.properties.map(x => "\\\"$.after." + x.name + "\\\"").mkString(",") + "\\\"$.source.ts_ms\\\",\\\"$.op\\\",\\\"$.source.table\\\""
+    val columnsList = responseObj.data.properties
+      .map(x => x.name)
+      .mkString(",") + ",ts_ms,op,`table`"
+    val jsonPath = responseObj.data.properties
+      .map(x => "\\\"$.after." + x.name + "\\\"")
+      .mkString(
+        ","
+      ) + "\\\"$.source.ts_ms\\\",\\\"$.op\\\",\\\"$.source.table\\\""
     Messages.showInfoMessage(columnsList, "Copy Columns")
     ClipBoardUtil.copyToClipBoard(columnsList)
     Messages.showInfoMessage(jsonPath, "Copy JSONPath")
@@ -472,19 +487,16 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
 //    val jsonPathCell0: Cell = jsonPathRow.createCell(0)
 //    jsonPathCell0.setCellValue(jsonPath)
 
-
-
-
   }
 
   def processDorisSchema(
-                          tableList: List[String],
-                          user: String,
-                          password: String,
-                          host: String,
-                          port: String,
-                          project: Project
-                        ): Unit = {
+      tableList: List[String],
+      user: String,
+      password: String,
+      host: String,
+      port: String,
+      project: Project
+  ): Unit = {
 
     val descriptor: FileChooserDescriptor =
       new FileChooserDescriptor(false, true, false, false, false, false)
@@ -523,9 +535,8 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
       val responseObj: Response = misc.DorisHttpUtil
         .getTableMeta(user, password, host, port, yourdb, yourtb) match {
         case Some(result) => result
-        case None => return
+        case None         => return
       }
-
 
       getXlsxFileFromDoris(responseObj, workbook, yourdb, yourtb, listsheet)
     })
@@ -554,7 +565,7 @@ class SaveDorisMetaToXlsx extends AnAction("保存元数据") {
       user: String,
       password: String,
       project: Project
-      ) = misc.GetConfig.getConfig(e)
+    ) = misc.GetConfig.getConfig(e)
 
     val table_list =
       if (
@@ -747,6 +758,71 @@ class ClipBoardHistoryAction extends AnAction("查看剪切板历史") {
           }
         }
       )
+    }
+  }
+}
+
+class DorisTableRanmeActioin extends AnAction("DORIS测试环境") {
+
+  override def actionPerformed(e: AnActionEvent): Unit = {
+
+    val editor: Editor = e.getData(CommonDataKeys.EDITOR)
+    val text: String = editor.getDocument.getText
+    // process the text with Doris
+    val lexer = new DorisLexer(
+      new CaseChangingCharStream(CharStreams.fromString(text), true)
+    )
+
+    val commonTokenStream: CommonTokenStream = new CommonTokenStream(lexer)
+    val parser: DorisParser = new DorisParser(commonTokenStream)
+
+    val context = parser.multiStatements()
+
+    val tokenStreamRewriter =
+      new org.antlr.v4.runtime.TokenStreamRewriter(commonTokenStream)
+
+    val OK = Messages.showYesNoDialog(
+      "strategy_test 添加后缀选择Yes, 删除后缀选择No ",
+      "确认",
+      Messages.getWarningIcon
+    )
+
+    val visitor =
+      if (OK == Messages.YES) {
+
+        val onlyInsertChange = Messages.showYesNoDialog(
+          "是否仅仅修改delete 和  insert的表名？",
+          "确认",
+          Messages.getWarningIcon
+        )
+
+        new DorisTableNameModifier(
+          tokenStreamRewriter,
+          true,
+          if (onlyInsertChange == Messages.YES) true else false
+        )
+      } else {
+        new DorisTableNameModifier(tokenStreamRewriter, false)
+      }
+
+    visitor.visit(context)
+    val newText = tokenStreamRewriter.getText()
+    Messages.showInfoMessage(newText, "修正后的DDL")
+    ClipBoardUtil.copyToClipBoard(newText)
+    // 是否要用newText去覆盖文件
+    val result =
+      Messages.showYesNoDialog("是否覆盖当前文件?", "确认", Messages.getWarningIcon)
+
+    if (result == Messages.YES) {
+      // 用户点击了 "Yes"
+      ApplicationManager.getApplication.runWriteAction(new Runnable {
+        override def run(): Unit = {
+          editor.getDocument.setText(newText)
+        }
+      })
+    } else if (result == Messages.NO) {
+      // 用户点击了 "No"
+      return
     }
   }
 }
