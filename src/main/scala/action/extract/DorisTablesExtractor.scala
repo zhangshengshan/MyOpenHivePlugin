@@ -66,20 +66,6 @@ class DorisTablesExtractor extends DorisParserBaseVisitor[String] {
     super.visitAliasQuery(ctx)
   }
 
-  override def visitAliasQuery(ctx: DorisParser.AliasQueryContext): String = {
-    val aliasTableName = ctx.identifier().getText
-    aliasTables add aliasTableName
-    if (curInsertTable.isDefined) {
-      if (targetTableAliasTablesFilter.contains(curInsertTable.get)) {
-        targetTableAliasTablesFilter(curInsertTable.get) += aliasTableName
-      } else {
-        targetTableAliasTablesFilter(curInsertTable.get) =
-          mutable.ListBuffer(aliasTableName)
-      }
-    }
-    super.visitAliasQuery(ctx)
-  }
-
   def plot(): List[(String, Int)] = {
     tablesMap.filter(x => !aliasTables.contains(x._1)).toList
   }
