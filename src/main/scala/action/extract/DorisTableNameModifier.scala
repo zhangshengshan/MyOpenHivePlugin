@@ -13,25 +13,25 @@ class DorisTableNameModifier(
   private def addTestSuffix(tableName: String): String = {
     val cleanName = tableName.replaceAll("`", "")
 
-    if (addSuffix == true) {
-      if (cleanName.endsWith("_stragegy_test")) {
+    if (addSuffix) {
+      if (cleanName.endsWith("_strategy_test")) {
         tableName // 保持原格式（包括反引号）
       } else {
         if (tableName.contains("`")) {
-          s"`${cleanName}_stragety_test`"
+          s"`${cleanName}_strategy_test`"
         } else {
-          s"${cleanName}_stragety_test"
+          s"${cleanName}_strategy_test"
         }
       }
     } else {
-      if (cleanName.endsWith("_stragegy_test")) {
+      if (cleanName.endsWith("_strategy_test")) {
         tableName // 保持原格式（包括反引号）
       } else {
-        // 删除 _stragegy_test 后缀
+        // 删除 _strategy_test 后缀
         if (tableName.contains("`")) {
-          s"`${cleanName.stripSuffix("_stragety_test")}`"
+          s"`${cleanName.stripSuffix("_strategy_test")}`"
         } else {
-          cleanName.stripSuffix("_stragety_test")
+          cleanName.stripSuffix("_strategy_test")
         }
       }
     }

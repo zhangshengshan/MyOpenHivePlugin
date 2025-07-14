@@ -782,7 +782,7 @@ class DorisTableRanmeActioin extends AnAction("DORIS测试环境") {
       new org.antlr.v4.runtime.TokenStreamRewriter(commonTokenStream)
 
     val OK = Messages.showYesNoDialog(
-      "是否添加后缀_stragety_test?",
+      "strategy_test 添加后缀选择Yes, 删除后缀选择No ",
       "确认",
       Messages.getWarningIcon
     )
