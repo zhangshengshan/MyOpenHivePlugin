@@ -8,7 +8,8 @@ import org.antlr.v4.runtime.tree.ParseTree
 
 class DorisTableNameModifier(
     tokenStream: TokenStreamRewriter,
-    addSuffix: Boolean = true
+    addSuffix: Boolean = true,
+    onlyInsertChange: Boolean = true
 ) extends DorisParserBaseVisitor[Any] {
 
   private val aliasTableNames = scala.collection.mutable.Set[String]()
@@ -175,26 +176,27 @@ class DorisTableNameModifier(
   }
 
   override def visitTableName(ctx: DorisParser.TableNameContext): Any = {
-    val originalText = ctx.multipartIdentifier().getText
-    val cleanName = originalText.replaceAll("`", "")
+    if (!onlyInsertChange) {
+      val originalText = ctx.multipartIdentifier().getText
+      val cleanName = originalText.replaceAll("`", "")
+      // 不修改的情况：
+      // 1. 在别名查询上下文中
+      // 2. 当前表名是已知的别名
+      // 3. 在表别名定义上下文中
+      if (!aliasTableNames.contains(cleanName)) {
+        val modifiedText = addTestSuffix(originalText)
 
-    // 不修改的情况：
-    // 1. 在别名查询上下文中
-    // 2. 当前表名是已知的别名
-    // 3. 在表别名定义上下文中
-    if (!aliasTableNames.contains(cleanName)) {
-      val modifiedText = addTestSuffix(originalText)
-
-      tokenStream.replace(
-        ctx.multipartIdentifier().getStart,
-        ctx.multipartIdentifier().getStop,
-        modifiedText
-      )
-    } else {
-      Messages.showInfoMessage(
-        s"${cleanName} 已经是别名，不需要修改",
-        aliasTableNames.mkString("\r")
-      )
+        tokenStream.replace(
+          ctx.multipartIdentifier().getStart,
+          ctx.multipartIdentifier().getStop,
+          modifiedText
+        )
+      } else {
+//        Messages.showInfoMessage(
+//          s"${cleanName} 已经是别名，不需要修改",
+//          aliasTableNames.mkString("\r")
+//        )
+      }
     }
     super.visitTableName(ctx)
   }

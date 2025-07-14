@@ -789,7 +789,18 @@ class DorisTableRanmeActioin extends AnAction("DORIS测试环境") {
 
     val visitor =
       if (OK == Messages.YES) {
-        new DorisTableNameModifier(tokenStreamRewriter, true)
+
+        val onlyInsertChange = Messages.showYesNoDialog(
+          "是否仅仅修改delete 和  insert的表名？",
+          "确认",
+          Messages.getWarningIcon
+        )
+
+        new DorisTableNameModifier(
+          tokenStreamRewriter,
+          true,
+          if (onlyInsertChange == Messages.YES) true else false
+        )
       } else {
         new DorisTableNameModifier(tokenStreamRewriter, false)
       }
