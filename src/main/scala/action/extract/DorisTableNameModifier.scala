@@ -86,21 +86,6 @@ class DorisTableNameModifier(
     aliasTableNames += originalText
     super.visitAliasQuery(ctx)
   }
-  //  // 修改 FROM 子句和其他地方的表名，但排除别名查询
-//  override def visitTableName(ctx: DorisParser.TableNameContext): Any = {
-//    // 如果在别名查询上下文中，则不修改
-//    if (!isInAliasQueryContext(ctx)) {
-//      val originalText = ctx.multipartIdentifier().getText
-//      val modifiedText = addTestSuffix(originalText)
-//
-//      tokenStream.replace(
-//        ctx.multipartIdentifier().getStart,
-//        ctx.multipartIdentifier().getStop,
-//        modifiedText
-//      )
-//    }
-//    super.visitTableName(ctx)
-//  }
   // 针对 TRUNCATE 语句，需要查找相应的 Context
   // 由于 DorisParser 中可能没有专门的 TruncateTableContext，
   // 我们需要查找 TRUNCATE 相关的语句处理
@@ -179,11 +164,6 @@ class DorisTableNameModifier(
     if (!onlyInsertChange) {
       val originalText = ctx.multipartIdentifier().getText
       val cleanName = originalText.replaceAll("`", "")
-      // 不修改的情况：
-      // 1. 在别名查询上下文中
-      // 2. 当前表名是已知的别名
-      // 3. 在表别名定义上下文中
-
       // 并且 cleanName 是 a.b.c 这种形式的才修改
       if (
         !aliasTableNames
@@ -196,12 +176,7 @@ class DorisTableNameModifier(
           ctx.multipartIdentifier().getStop,
           modifiedText
         )
-      } else {
-        //        Messages.showInfoMessage(
-//          s"${cleanName} 已经是别名，不需要修改",
-//          aliasTableNames.mkString("\r")
-//        )
-      }
+      } else {}
     }
     super.visitTableName(ctx)
   }
