@@ -183,7 +183,12 @@ class DorisTableNameModifier(
       // 1. 在别名查询上下文中
       // 2. 当前表名是已知的别名
       // 3. 在表别名定义上下文中
-      if (!aliasTableNames.contains(cleanName)) {
+
+      // 并且 cleanName 是 a.b.c 这种形式的才修改
+      if (
+        !aliasTableNames
+          .contains(cleanName) && cleanName.split("\\.").length == 3
+      ) {
         val modifiedText = addTestSuffix(originalText)
 
         tokenStream.replace(
@@ -192,7 +197,7 @@ class DorisTableNameModifier(
           modifiedText
         )
       } else {
-//        Messages.showInfoMessage(
+        //        Messages.showInfoMessage(
 //          s"${cleanName} 已经是别名，不需要修改",
 //          aliasTableNames.mkString("\r")
 //        )
