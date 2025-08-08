@@ -16,6 +16,7 @@ import com.intellij.openapi.fileChooser.{
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.SystemInfo
+import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.{PsiDocumentManager, PsiFile}
 import com.zss.graph.{Graph, Node}
@@ -197,25 +198,26 @@ class GetDorisSchemaAction extends AnAction {
     val dotPath = dotPathConfig
     val isWin = SystemInfo.isWindows
 
-    val fileName: String = Messages.showInputDialog(
-      project,
-      "请输入文件名",
-      "文件名",
-      Messages.getQuestionIcon,
-      graphNode.x.getTableAlias(),
-      null
-    )
-
-    graph.render(
-      fileName,
-      Some(outPutDir),
-      Some(true),
-      Some(dotPath),
-      Some(isWin)
-    )
+    // 此处要检查 dotPath是否存在, 而且是操作系统中是否真的存在这个文件
+    if (FileUtil.exists(dotPath)) {
+      val fileName: String = Messages.showInputDialog(
+        project,
+        """请输入文件名""",
+        "文件名",
+        Messages.getQuestionIcon,
+        graphNode.x.getTableAlias(),
+        null
+      )
+      graph.render(
+        fileName,
+        Some(outPutDir),
+        Some(true),
+        Some(dotPath),
+        Some(isWin)
+      )
+    }
 
     val sql = genDorisSelectQuery(responseObj, yourdb, yourtb)
-
     Messages.showInfoMessage(sql, "Generated Doris SQL")
     ClipBoardUtil.copyToClipBoard(sql)
   }
