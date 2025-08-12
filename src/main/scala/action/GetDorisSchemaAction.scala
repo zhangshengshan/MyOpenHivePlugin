@@ -70,8 +70,12 @@ class GetDorisSchemaAction extends AnAction {
       Messages.getQuestionIcon
     )
 
+    def isCommentEmpty(comment: String): Boolean = {
+      comment == null || comment.isEmpty
+    }
+
     def getAliasName(item: Property): String = {
-      if (item.comment == null || item.comment.isEmpty) {
+      if (isCommentEmpty(item.comment)) {
         item.name
       } else {
         "`" + item.comment + "`"
