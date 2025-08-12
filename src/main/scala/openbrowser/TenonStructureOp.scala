@@ -17,12 +17,7 @@ object TenonStructureOp {
     val dotPathConfig = value.getDotPathConfig
 
     param
-      .replace("(", "_")
-      .replace(")", "_")
-      .replace(".", "_")
-      .replace("（", "_")
-      .replace("）", "_")
-      .replace("=", "_")
+      .replaceAll("[().（）=]", "_")
 
     def genUrl(ss: Array[String]): String = {
       s"https://www.baidu.com"

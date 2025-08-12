@@ -36,12 +36,13 @@ case class Response(msg: String, code: Int, data: Data, count: Int)
 class GetDorisSchemaAction extends AnAction {
   final val DOT = "\\."
 
-  /** @param responseObj
-    * @param db
-    * @param tb
-    * @return
+  /** 生成 Doris 的 SELECT 查询语句
+    * @param responseObj 包含表结构信息的响应对象
+    * @param db 数据库名称
+    * @param tb 表名
+    * @return 格式化后的 SQL 查询字符串
     */
-  def genDorisSelectQuery(
+  private def genDorisSelectQuery(
       responseObj: Response,
       db: String,
       tb: String
