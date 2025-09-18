@@ -14,6 +14,10 @@ import com.intellij.openapi.editor.markup.{
   HighlighterTargetArea,
   TextAttributes
 }
+import com.intellij.openapi.fileEditor.FileEditorManager
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.editor.Document
+import com.intellij.openapi.fileEditor.TextEditor
 
 import scala.util.matching.Regex
 
@@ -77,27 +81,72 @@ class MoveToNextWordAction extends AnAction {
 
     // 构建单词的正则表达式，用于查找下一个匹配的单词
     val wordPattern = new Regex(s"(?i)\\b$word\\b").unanchored
-    // 尝试从当前光标位置之后查找下一个匹配的单词
-    var nextWordMatch =
-      wordPattern.findFirstMatchIn(documentText.substring(offset + 1))
-
-    // 如果在当前光标位置之后找不到匹配的单词，则从文档的开头重新开始查找
-    if (nextWordMatch.isEmpty) {
-      offset = 0
-      nextWordMatch = wordPattern.findFirstMatchIn(documentText)
+    
+    // 获取所有打开的文件
+    val fileEditorManager = FileEditorManager.getInstance(project)
+    val openFiles = fileEditorManager.getOpenFiles()
+    val currentFile = editor.getVirtualFile
+    
+    // 查找下一个匹配的单词位置
+    findAndMoveToNextWord(fileEditorManager, openFiles, currentFile, editor, wordPattern, offset)
+  }
+  
+  // 在所有打开的文件中查找并跳转到下一个匹配的单词
+  private def findAndMoveToNextWord(
+    fileEditorManager: FileEditorManager,
+    openFiles: Array[VirtualFile],
+    currentFile: VirtualFile,
+    currentEditor: com.intellij.openapi.editor.Editor,
+    wordPattern: Regex,
+    currentOffset: Int
+  ): Unit = {
+    
+    val currentDocumentText = currentEditor.getDocument.getText
+    var foundInCurrentFile = false
+    
+    // 首先尝试在当前文件中查找下一个匹配项
+    var nextWordMatch = wordPattern.findFirstMatchIn(currentDocumentText.substring(currentOffset + 1))
+    
+    if (nextWordMatch.isDefined) {
+      // 在当前文件中找到了下一个匹配项
+      val searchStartOffset = 1
+      val nextWordOffset = currentOffset + nextWordMatch.get.start + searchStartOffset
+      currentEditor.getCaretModel.moveToOffset(nextWordOffset)
+      currentEditor.getScrollingModel.scrollToCaret(ScrollType.CENTER)
+      return
     }
-
-    // 如果找到匹配的单词，则滚动到该单词的位置，但不进行高亮
-    nextWordMatch.foreach { m =>
-      // 如果搜索不是从文档的开头开始，则调整搜索开始的偏移量
-      val searchStartOffset = if (offset > 0) 1 else 0
-      // 计算下一个匹配单词的偏移量
-      val nextWordOffset = offset + m.start + searchStartOffset
-      // 将光标移动到下一个匹配的单词位置
-      caretModel.moveToOffset(nextWordOffset)
-      // 滚动编辑器使当前光标位置居中显示
-      editor.getScrollingModel.scrollToCaret(ScrollType.CENTER)
+    
+    // 如果在当前文件的后续位置没找到，则在所有打开的文件中搜索
+    var currentIndex = openFiles.indexOf(currentFile)
+    var filesSearched = 0
+    val totalFiles = openFiles.length
+    
+    while (filesSearched < totalFiles) {
+      currentIndex = (currentIndex + 1) % totalFiles
+      val file = openFiles(currentIndex)
+      
+      // 获取文件对应的编辑器
+      val editors = fileEditorManager.getEditors(file)
+      if (editors.nonEmpty && editors(0).isInstanceOf[TextEditor]) {
+        val textEditor = editors(0).asInstanceOf[TextEditor]
+        val document = textEditor.getEditor.getDocument
+        val documentText = document.getText
+        
+        // 在文件中查找匹配的单词
+        val matchResult = wordPattern.findFirstMatchIn(documentText)
+        if (matchResult.isDefined) {
+          // 找到匹配项，跳转到该文件和位置
+          fileEditorManager.openFile(file, true)
+          val targetEditor = fileEditorManager.getSelectedTextEditor
+          if (targetEditor != null) {
+            targetEditor.getCaretModel.moveToOffset(matchResult.get.start)
+            targetEditor.getScrollingModel.scrollToCaret(ScrollType.CENTER)
+          }
+          return
+        }
+      }
+      
+      filesSearched += 1
     }
-
   }
 }
