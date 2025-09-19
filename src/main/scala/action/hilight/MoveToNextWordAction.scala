@@ -84,7 +84,7 @@ class MoveToNextWordAction extends AnAction {
     
     // 获取所有打开的文件
     val fileEditorManager = FileEditorManager.getInstance(project)
-    val openFiles = fileEditorManager.getOpenFiles()
+    val openFiles = fileEditorManager.getOpenFiles
     val currentFile = editor.getVirtualFile
     
     // 查找下一个匹配的单词位置
