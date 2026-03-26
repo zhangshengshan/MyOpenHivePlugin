@@ -374,7 +374,7 @@ class CompareTwoTables extends AnAction("表格比对") {
         val outer = sourceTableMeta.get.data.properties
           .filter(x => bothSids.contains(x.name))
           .map(item => {
-            s"a.${item.name} <> b.${item.name} AS is_diff_${item.name}"
+            s"a.${item.name} <> b.${item.name} AS is_diff_${item.name}, a.${item.name}  AS a_${item.name}, b.${item.name} AS b_${item.name}"
           })
           .mkString(
             ",\n"
