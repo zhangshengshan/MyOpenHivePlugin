@@ -2,7 +2,7 @@ package action.extract
 
 import com.intellij.openapi.ui.Messages
 import doris.{DorisParser, DorisParserBaseVisitor}
-import okhttp3.internal.ws.RealWebSocket.Message
+
 import org.antlr.v4.runtime.TokenStreamRewriter
 import org.antlr.v4.runtime.tree.ParseTree
 

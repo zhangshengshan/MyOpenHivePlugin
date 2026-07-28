@@ -94,16 +94,15 @@ class CommentSelectLinesToggle extends AnAction {
                 )
               )
               if (shouldRemoveComments) {
-                // 移除当前行的注释：去掉行首的"--"及其前面的空白字符
-                val newStr = lineText.replaceFirst("^\\s*--", "")
+                val newStr = lineText.replaceFirst("^(\\s*)--\\s?", "$1")
                 document.replaceString(
                   document.getLineStartOffset(curLine),
                   document.getLineEndOffset(curLine),
                   newStr
                 )
               } else {
-                // 添加注释：在行首插入"-- "
-                val insertPos: Int = document.getLineStartOffset(curLine)
+                val leadingWhitespace = lineText.takeWhile(c => c == ' ' || c == '\t')
+                val insertPos: Int = document.getLineStartOffset(curLine) + leadingWhitespace.length
                 document.insertString(insertPos, "-- ")
               }
             }
