@@ -184,6 +184,10 @@
         <action id="paramSub" class="action.editor.tech.SqlParamSub" text="SQL 参数替换" description="ParamSub">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+        <action id="sqlSelectWrapper" class="action.editor.tech.SQLSelectWrapperAction" text="SQL Select Wrapper"
+                description="将选中SQL包裹为 SELECT * FROM (...) AS alias">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
         <action id="substituewordundercursorwithclipboard"
                 class="action.editor.tech.SubstitueWordUnderCursorWithClipboard"
                 text="SubstitueWordUnderCursorWithClipboard"
