@@ -12,4 +12,7 @@ class ScalaBridgeImpl extends ScalaBridge {
 
   override def genTenonStructureGraph(param: String): Unit =
     TenonStructureOp.genTenonStructureGraph(param)
+
+  override def copyToClipBoard(text: String): Unit =
+    ClipBoardUtil.copyToClipBoard(text)
 }

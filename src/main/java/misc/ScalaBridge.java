@@ -25,4 +25,15 @@ public interface ScalaBridge {
      * @see openbrowser.TenonStructureOp#genTenonStructureGraph(String)
      */
     void genTenonStructureGraph(String param);
+
+    /**
+     * 把文本写入系统剪贴板，并记录到插件的剪贴板历史队列。
+     *
+     * <p>等价于 main 分支 {@code HiveFormatAction} 直接调用
+     * {@code misc.ClipBoardUtil.copyToClipBoard}：除了写入系统剪贴板，还会把该值
+     * 存进 {@code ClipBoardUtil} 内部的 100 条历史队列（供 BatchProcessGroup 使用）。</p>
+     *
+     * @see misc.ClipBoardUtil#copyToClipBoard(String)
+     */
+    void copyToClipBoard(String text);
 }
