@@ -60,10 +60,18 @@ sourceSets {
 tasks.register('fatJar', Jar) {
     archiveClassifier = 'all'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    // 依赖里带签名文件的 jar 合并后会触发 "Invalid signature file digest"，
+    // 单文件包必须剔除 META-INF 下的签名文件
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.EC', 'META-INF/SIG-*'
     from sourceSets.main.output
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+// 让 ./gradlew build 也产出 build/libs/myhive-<version>-all.jar，可直接单文件丢进 plugins 目录
+tasks.named('assemble') {
+    dependsOn 'fatJar'
 }
 
 dependencies {
