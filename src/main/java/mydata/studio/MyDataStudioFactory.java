@@ -3,6 +3,7 @@
 
 package mydata.studio;
 
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -24,7 +25,7 @@ public class MyDataStudioFactory implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         MyDataStudio myToolWindow = new MyDataStudio(toolWindow);
-        ContentFactory contentFactory = ContentFactory.getInstance();
+        ContentFactory contentFactory = ServiceManager.getService(ContentFactory.class);
         Content content = contentFactory.createContent(myToolWindow.getContent(), "", false);
         toolWindow.getContentManager().addContent(content);
     }

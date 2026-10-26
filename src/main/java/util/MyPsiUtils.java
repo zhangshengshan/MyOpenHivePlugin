@@ -100,15 +100,11 @@ public class MyPsiUtils {
     public static void replacePsiFileFromText(
             final Project project, final PsiFile psiFile, String text) {
         final PsiFile newPsiFile = createFile(project, text);
-        WriteCommandAction setTextAction =
-                new WriteCommandAction(project) {
-                    @Override
-                    protected void run(@NotNull final Result result) {
-                        psiFile.deleteChildRange(psiFile.getFirstChild(), psiFile.getLastChild());
-                        psiFile.addRange(newPsiFile.getFirstChild(), newPsiFile.getLastChild());
-                    }
-                };
-        setTextAction.execute();
+        // 2026.2 起 WriteCommandAction 变成 final、不再允许匿名子类，改用静态入口
+        WriteCommandAction.runWriteCommandAction(project, () -> {
+            psiFile.deleteChildRange(psiFile.getFirstChild(), psiFile.getLastChild());
+            psiFile.addRange(newPsiFile.getFirstChild(), newPsiFile.getLastChild());
+        });
     }
 
     public static PsiFile createFile(Project project, String text) {

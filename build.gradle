@@ -73,7 +73,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
     implementation 'org.antlr:antlr4:4.11.1'
     implementation "org.antlr:antlr4-intellij-adaptor:0.1"
-    implementation 'org.scala-lang:scala-library:2.13.11'
+    implementation 'org.scala-lang:scala-library:2.13.18'
     implementation 'com.github.vertical-blank:sql-formatter:2.0.3'
     implementation 'io.github.zhangshengshan:mygraphapp_2.13:0.1.8'
     // mygraphapp中包含此依赖，此处不再需要，防止冲突
@@ -107,16 +107,30 @@ generateGrammarSource {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = '2026.1'
+    version = '2026.2'
     type = 'IU'
 }
 patchPluginXml {
+    sinceBuild = '262'
+    untilBuild = '262.*'
     changeNotes = """ """
 }
 
 
 test {
     useJUnitPlatform()
+}
+
+// IntelliJ Platform 2026.2 (build 262) 的平台 jar 是 Java 25 (class file v69) 编译的，
+// 必须用 JDK 25 编译插件，否则报 "错误的类文件 ... 版本 69.0, 应为 65.0"
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+lombok {
+    version = '1.18.48'
 }
 
 release {

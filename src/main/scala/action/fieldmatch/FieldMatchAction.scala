@@ -28,9 +28,11 @@ class FieldMatchAction extends AnAction {
       .createFileChooser(descriptor, project, null)
 
     // 显示文件选择器对话框并获取选中的文件
-    val chosenFiles: Array[VirtualFile] = dialog.choose(null, project)
+    // 2026.2 起签名变为 choose(Project, VirtualFile...)
+    val chosenFiles: Array[VirtualFile] = dialog.choose(project)
 
     // 检查是否有文件被选中
+    if (chosenFiles == null || chosenFiles.isEmpty) return
     val chosenFile: VirtualFile = chosenFiles(0)
     // 在这里处理选中的文件
 
