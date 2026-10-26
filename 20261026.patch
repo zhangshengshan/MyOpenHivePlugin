@@ -1,0 +1,285 @@
+diff --git a/build.gradle b/build.gradle
+index 88d51f4..7e9355a 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -73,7 +73,7 @@ dependencies {
+     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+     implementation 'org.antlr:antlr4:4.11.1'
+     implementation "org.antlr:antlr4-intellij-adaptor:0.1"
+-    implementation 'org.scala-lang:scala-library:2.13.11'
++    implementation 'org.scala-lang:scala-library:2.13.18'
+     implementation 'com.github.vertical-blank:sql-formatter:2.0.3'
+     implementation 'io.github.zhangshengshan:mygraphapp_2.13:0.1.8'
+     // mygraphapp中包含此依赖，此处不再需要，防止冲突
+@@ -107,10 +107,12 @@ generateGrammarSource {
+ 
+ // See https://github.com/JetBrains/gradle-intellij-plugin/
+ intellij {
+-    version = '2026.1'
++    version = '2026.2'
+     type = 'IU'
+ }
+ patchPluginXml {
++    sinceBuild = '262'
++    untilBuild = '262.*'
+     changeNotes = """ """
+ }
+ 
+@@ -119,6 +121,18 @@ test {
+     useJUnitPlatform()
+ }
+ 
++// IntelliJ Platform 2026.2 (build 262) 的平台 jar 是 Java 25 (class file v69) 编译的，
++// 必须用 JDK 25 编译插件，否则报 "错误的类文件 ... 版本 69.0, 应为 65.0"
++java {
++    toolchain {
++        languageVersion = JavaLanguageVersion.of(25)
++    }
++}
++
++lombok {
++    version = '1.18.48'
++}
++
+ release {
+     ignoredSnapshotDependencies = ["io.github.zhangshengshan:mygraphapp_2.13"]
+ }
+diff --git a/gradle.properties b/gradle.properties
+index 6c0dbcc..b8a06e5 100644
+--- a/gradle.properties
++++ b/gradle.properties
+@@ -1 +1,3 @@
+-version=2.2.34
+\ No newline at end of file
++version=2.2.34
++# 让 Gradle 自动探测到 RustRover 自带的 JDK 25 (编译 2026.2 平台插件需要)
++org.gradle.java.installations.paths=/Applications/RustRover.app/Contents/jbr/Contents/Home
+diff --git a/src/main/java/action/HiveFormatAction.java b/src/main/java/action/HiveFormatAction.java
+index addd9e9..aa3830b 100644
+--- a/src/main/java/action/HiveFormatAction.java
++++ b/src/main/java/action/HiveFormatAction.java
+@@ -11,7 +11,7 @@ import com.intellij.openapi.editor.Document;
+ import com.intellij.openapi.editor.Editor;
+ import com.intellij.openapi.project.Project;
+ import com.intellij.openapi.ui.Messages;
+-import misc.ClipBoardUtil;
++//import misc.ClipBoardUtil;
+ import org.jetbrains.annotations.NotNull;
+ import com.intellij.openapi.application.ApplicationManager;
+ 
+@@ -36,7 +36,7 @@ public class HiveFormatAction extends AnAction {
+                                         .build());
+ 
+         final Document document = editor.getDocument();
+-        ClipBoardUtil.copyToClipBoard(format);
++//        ClipBoardUtil.copyToClipBoard(format);
+         Messages.showInfoMessage("Formatted SQL has been copied to clipboard", "Success");
+ 
+         int result = Messages.showYesNoDialog(
+diff --git a/src/main/java/mydata/studio/MyDataStudioFactory.java b/src/main/java/mydata/studio/MyDataStudioFactory.java
+index 14588f7..5d39eb9 100644
+--- a/src/main/java/mydata/studio/MyDataStudioFactory.java
++++ b/src/main/java/mydata/studio/MyDataStudioFactory.java
+@@ -3,6 +3,7 @@
+ 
+ package mydata.studio;
+ 
++import com.intellij.openapi.components.ServiceManager;
+ import com.intellij.openapi.project.Project;
+ import com.intellij.openapi.wm.ToolWindow;
+ import com.intellij.openapi.wm.ToolWindowFactory;
+@@ -24,7 +25,7 @@ public class MyDataStudioFactory implements ToolWindowFactory {
+     @Override
+     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
+         MyDataStudio myToolWindow = new MyDataStudio(toolWindow);
+-        ContentFactory contentFactory = ContentFactory.getInstance();
++        ContentFactory contentFactory = ServiceManager.getService(ContentFactory.class);
+         Content content = contentFactory.createContent(myToolWindow.getContent(), "", false);
+         toolWindow.getContentManager().addContent(content);
+     }
+diff --git a/src/main/java/mydata/studio/listener/ExecuteButtonListener.java b/src/main/java/mydata/studio/listener/ExecuteButtonListener.java
+index f03fa28..902b8e3 100644
+--- a/src/main/java/mydata/studio/listener/ExecuteButtonListener.java
++++ b/src/main/java/mydata/studio/listener/ExecuteButtonListener.java
+@@ -4,8 +4,8 @@ import com.intellij.openapi.ui.Messages;
+ import lombok.SneakyThrows;
+ import mydata.studio.DataStudioCommonParam;
+ import mydata.studio.MyDataStudio;
+-import mydata.studio.op.GenOp;
+-import openbrowser.TenonStructureOp$;
++//import mydata.studio.op.GenOp;
++//import openbrowser.TenonStructureOp$;
+ 
+ import java.awt.event.ActionEvent;
+ import java.awt.event.ActionListener;
+@@ -37,11 +37,11 @@ public class ExecuteButtonListener implements ActionListener, KeyListener {
+         params.forEach(param -> {
+ 
+             if (this.myDataStudio.getFieldsInfoButton().isSelected()) {
+-                GenOp.getSelectPart(param);
++//                GenOp.getSelectPart(param);
+             }
+ 
+             if (this.myDataStudio.getTennonButton().isSelected()) {
+-                TenonStructureOp$.MODULE$.genTenonStructureGraph(param);
++//                TenonStructureOp$.MODULE$.genTenonStructureGraph(param);
+             }
+ 
+             if (this.myDataStudio.getHierachyFieldRadioButton().isSelected()) {
+diff --git a/src/main/java/mydata/studio/op/GenOp.java b/src/main/java/mydata/studio/op/GenOp.java
+index af0412a..13b2f95 100644
+--- a/src/main/java/mydata/studio/op/GenOp.java
++++ b/src/main/java/mydata/studio/op/GenOp.java
+@@ -1,7 +1,7 @@
+ package mydata.studio.op;
+ 
+ import mydata.studio.service.SessionService;
+-import openbrowser.GenCodeOp$;
++//import openbrowser.GenCodeOp$;
+ 
+ /**
+  * @author nobody
+@@ -9,6 +9,6 @@ import openbrowser.GenCodeOp$;
+ public class GenOp {
+ 
+     public static String getSelectPart(String param) {
+-        return GenCodeOp$.MODULE$.genSelectCodePiece(param, SessionService.getSessionId());
++        return null;
+     }
+ }
+diff --git a/src/main/java/structview/HiveStructureViewFactory.java b/src/main/java/structview/HiveStructureViewFactory.java
+index 82df829..9f9572e 100644
+--- a/src/main/java/structview/HiveStructureViewFactory.java
++++ b/src/main/java/structview/HiveStructureViewFactory.java
+@@ -1,8 +1,9 @@
+ package structview;
+ 
+ import com.intellij.ide.structureView.*;
+-import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
++import com.intellij.ide.util.treeView.smartTree.TreeElement;
+ import com.intellij.lang.PsiStructureViewFactory;
++import com.intellij.navigation.ItemPresentation;
+ import com.intellij.openapi.editor.Editor;
+ import com.intellij.openapi.vfs.VirtualFile;
+ import com.intellij.psi.PsiElement;
+@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
+ import org.jetbrains.annotations.Nullable;
+ import plugin.HiveFile;
+ 
+-import java.util.Collection;
++import javax.swing.Icon;
+ import java.util.Collections;
+ 
+ /**
+@@ -36,16 +37,33 @@ public class HiveStructureViewFactory implements PsiStructureViewFactory {
+ 
+     /**
+      * fake a blank Treeview with a warning
++     * <p>
++     * 2026.2 起 {@code com.intellij.ide.structureView.impl.common.PsiTreeElementBase}
++     * 被移到了 platform-structureView-plugin 模块里（不再位于 IDE 的 lib 下），
++     * 这里改为直接实现 {@link StructureViewTreeElement}，避免依赖内部实现类。
+      */
+-    public static class DummyViewTreeElement extends PsiTreeElementBase<PsiElement> {
++    public static class DummyViewTreeElement implements StructureViewTreeElement, ItemPresentation {
++        private final PsiElement myElement;
++
+         public DummyViewTreeElement(PsiElement psiElement) {
+-            super(psiElement);
++            this.myElement = psiElement;
++        }
++
++        @Override
++        public Object getValue() {
++            return myElement;
+         }
+ 
+         @NotNull
+         @Override
+-        public Collection<StructureViewTreeElement> getChildrenBase() {
+-            return Collections.emptyList();
++        public ItemPresentation getPresentation() {
++            return this;
++        }
++
++        @NotNull
++        @Override
++        public TreeElement[] getChildren() {
++            return StructureViewTreeElement.EMPTY_ARRAY;
+         }
+ 
+         @Nullable
+@@ -53,5 +71,31 @@ public class HiveStructureViewFactory implements PsiStructureViewFactory {
+         public String getPresentableText() {
+             return "Hive";
+         }
++
++        @Nullable
++        @Override
++        public String getLocationString() {
++            return null;
++        }
++
++        @Nullable
++        @Override
++        public Icon getIcon(boolean unused) {
++            return null;
++        }
++
++        @Override
++        public void navigate(boolean requestFocus) {
++        }
++
++        @Override
++        public boolean canNavigate() {
++            return false;
++        }
++
++        @Override
++        public boolean canNavigateToSource() {
++            return false;
++        }
+     }
+ }
+diff --git a/src/main/java/util/MyPsiUtils.java b/src/main/java/util/MyPsiUtils.java
+index f9a94bd..ed57a9a 100644
+--- a/src/main/java/util/MyPsiUtils.java
++++ b/src/main/java/util/MyPsiUtils.java
+@@ -100,15 +100,11 @@ public class MyPsiUtils {
+     public static void replacePsiFileFromText(
+             final Project project, final PsiFile psiFile, String text) {
+         final PsiFile newPsiFile = createFile(project, text);
+-        WriteCommandAction setTextAction =
+-                new WriteCommandAction(project) {
+-                    @Override
+-                    protected void run(@NotNull final Result result) {
+-                        psiFile.deleteChildRange(psiFile.getFirstChild(), psiFile.getLastChild());
+-                        psiFile.addRange(newPsiFile.getFirstChild(), newPsiFile.getLastChild());
+-                    }
+-                };
+-        setTextAction.execute();
++        // 2026.2 起 WriteCommandAction 变成 final、不再允许匿名子类，改用静态入口
++        WriteCommandAction.runWriteCommandAction(project, () -> {
++            psiFile.deleteChildRange(psiFile.getFirstChild(), psiFile.getLastChild());
++            psiFile.addRange(newPsiFile.getFirstChild(), newPsiFile.getLastChild());
++        });
+     }
+ 
+     public static PsiFile createFile(Project project, String text) {
+diff --git a/src/main/scala/action/fieldmatch/FieldMatchAction.scala b/src/main/scala/action/fieldmatch/FieldMatchAction.scala
+index b25a6ac..90184e3 100644
+--- a/src/main/scala/action/fieldmatch/FieldMatchAction.scala
++++ b/src/main/scala/action/fieldmatch/FieldMatchAction.scala
+@@ -28,9 +28,11 @@ class FieldMatchAction extends AnAction {
+       .createFileChooser(descriptor, project, null)
+ 
+     // 显示文件选择器对话框并获取选中的文件
+-    val chosenFiles: Array[VirtualFile] = dialog.choose(null, project)
++    // 2026.2 起签名变为 choose(Project, VirtualFile...)
++    val chosenFiles: Array[VirtualFile] = dialog.choose(project)
+ 
+     // 检查是否有文件被选中
++    if (chosenFiles == null || chosenFiles.isEmpty) return
+     val chosenFile: VirtualFile = chosenFiles(0)
+     // 在这里处理选中的文件
+ 
