@@ -9,11 +9,12 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import misc.ClipBoardUtil;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.openapi.application.ApplicationManager;
+
+import java.awt.datatransfer.StringSelection;
 
 /**
  * @author nobody
@@ -36,7 +37,9 @@ public class HiveFormatAction extends AnAction {
                                         .build());
 
         final Document document = editor.getDocument();
-        ClipBoardUtil.copyToClipBoard(format);
+        // 原来调用 Scala 的 misc.ClipBoardUtil，这里改为直接用平台 API，
+        // 避免 Java 源码依赖 scalac 的产物（compileJava -> compileScala 任务环）
+        CopyPasteManager.getInstance().setContents(new StringSelection(format));
         Messages.showInfoMessage("Formatted SQL has been copied to clipboard", "Success");
 
         int result = Messages.showYesNoDialog(

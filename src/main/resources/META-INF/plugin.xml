@@ -57,6 +57,9 @@
                                          displayName="HierachyTools"/>
         -->
         <applicationService serviceImplementation="hierachyconfig.MyConfigurable"/>
+        <!-- Java -> Scala 调用桥（实现类由 Scala 侧提供，避免 javac 依赖 scalac 产物） -->
+        <applicationService serviceInterface="misc.ScalaBridge"
+                            serviceImplementation="misc.ScalaBridgeImpl"/>
         <applicationConfigurable instance="hierachyconfig.MyConfigEntry" displayName="层次工具"
                                  parentId="tools" id="hierachy"
         />

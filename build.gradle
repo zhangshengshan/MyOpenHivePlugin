@@ -1,10 +1,10 @@
 plugins {
-    id 'org.jetbrains.intellij' version '1.17.4'
+    id 'org.jetbrains.intellij.platform' version '2.19.0'
     id 'java'
     id 'antlr'
     id 'scala'
-    id 'net.researchgate.release' version '3.0.2'
-    id "io.freefair.lombok" version "8.4"
+    id 'net.researchgate.release' version '3.2.0'
+    id "io.freefair.lombok" version "9.8.2"
     id "maven-publish"
     id "signing"
 }
@@ -35,9 +35,17 @@ repositories {
     maven {
         url "https://oss.sonatype.org/service/local/repositories/releases/content"
     }
+
+    // gradle-intellij-plugin 2.x: IDE 与捆绑插件的仓库
+    intellijPlatform {
+        defaultRepositories()
+    }
 }
 sourceSets {
     main {
+        // Java 先编译，Scala 再编译（scalac 能看到 javac 产物，反之不行）。
+        // Java 源码不再直接引用 Scala object，跨语言调用统一走 misc.ScalaBridge 接口，
+        // 从而避免 compileJava <-> compileScala 的任务环。
         java {
             srcDirs = ['src/main/java', 'src/main/gen']
         }
@@ -46,29 +54,30 @@ sourceSets {
         }
     }
 }
-//compileJava.dependsOn(compileScala)
-compileJava.classpath += files(compileScala.destinationDir)
-// TODO: 突然发现打出的JAR包不含依赖， 体积骤降，导致相关的类无法加载，调整为打包成fatJar
-// FatJar导致包体积过大，需要调整
-jar {
-    archiveClassifier = "all"
+
+// gradle-intellij-plugin 2.x 的 buildPlugin 会把 runtimeClasspath 依赖一起放进 zip 的 lib/，
+// 所以默认 jar 保持普通瘦包；需要"单个 jar 直接丢进 plugins 目录"时用 fatJar
+tasks.register('fatJar', Jar) {
+    archiveClassifier = 'all'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from sourceSets.main.output
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-}
-task fatJar(type: Jar) {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    with jar
 }
 
-tasks.named("buildSearchableOptions").configure {
-    enabled = false
-}
 dependencies {
+    intellijPlatform {
+        // 默认从 JetBrains 仓库下载 2026.2 平台；
+        // 想复用本机已解压的 IDE（省 1.5G 下载）可加 -PlocalIdePath=/path/to/ideaIU-2026.2
+        def localIde = providers.gradleProperty('localIdePath').orNull
+        if (localIde) {
+            local(localIde)
+        } else {
+            intellijIdeaUltimate('2026.2')
+        }
+    }
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
     implementation 'org.antlr:antlr4:4.11.1'
@@ -105,15 +114,29 @@ generateGrammarSource {
     ]
 }
 
-// See https://github.com/JetBrains/gradle-intellij-plugin/
-intellij {
-    version = '2026.2'
-    type = 'IU'
-}
-patchPluginXml {
-    sinceBuild = '262'
-    untilBuild = '262.*'
-    changeNotes = """ """
+// See https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
+intellijPlatform {
+    buildSearchableOptions = false
+    instrumentCode = true
+
+    pluginConfiguration {
+        id = 'org.example.MyHive'
+        name = 'DataStudio'
+        description = '''
+            DataStudio：Hive / Doris SQL 开发辅助工具<br/>
+            提供语法高亮、格式化、表结构抽取、数据对比、血缘分析等能力。
+        '''
+        ideaVersion {
+            sinceBuild = '262'
+            untilBuild = '262.*'
+        }
+        vendor {
+            name = 'MyDataStudio'
+            url = 'https://github.com/zhangshengshan/MyOpenHivePlugin'
+            email = 'alphabetago@163.com'
+        }
+        changeNotes = ''
+    }
 }
 
 

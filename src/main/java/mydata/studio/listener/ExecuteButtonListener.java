@@ -1,11 +1,12 @@
 package mydata.studio.listener;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.ui.Messages;
 import lombok.SneakyThrows;
+import misc.ScalaBridge;
 import mydata.studio.DataStudioCommonParam;
 import mydata.studio.MyDataStudio;
-import mydata.studio.op.GenOp;
-import openbrowser.TenonStructureOp$;
+import mydata.studio.service.SessionService;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,17 +32,20 @@ public class ExecuteButtonListener implements ActionListener, KeyListener {
 
         final List<String> params = dataStudioCommonParam.getParams();
 
+        final ScalaBridge scalaBridge =
+                ApplicationManager.getApplication().getService(ScalaBridge.class);
+
 
         // todo: judge which button is clicked and execute the corresponding command
 
         params.forEach(param -> {
 
             if (this.myDataStudio.getFieldsInfoButton().isSelected()) {
-                GenOp.getSelectPart(param);
+                scalaBridge.genSelectCodePiece(param, SessionService.getSessionId());
             }
 
             if (this.myDataStudio.getTennonButton().isSelected()) {
-                TenonStructureOp$.MODULE$.genTenonStructureGraph(param);
+                scalaBridge.genTenonStructureGraph(param);
             }
 
             if (this.myDataStudio.getHierachyFieldRadioButton().isSelected()) {
