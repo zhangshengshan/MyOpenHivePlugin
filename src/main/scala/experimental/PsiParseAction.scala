@@ -10,6 +10,13 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.{PsiElement, PsiManager}
 import psi.node.IdentifierNode
 
+/**
+ * PSI 解析实验动作（原菜单项：PsiParse / Ctrl+Alt+P）。
+ *
+ * 已废弃：自 2.2.36 起不再在 plugin.xml 中注册挂载，编辑器右键菜单与默认快捷键均已下线。
+ * 保留类体仅作 PSI 调试参考，不做维护、不保证在新平台版本下可用。
+ */
+@deprecated("PSI 解析实验功能已废弃，菜单入口与 Ctrl+Alt+P 已隐藏", "2.2.36")
 class PsiParseAction extends AnAction {
 
   override def actionPerformed(event: AnActionEvent): Unit = {

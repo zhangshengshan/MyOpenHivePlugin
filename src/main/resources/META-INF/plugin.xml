@@ -79,10 +79,13 @@
         <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl meta alt T"/>-->
         <!--            <add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
         <!--        </action>-->
-        <action id="PsiParseAction" class="experimental.PsiParseAction" text="PsiParse">
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt P"/>
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-        </action>
+        <!-- PsiParseAction（PSI 解析，实验功能）已废弃：不再挂载到 EditorPopupMenu，
+             入口与 Ctrl+Alt+P 快捷键一并下线。类 experimental.PsiParseAction 保留并标记 @deprecated，
+             仅供内部排查参考；如后续确认无价值，可连同本段与实际类文件一起删除。 -->
+        <!--        <action id="PsiParseAction" class="experimental.PsiParseAction" text="PsiParse">-->
+        <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt P"/>-->
+        <!--            <add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
+        <!--        </action>-->
         <action id="getDorisTableAction" class="action.GetDorisSchemaAction" text="获取GRAPH与SQL生成"
                 description="获取GRAPH与SQL生成">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt G"/>
