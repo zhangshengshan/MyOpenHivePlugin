@@ -63,6 +63,10 @@
         <applicationConfigurable instance="hierachyconfig.MyConfigEntry" displayName="层次工具"
                                  parentId="tools" id="hierachy"
         />
+        <!-- 表导航索引：正则扫描项目内 .hql/.sql，定位写入某表的文件 -->
+        <projectService serviceImplementation="navigation.TableNavigationService"/>
+        <!-- Ctrl+Click / Ctrl+B 走纯正则表跳转（仅 .sql/.hql） -->
+        <gotoDeclarationHandler implementation="navigation.TableGotoDeclarationHandler"/>
     </extensions>
 
     <actions>
@@ -199,6 +203,11 @@
                 text="SubstitueWordUnderCursorWithClipboard"
                 description="SubstitueWordUnderCursorWithClipboard">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+        <!-- 在表名上执行：正则提取表名，跳转到“包含该表名且含 insert into 表名”的文件（纯正则，不依赖 PSI） -->
+        <action id="gotoWriteTableFile" class="navigation.GotoWriteTableFileAction"
+                text="跳转到写入此表的文件" description="正则扫描项目，打开写入该表的文件">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
     </actions>
 </idea-plugin>
