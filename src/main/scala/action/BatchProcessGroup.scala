@@ -699,28 +699,82 @@ class SearchTable extends AnAction("模糊搜索表格") {
     val (clipboard, host, port, user, password, project) =
       misc.GetConfig.getConfig(anActionEvent)
 
-    Messages.showInfoMessage(clipboard, "剪切板内容")
-    val sourceTable = clipboard.strip()
+    val sourceTable = Option(clipboard)
+      .map(_.trim)
+      .getOrElse("")
+      .stripSuffix(";")
+      .trim
+    val tableParts = sourceTable
+      .split("\\.")
+      .map(_.replace("`", "").trim)
+      .filter(_.nonEmpty)
+    if (tableParts.length != 2) {
+      Messages.showErrorDialog(
+        s"剪切板内容不是合法的 db.table 表名: $sourceTable",
+        "模糊搜索表格"
+      )
+      return
+    }
+    val db = tableParts(0)
+    val tb = tableParts(1)
+    val tableName = s"`$db`.`$tb`"
+
     val sourceTableMeta = misc.DorisHttpUtil.getTableMeta(
       user,
       password,
       host,
       port,
-      sourceTable.split("\\.")(0),
-      sourceTable.split("\\.")(1)
+      db,
+      tb
     )
-    val sourceTableMetaMap =
-      sourceTableMeta.get.data.properties.map(x => (x.name, x.`type`)).toMap
+    if (sourceTableMeta.isEmpty) return
+    val columns = sourceTableMeta.get.data.properties.map(_.name)
+    if (columns.isEmpty) {
+      Messages.showErrorDialog(s"没有获取到 $db.$tb 的字段列表", "模糊搜索表格")
+      return
+    }
 
-    val searchCotent =
-      Messages.showInputDialog("请输入搜索内容", "搜索内容", Messages.getQuestionIcon)
+    // 留空则保留 ${search_string} 占位符，方便后续做参数替换
+    val searchContent = Messages.showInputDialog(
+      project,
+      "请输入搜索内容（留空则保留 ${search_string} 占位符）",
+      "搜索内容",
+      Messages.getQuestionIcon,
+      "${search_string}",
+      null
+    )
+    if (searchContent == null) return
+
+    val searchValue =
+      if (searchContent.trim.isEmpty) "${search_string}"
+      else searchContent.trim
+    val searchLit = "'" + searchValue.replace("'", "''") + "'"
+
+    // 每个字段命中时输出 字段名=字段值；未命中的 CASE 返回 NULL，CONCAT_WS 会自动跳过
+    val matchedFields = columns
+      .map { column =>
+        val quoted = s"`$column`"
+        val label = column.replace("'", "''")
+        s"""        , CASE WHEN COALESCE(CAST($quoted AS STRING), '') RLIKE TRIM($searchLit)
+           |               THEN CONCAT('$label=', CAST($quoted AS STRING)) END""".stripMargin
+      }
+      .mkString("\n")
 
     val result =
-      "select * from \n" + sourceTable + "\nwhere\n" + sourceTableMetaMap.keys
-        .map(x => {
-          s"COALESCE(CAST(${x} AS STRING), '') like '%${searchCotent}%'"
-        })
-        .mkString("\nOR\n")
+      s"""WITH searched AS (
+         |  SELECT
+         |      t.*
+         |    , CONCAT_WS(' | '
+         |$matchedFields
+         |      ) AS matched_fields
+         |  FROM $tableName t
+         |  WHERE TRIM($searchLit) <> ''
+         |)
+         |SELECT *
+         |FROM searched
+         |WHERE matched_fields <> ''
+         |""".stripMargin
+
     Messages.showInfoMessage(result, "搜索结果")
     ClipBoardUtil.copyToClipBoard(result)
   }
