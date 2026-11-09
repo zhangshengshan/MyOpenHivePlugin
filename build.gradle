@@ -76,14 +76,17 @@ tasks.named('assemble') {
 
 dependencies {
     intellijPlatform {
-        // 默认从 JetBrains 仓库下载 2026.2 平台；
-        // 想复用本机已解压的 IDE（省 1.5G 下载）可加 -PlocalIdePath=/path/to/ideaIU-2026.2
+        // 默认从 JetBrains 仓库下载 2026.3 平台（build 263，对应 RustRover 2026.3）；
+        // 想复用本机已解压的 IDE（省 1.5G 下载）可加 -PlocalIdePath=/path/to/ideaIU-2026.3
         def localIde = providers.gradleProperty('localIdePath').orNull
         if (localIde) {
             local(localIde)
         } else {
-            intellijIdeaUltimate('2026.2')
+            intellijIdeaUltimate('2026.3')
         }
+        // 2026.3 起正则表达式支持被拆成独立的平台模块（lib/intellij.regexp.jar），
+        // HiveTableSurrounder 用到 org.intellij.lang.regexp.RegExpFileType，需要显式声明。
+        bundledModule('com.intellij.modules.regexp')
     }
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
@@ -136,7 +139,7 @@ intellijPlatform {
         '''
         ideaVersion {
             sinceBuild = '262'
-            untilBuild = '262.*'
+            untilBuild = '263.*'
         }
         vendor {
             name = 'MyDataStudio'
@@ -152,7 +155,7 @@ test {
     useJUnitPlatform()
 }
 
-// IntelliJ Platform 2026.2 (build 262) 的平台 jar 是 Java 25 (class file v69) 编译的，
+// IntelliJ Platform 2026.3 (build 263) 的平台 jar 是 Java 25 (class file v69) 编译的，
 // 必须用 JDK 25 编译插件，否则报 "错误的类文件 ... 版本 69.0, 应为 65.0"
 java {
     toolchain {
