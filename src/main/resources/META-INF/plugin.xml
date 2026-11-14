@@ -209,6 +209,7 @@
         <action id="renderMybatisSqlAction" class="action.editor.tech.RenderMybatisSqlAction"
                 text="渲染 MyBatis 动态 SQL" description="输入参数值，把动态标签渲染为可执行的纯 SQL">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
         <!-- 在表名上执行：正则提取表名，跳转到“包含该表名且含 insert into 表名”的文件（纯正则，不依赖 PSI） -->
         <action id="gotoWriteTableFile" class="navigation.GotoWriteTableFileAction"

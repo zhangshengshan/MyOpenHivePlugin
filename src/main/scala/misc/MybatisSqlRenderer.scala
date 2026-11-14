@@ -84,17 +84,101 @@ object MybatisSqlRenderer {
    * @return 可执行的纯 SQL
    */
   def render(sql: String, params: Map[String, Any]): String = {
-    // MyBatis 要求以 <script> 包裹动态片段
-    val wrapped: String = "<script>" + sql.trim + "</script>"
+    // MyBatis 要求以 <script> 包裹动态片段；先做 XML 转义，避免 SQL 中的比较符 <、& 破坏 XML 解析
+    val wrapped: String = "<script>" + escapeForXml(sql.trim) + "</script>"
     val paramJava: util.Map[String, Any] = new util.HashMap[String, Any]()
     params.foreach { case (k, v) => paramJava.put(k, if (v == null) null else v) }
 
-    val sqlSource = languageDriver.createSqlSource(configuration, wrapped, classOf[util.Map[String, Any]])
-    val boundSql: BoundSql = sqlSource.getBoundSql(paramJava)
-
-    val renderedSql: String = boundSql.getSql()
-    inlineParams(renderedSql, boundSql, paramJava)
+    val renderedSql: String =
+      try {
+        val sqlSource = languageDriver.createSqlSource(configuration, wrapped, classOf[util.Map[String, Any]])
+        val boundSql: BoundSql = sqlSource.getBoundSql(paramJava)
+        inlineParams(boundSql.getSql, boundSql, paramJava)
+      } catch {
+        case e: Throwable =>
+          throw new IllegalStateException(friendlyError(e, sql), e)
+      }
+    tidy(renderedSql)
   }
+
+  /** 提取 <foreach collection="xxx"> 的集合参数名。 */
+  private def foreachCollections(sql: String): List[String] = {
+    val out: mutable.LinkedHashSet[String] = mutable.LinkedHashSet.empty
+    val m: Matcher = FOREACH_COLLECTION.matcher(sql)
+    while (m.find()) out.add(m.group(1).trim)
+    out.toList
+  }
+
+  private val FOREACH_COLLECTION: Pattern =
+    Pattern.compile("(?i)<foreach\\b[^>]*?\\bcollection\\s*=\\s*\"([^\"]*)\"")
+
+  /** 提取异常链上的全部消息，便于识别根因（MyBatis 常把真实原因包在 cause 里）。 */
+  private def allMessages(e: Throwable): String = {
+    val sb: StringBuilder = new StringBuilder()
+    var cur: Throwable = e
+    var guard: Int = 0
+    while (cur != null && guard < 10) {
+      sb.append(Option(cur.getMessage).getOrElse(cur.getClass.getSimpleName)).append('\n')
+      cur = cur.getCause
+      guard += 1
+    }
+    sb.toString
+  }
+
+  /** 给 MyBatis 的底层异常补充常见原因提示，方便定位。 */
+  private def friendlyError(e: Throwable, sql: String): String = {
+    val msg: String = allMessages(e)
+    val lower: String = msg.toLowerCase
+    val hints: List[String] =
+      if (msg.contains("Error creating document instance") || msg.contains("must be well-formed"))
+        List("SQL 中含未转义的 XML 特殊字符（如 < 或 &），或动态标签未正确闭合")
+      else if (msg.contains("OGNL") || msg.contains("ExpressionSyntaxException") || msg.contains("ExpressionEvaluationException"))
+        List("动态标签的 test 表达式（OGNL）语法有误，请检查 <if>/<when> 的条件")
+      else if (lower.contains("evaluated to a null value") || lower.contains("nullpointerexception") || lower.contains("cannot invoke") || lower.contains("is null")) {
+        val cols: List[String] = foreachCollections(sql)
+        if (cols.nonEmpty)
+          List(
+            "foreach 的集合参数（" + cols.mkString("、") + "）未赋值或为 null",
+            "请在参数里给它一个数组值（如 " + cols.head + "=[\"A\",\"B\"]），",
+            "或用 <if test=\"" + cols.head + " != null\"> 包住这段 foreach"
+          )
+        else List("某个参数为 null 但被直接用于表达式，请检查 #{}/<if> 的写法")
+      }
+      else Nil
+    if (hints.isEmpty) msg.stripTrailing()
+    else msg.stripTrailing() + "\n\n可能原因：\n" + hints.map("- " + _).mkString("\n")
+  }
+
+  /** 清理渲染结果的排版：去掉行尾空白，把连续空行压缩为一行。 */
+  private def tidy(sql: String): String = {
+    val sb: StringBuilder = new StringBuilder()
+    var blankPending: Boolean = false
+    var started: Boolean = false
+    sql.split("\n", -1).foreach { raw =>
+      val line: String = raw.replaceAll("[ \\t]+$", "")
+      if (line.trim.isEmpty) {
+        if (started) blankPending = true
+      } else {
+        if (blankPending) { sb.append('\n'); blankPending = false }
+        sb.append(line).append('\n')
+        started = true
+      }
+    }
+    sb.toString.stripTrailing()
+  }
+
+  /**
+   * 转义 SQL 文本中的 XML 特殊字符，同时保留 MyBatis 动态标签。
+   * - `<` 只在后面不是标签起始字符（字母 / `/` / `!` / `?`）时转义，保护 <if>/</if>/<![CDATA[/<?xml；
+   * - `&` 仅在不是已有实体（&amp; / &lt; / &#123; 等）时转义。
+   */
+  private def escapeForXml(sql: String): String = {
+    val afterLt: String = RAW_LT.matcher(sql).replaceAll("&lt;")
+    RAW_AMP.matcher(afterLt).replaceAll("&amp;")
+  }
+
+  private val RAW_LT: Pattern = Pattern.compile("<(?![A-Za-z/!?])")
+  private val RAW_AMP: Pattern = Pattern.compile("&(?!(?:amp|lt|gt|quot|apos|#\\d+|#x[0-9a-fA-F]+);)")
 
   /**
    * 把 boundSql.getSql() 中的 `?` 按 ParameterMapping 顺序替换为真实字面量。

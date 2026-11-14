@@ -1,7 +1,7 @@
 package misc
 
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.{assertTrue, assertFalse}
+import org.junit.jupiter.api.Assertions.{assertTrue, assertFalse, assertThrows}
 
 /**
  * MybatisSqlRenderer 单元测试。
@@ -107,5 +107,109 @@ class MybatisSqlRendererTest {
     assertTrue(compress(out).matches(".*IN \\( 1 , 2 , 3 , 'x' \\).*"),
       s"foreach 应展开为 IN (1,2,3,'x')，实际: \n$out")
     assertFalse(out.contains("<foreach"), "不应保留 foreach 标签")
+  }
+
+  @Test
+  def testRenderLessThanOperator(): Unit = {
+    // 裸 < 会破坏 XML，渲染器应自动转义，最终 SQL 仍保留 <
+    val sql = "SELECT * FROM t WHERE a < 5 AND b > 1"
+    val out = MybatisSqlRenderer.render(sql, Map.empty[String, Any])
+    assertTrue(out.contains("a < 5"), s"小于号应原样保留，实际: $out")
+    assertFalse(out.contains("&lt;"), s"不应把转义实体泄漏到结果里，实际: $out")
+  }
+
+  @Test
+  def testRenderAmpersand(): Unit = {
+    val sql = "SELECT * FROM t WHERE a = 1 AND b & 2 = 0"
+    val out = MybatisSqlRenderer.render(sql, Map.empty[String, Any])
+    assertTrue(out.contains("b & 2"), s"& 应原样保留，实际: $out")
+    assertFalse(out.contains("&amp;"), s"不应把转义实体泄漏到结果里，实际: $out")
+  }
+
+  @Test
+  def testRenderIfWithLessThanInSql(): Unit = {
+    // 动态标签 + SQL 内比较符共存
+    val sql =
+      """SELECT * FROM t WHERE 1 = 1
+        |<if test="d != null">
+        |    and dt &lt;= #{d}
+        |</if>
+        |and a < 10
+        |""".stripMargin
+    val out = MybatisSqlRenderer.render(sql, Map("d" -> "2026-01-01"))
+    val c = compress(out)
+    assertTrue(c.contains("dt <= '2026-01-01'"), s"实体与参数都应正确渲染，实际: \n$out")
+    assertTrue(c.contains("a < 10"), s"裸 < 也应保留，实际: \n$out")
+  }
+
+  @Test
+  def testGuardedForeachWithNullCollectionRemovesBlock(): Unit = {
+    val sql =
+      """SELECT * FROM t
+        |<where>
+        |  <if test="ids != null">
+        |    id IN
+        |    <foreach collection="ids" item="id" open="(" separator="," close=")">
+        |      #{id}
+        |    </foreach>
+        |  </if>
+        |</where>
+        |""".stripMargin
+    // ids 为 null：<if> 判空后整块删除，不应残留孤立的 "IN"
+    val out = MybatisSqlRenderer.render(sql, Map("ids" -> null))
+    assertFalse(out.contains("<foreach"), "不应保留 foreach 标签")
+    assertFalse(out.contains("<where"), "不应保留 where 标签")
+    assertFalse(compress(out).contains("IN"), s"不应残留孤立的 IN，实际: \n$out")
+  }
+
+  @Test
+  def testUnguardedForeachWithNullCollectionGivesFriendlyError(): Unit = {
+    val sql =
+      """SELECT * FROM t WHERE id IN
+        |<foreach collection="ids" item="id" open="(" separator="," close=")">
+        |  #{id}
+        |</foreach>
+        |""".stripMargin
+    val ex = assertThrows(classOf[IllegalStateException], () => {
+      MybatisSqlRenderer.render(sql, Map("ids" -> null)); ()
+    })
+    assertTrue(ex.getMessage.contains("foreach 的集合参数"),
+      s"应提示 foreach 集合参数未赋值，实际: ${ex.getMessage}")
+  }
+
+  @Test
+  def testWhereTagTrimsLeadingAnd(): Unit = {
+    val sql =
+      """SELECT * FROM t
+        |<where>
+        |  <if test="a != null">and a = #{a}</if>
+        |  <if test="b != null">and b = #{b}</if>
+        |</where>
+        |""".stripMargin
+    val out = MybatisSqlRenderer.render(sql, Map("a" -> 1L, "b" -> null))
+    val c = compress(out)
+    assertTrue(c.contains("WHERE a = 1"), s"where 应去掉开头多余的 and，实际: \n$out")
+    assertFalse(c.contains("and WHERE"), s"不应出现 and WHERE，实际: \n$out")
+  }
+
+  @Test
+  def testTidyCollapsesBlankLines(): Unit = {
+    val sql =
+      """SELECT * FROM t
+        |
+        |
+        |WHERE 1 = 1
+        |""".stripMargin
+    val out = MybatisSqlRenderer.render(sql, Map.empty[String, Any])
+    assertFalse(out.contains("\n\n\n"), s"连续空行应被压缩，实际: [$out]")
+  }
+
+  @Test
+  def testFriendlyErrorOnUnclosedTag(): Unit = {
+    val sql = "SELECT * FROM t <if test=\"a != null\"> and a = #{a}"
+    val ex = assertThrows(classOf[IllegalStateException], () => {
+      MybatisSqlRenderer.render(sql, Map("a" -> 1L)); ()
+    })
+    assertTrue(ex.getMessage.contains("可能原因"), s"应给出友好提示，实际: ${ex.getMessage}")
   }
 }
