@@ -205,6 +205,11 @@
                 description="SubstitueWordUnderCursorWithClipboard">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+        <!-- 渲染 MyBatis 动态 SQL：输入参数值，自动去掉 <if>/<choose>/<foreach> 等标签，生成可执行纯 SQL -->
+        <action id="renderMybatisSqlAction" class="action.editor.tech.RenderMybatisSqlAction"
+                text="渲染 MyBatis 动态 SQL" description="输入参数值，把动态标签渲染为可执行的纯 SQL">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
         <!-- 在表名上执行：正则提取表名，跳转到“包含该表名且含 insert into 表名”的文件（纯正则，不依赖 PSI） -->
         <action id="gotoWriteTableFile" class="navigation.GotoWriteTableFileAction"
                 text="跳转到写入此表的文件" description="正则扫描项目，打开写入该表的文件">

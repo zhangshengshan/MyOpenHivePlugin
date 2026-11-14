@@ -91,6 +91,7 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.9.0'
     implementation 'org.antlr:antlr4:4.11.1'
     implementation "org.antlr:antlr4-intellij-adaptor:0.1"
     implementation 'org.scala-lang:scala-library:2.13.18'
@@ -108,6 +109,9 @@ dependencies {
     implementation 'com.lihaoyi:upickle_2.13:1.4.2'
 
     implementation 'mysql:mysql-connector-java:8.0.28'
+    // MyBatis：渲染接口 SQL 中的 MyBatis 动态标签（<if>/<choose>/<foreach>/<trim>/<where>/<set>）
+    // 方案B：复用官方 XMLLanguageDriver + SqlSourceBuilder，避免自研解析器的 BUG
+    implementation 'org.mybatis:mybatis:3.5.16'
     implementation 'com.typesafe.slick:slick_2.13:3.3.3'
     implementation 'com.typesafe.slick:slick-hikaricp_2.13:3.3.3'
 
@@ -153,6 +157,11 @@ intellijPlatform {
 
 test {
     useJUnitPlatform()
+    maxHeapSize = '2g'
+    testLogging {
+        events 'passed', 'failed', 'skipped'
+        exceptionFormat = 'full'
+    }
 }
 
 // IntelliJ Platform 2026.3 (build 263) 的平台 jar 是 Java 25 (class file v69) 编译的，
